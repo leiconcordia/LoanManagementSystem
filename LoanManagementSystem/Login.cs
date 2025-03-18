@@ -57,6 +57,7 @@ namespace LoanManagementSystem
         private void tbPassword_TextChanged(object sender, EventArgs e)
         {
             label6.Visible = false;
+            //testing
         }
     }
 }
