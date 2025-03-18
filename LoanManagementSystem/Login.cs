@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LoanManagementSystem
 {
@@ -40,6 +41,22 @@ namespace LoanManagementSystem
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void label5_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void tbUsername_TextChanged(object sender, EventArgs e)
+        {
+            label5.Visible = false;
+           
+        }
+
+        private void tbPassword_TextChanged(object sender, EventArgs e)
+        {
+            label6.Visible = false;
         }
     }
 }
