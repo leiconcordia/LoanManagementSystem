@@ -59,5 +59,19 @@ namespace LoanManagementSystem
             label6.Visible = false;
             //testing
         }
+
+        
+
+        private void register_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            Register register = new Register();
+            register.Show();
+        }
+        private void logAdmin_click(object sender, EventArgs e)
+        {
+            
+        }
+
     }
 }
