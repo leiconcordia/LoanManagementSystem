@@ -103,8 +103,6 @@ namespace LoanManagementSystem
             Process.Start(new ProcessStartInfo("https://www.flaticon.com/") { UseShellExecute = true });
         }
 
-      
-       
         
     }
 

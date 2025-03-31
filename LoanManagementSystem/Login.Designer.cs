@@ -50,11 +50,11 @@
             // 
             this.label.AutoSize = true;
             this.label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.label.Font = new System.Drawing.Font("Montserrat Subrayada", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.label.Location = new System.Drawing.Point(55, 431);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(261, 33);
+            this.label.Size = new System.Drawing.Size(263, 31);
             this.label.TabIndex = 0;
             this.label.Text = "KASALIGAN LOAN";
             this.label.Click += new System.EventHandler(this.label_Click);
@@ -102,6 +102,7 @@
             this.button1.TabIndex = 3;
             this.button1.Text = "LOGIN";
             this.button1.UseVisualStyleBackColor = false;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // register
             // 

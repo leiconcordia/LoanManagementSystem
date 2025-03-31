@@ -100,5 +100,10 @@ namespace LoanManagementSystem
                 MessageBox.Show("Registration Failed. Please try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        private void tbPhoneNumber_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

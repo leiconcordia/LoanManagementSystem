@@ -103,7 +103,6 @@ namespace LoanManagementSystem
             this.label6.Size = new System.Drawing.Size(98, 19);
             this.label6.TabIndex = 11;
             this.label6.Text = "First Name";
-            
             // 
             // tbFName
             // 
@@ -112,7 +111,6 @@ namespace LoanManagementSystem
             this.tbFName.Name = "tbFName";
             this.tbFName.Size = new System.Drawing.Size(143, 22);
             this.tbFName.TabIndex = 12;
-        
             // 
             // panel1
             // 
@@ -139,11 +137,11 @@ namespace LoanManagementSystem
             // 
             this.label.AutoSize = true;
             this.label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.label.Font = new System.Drawing.Font("Montserrat Subrayada", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.label.Location = new System.Drawing.Point(55, 431);
             this.label.Name = "label";
-            this.label.Size = new System.Drawing.Size(261, 33);
+            this.label.Size = new System.Drawing.Size(263, 31);
             this.label.TabIndex = 0;
             this.label.Text = "KASALIGAN LOAN";
             // 
@@ -161,7 +159,6 @@ namespace LoanManagementSystem
             this.DOB.Name = "DOB";
             this.DOB.Size = new System.Drawing.Size(198, 20);
             this.DOB.TabIndex = 21;
-           
             // 
             // label8
             // 
@@ -184,7 +181,6 @@ namespace LoanManagementSystem
             this.label10.Size = new System.Drawing.Size(217, 25);
             this.label10.TabIndex = 25;
             this.label10.Text = "Employment details";
-           
             // 
             // tbAddress
             // 
@@ -204,15 +200,16 @@ namespace LoanManagementSystem
             // 
             // tbPhoneNumber
             // 
-            this.tbPhoneNumber.Location = new System.Drawing.Point(636, 267);
+            this.tbPhoneNumber.Location = new System.Drawing.Point(626, 267);
             this.tbPhoneNumber.Multiline = true;
             this.tbPhoneNumber.Name = "tbPhoneNumber";
             this.tbPhoneNumber.Size = new System.Drawing.Size(106, 22);
             this.tbPhoneNumber.TabIndex = 23;
+            this.tbPhoneNumber.TextChanged += new System.EventHandler(this.tbPhoneNumber_TextChanged);
             // 
             // label9
             // 
-            this.label9.Location = new System.Drawing.Point(633, 245);
+            this.label9.Location = new System.Drawing.Point(623, 245);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(89, 19);
             this.label9.TabIndex = 24;
@@ -249,11 +246,10 @@ namespace LoanManagementSystem
             "Employed",
             "Unemployed",
             "Self-employed"});
-            this.cmbEmploymentStatus.Location = new System.Drawing.Point(408, 362);
+            this.cmbEmploymentStatus.Location = new System.Drawing.Point(413, 362);
             this.cmbEmploymentStatus.Name = "cmbEmploymentStatus";
             this.cmbEmploymentStatus.Size = new System.Drawing.Size(125, 21);
             this.cmbEmploymentStatus.TabIndex = 30;
-          
             // 
             // splitter1
             // 
