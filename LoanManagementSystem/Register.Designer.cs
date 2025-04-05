@@ -117,9 +117,9 @@ namespace LoanManagementSystem
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.panel1.Controls.Add(this.pictureBox1);
             this.panel1.Controls.Add(this.label);
-            this.panel1.Location = new System.Drawing.Point(3, 2);
+            this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(394, 544);
+            this.panel1.Size = new System.Drawing.Size(402, 558);
             this.panel1.TabIndex = 15;
             // 
             // pictureBox1
@@ -127,9 +127,9 @@ namespace LoanManagementSystem
             this.pictureBox1.ErrorImage = global::LoanManagementSystem.Properties.Resources.KASALIGANLOANLOGO;
             this.pictureBox1.Image = global::LoanManagementSystem.Properties.Resources.KASALIGANLOANLOGO;
             this.pictureBox1.InitialImage = global::LoanManagementSystem.Properties.Resources.KASALIGANLOANLOGO;
-            this.pictureBox1.Location = new System.Drawing.Point(14, 43);
+            this.pictureBox1.Location = new System.Drawing.Point(12, 70);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(368, 318);
+            this.pictureBox1.Size = new System.Drawing.Size(368, 392);
             this.pictureBox1.TabIndex = 1;
             this.pictureBox1.TabStop = false;
             // 
@@ -139,7 +139,7 @@ namespace LoanManagementSystem
             this.label.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.label.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.label.Location = new System.Drawing.Point(55, 431);
+            this.label.Location = new System.Drawing.Point(61, 496);
             this.label.Name = "label";
             this.label.Size = new System.Drawing.Size(263, 31);
             this.label.TabIndex = 0;
@@ -255,7 +255,7 @@ namespace LoanManagementSystem
             // 
             this.splitter1.Location = new System.Drawing.Point(0, 0);
             this.splitter1.Name = "splitter1";
-            this.splitter1.Size = new System.Drawing.Size(3, 553);
+            this.splitter1.Size = new System.Drawing.Size(3, 558);
             this.splitter1.TabIndex = 31;
             this.splitter1.TabStop = false;
             // 
@@ -316,7 +316,7 @@ namespace LoanManagementSystem
             // 
             // Register
             // 
-            this.ClientSize = new System.Drawing.Size(744, 553);
+            this.ClientSize = new System.Drawing.Size(758, 558);
             this.Controls.Add(this.RegUser);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.tbPassword);

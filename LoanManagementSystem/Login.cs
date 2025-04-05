@@ -18,35 +18,13 @@ namespace LoanManagementSystem
             InitializeComponent();
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-
-        }
+       
 
         private void Login_Load(object sender, EventArgs e)
         {
 
         }
 
-        private void label_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox1_Click_1(object sender, EventArgs e)
-        {
-
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label5_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void tbUsername_TextChanged(object sender, EventArgs e)
         {
@@ -57,7 +35,7 @@ namespace LoanManagementSystem
         private void tbPassword_TextChanged(object sender, EventArgs e)
         {
             label6.Visible = false;
-            //testing
+           
         }
 
         
@@ -73,8 +51,33 @@ namespace LoanManagementSystem
             
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnLogin_Click(object sender, EventArgs e)
         {
+            string username = tbUsername.Text;
+            string password = tbPassword.Text;
+
+            // Simple validation to check if fields are not empty
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
+            {
+                MessageBox.Show("Please enter both username and password.");
+                // Invalid login: Show a message indicating that the username or password is incorrect
+                
+            }
+            else if (username == "admin" && password == "123")
+            {
+                this.Hide();
+                MainForm mf = new MainForm();
+                mf.Show();
+
+            }
+            else
+            {
+                // Invalid login: Show a message indicating that the username or password is incorrect
+                MessageBox.Show("Invalid username or password.");
+                tbPassword.Text = "";
+                tbUsername.Text = "";
+            }
+
 
         }
     }

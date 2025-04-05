@@ -7,7 +7,7 @@ namespace LoanManagementSystem
     public class DatabaseHelper
     {
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=DESKTOP-7GEUIL3\\SQLEXPRESS;Database=DB_LoanManagementSystem;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()

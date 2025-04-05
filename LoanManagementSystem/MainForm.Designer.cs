@@ -2,7 +2,7 @@
 
 namespace LoanManagementSystem
 {
-    partial class Dashboard
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,14 +29,13 @@ namespace LoanManagementSystem
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Dashboard));
             this.panel1 = new System.Windows.Forms.Panel();
             this.pictureBox4 = new System.Windows.Forms.PictureBox();
             this.pnlNav = new System.Windows.Forms.Panel();
             this.btnSettings = new System.Windows.Forms.Button();
             this.btnContactUs = new System.Windows.Forms.Button();
             this.btnCalender = new System.Windows.Forms.Button();
-            this.btnAnalytics = new System.Windows.Forms.Button();
+            this.btnUserEvaluation = new System.Windows.Forms.Button();
             this.btnDashboard = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
@@ -53,7 +52,7 @@ namespace LoanManagementSystem
             this.label7 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.panel5 = new System.Windows.Forms.Panel();
+            this.MainPanel = new System.Windows.Forms.Panel();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).BeginInit();
             this.panel2.SuspendLayout();
@@ -62,7 +61,7 @@ namespace LoanManagementSystem
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel4.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).BeginInit();
-            this.panel5.SuspendLayout();
+            this.MainPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -73,7 +72,7 @@ namespace LoanManagementSystem
             this.panel1.Controls.Add(this.btnSettings);
             this.panel1.Controls.Add(this.btnContactUs);
             this.panel1.Controls.Add(this.btnCalender);
-            this.panel1.Controls.Add(this.btnAnalytics);
+            this.panel1.Controls.Add(this.btnUserEvaluation);
             this.panel1.Controls.Add(this.btnDashboard);
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
@@ -156,24 +155,24 @@ namespace LoanManagementSystem
             this.btnCalender.Click += new System.EventHandler(this.btnCalender_Click);
             this.btnCalender.Leave += new System.EventHandler(this.btnCalender_Leave);
             // 
-            // btnAnalytics
+            // btnUserEvaluation
             // 
-            this.btnAnalytics.Dock = System.Windows.Forms.DockStyle.Top;
-            this.btnAnalytics.FlatAppearance.BorderSize = 0;
-            this.btnAnalytics.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnAnalytics.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnAnalytics.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.btnAnalytics.Location = new System.Drawing.Point(0, 162);
-            this.btnAnalytics.Margin = new System.Windows.Forms.Padding(2);
-            this.btnAnalytics.Name = "btnAnalytics";
-            this.btnAnalytics.Size = new System.Drawing.Size(156, 65);
-            this.btnAnalytics.TabIndex = 1;
-            this.btnAnalytics.Text = "  Analytics";
-            this.btnAnalytics.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnAnalytics.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnAnalytics.UseVisualStyleBackColor = true;
-            this.btnAnalytics.Click += new System.EventHandler(this.btnAnalytics_Click);
-            this.btnAnalytics.Leave += new System.EventHandler(this.btnAnalytics_Leave);
+            this.btnUserEvaluation.Dock = System.Windows.Forms.DockStyle.Top;
+            this.btnUserEvaluation.FlatAppearance.BorderSize = 0;
+            this.btnUserEvaluation.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnUserEvaluation.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnUserEvaluation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.btnUserEvaluation.Location = new System.Drawing.Point(0, 162);
+            this.btnUserEvaluation.Margin = new System.Windows.Forms.Padding(2);
+            this.btnUserEvaluation.Name = "btnUserEvaluation";
+            this.btnUserEvaluation.Size = new System.Drawing.Size(156, 65);
+            this.btnUserEvaluation.TabIndex = 1;
+            this.btnUserEvaluation.Text = "User Evaluation";
+            this.btnUserEvaluation.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.btnUserEvaluation.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnUserEvaluation.UseVisualStyleBackColor = true;
+            this.btnUserEvaluation.Click += new System.EventHandler(this.btnUserEvaluation_Click);
+            this.btnUserEvaluation.Leave += new System.EventHandler(this.btnUserEvaluation_Leave);
             // 
             // btnDashboard
             // 
@@ -273,7 +272,6 @@ namespace LoanManagementSystem
             // 
             // pictureBox2
             // 
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
             this.pictureBox2.Location = new System.Drawing.Point(95, 5);
             this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
@@ -385,29 +383,28 @@ namespace LoanManagementSystem
             this.label9.Text = "Active Loans";
             this.label9.Click += new System.EventHandler(this.panel5_Click);
             // 
-            // panel5
+            // MainPanel
             // 
-            this.panel5.Controls.Add(this.panel4);
-            this.panel5.Controls.Add(this.panel3);
-            this.panel5.Controls.Add(this.label3);
-            this.panel5.Location = new System.Drawing.Point(157, 3);
-            this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(838, 568);
-            this.panel5.TabIndex = 5;
+            this.MainPanel.Controls.Add(this.panel4);
+            this.MainPanel.Controls.Add(this.panel3);
+            this.MainPanel.Controls.Add(this.label3);
+            this.MainPanel.Location = new System.Drawing.Point(157, 3);
+            this.MainPanel.Name = "MainPanel";
+            this.MainPanel.Size = new System.Drawing.Size(838, 568);
+            this.MainPanel.TabIndex = 5;
             // 
-            // Dashboard
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.ClientSize = new System.Drawing.Size(995, 572);
-            this.Controls.Add(this.panel5);
+            this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.panel1);
             this.Margin = new System.Windows.Forms.Padding(2);
-            this.Name = "Dashboard";
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DASHBOARD";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.Click += new System.EventHandler(this.panel5_Click);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox4)).EndInit();
@@ -420,8 +417,8 @@ namespace LoanManagementSystem
             this.panel4.ResumeLayout(false);
             this.panel4.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox3)).EndInit();
-            this.panel5.ResumeLayout(false);
-            this.panel5.PerformLayout();
+            this.MainPanel.ResumeLayout(false);
+            this.MainPanel.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -433,7 +430,7 @@ namespace LoanManagementSystem
         private Button btnSettings;
         private Button btnContactUs;
         private Button btnCalender;
-        private Button btnAnalytics;
+        private Button btnUserEvaluation;
         private Button btnDashboard;
         private Panel panel2;
         private Label label2;
@@ -458,7 +455,7 @@ namespace LoanManagementSystem
         private Label label7;
         private Label label8;
         private Label label9;
-        private Panel panel5;
+        private Panel MainPanel;
         private PictureBox pictureBox4;
     }
 }

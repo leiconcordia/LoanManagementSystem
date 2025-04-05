@@ -1,32 +1,26 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoanManagementSystem
 {
-    public partial class Dashboard : Form
+    public partial class MainForm : Form
     {
-        public Dashboard()
+        Controls.UserEvaluation UserEvaluation = new Controls.UserEvaluation();
+        public MainForm()
         {
             InitializeComponent();
-           
+
             pnlNav.Height = btnDashboard.Height;
             pnlNav.Top = btnDashboard.Top;
             pnlNav.Left = btnDashboard.Left;
             btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
 
-        }
+
+      
         private void panel5_Click(object sender, EventArgs e)
         {
             this.ActiveControl = null;
@@ -45,11 +39,18 @@ namespace LoanManagementSystem
             btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
         }
 
-        private void btnAnalytics_Click(object sender, EventArgs e)
+        private void btnUserEvaluation_Click(object sender, EventArgs e)
         {
-            pnlNav.Height = btnAnalytics.Height;
-            pnlNav.Top = btnAnalytics.Top;
-            btnAnalytics.BackColor = Color.FromArgb(46, 51, 73);
+           pnlNav.Height = btnUserEvaluation.Height;
+           pnlNav.Top = btnUserEvaluation.Top;
+           btnUserEvaluation.BackColor = Color.FromArgb(46, 51, 73);
+
+            //function
+            MainPanel.Controls.Clear();
+            MainPanel.Controls.Add(UserEvaluation);
+            MainPanel.Controls.Clear();
+            UserEvaluation.Dock = DockStyle.Fill;
+
         }
 
         private void btnCalender_Click(object sender, EventArgs e)
@@ -78,9 +79,9 @@ namespace LoanManagementSystem
             btnDashboard.BackColor = Color.FromArgb(24, 30, 54);
         }
 
-        private void btnAnalytics_Leave(object sender, EventArgs e)
+        private void btnUserEvaluation_Leave(object sender, EventArgs e)
         {
-            btnAnalytics.BackColor = Color.FromArgb(24, 30, 54);
+            btnUserEvaluation.BackColor = Color.FromArgb(24, 30, 54);
         }
 
         private void btnCalender_Leave(object sender, EventArgs e)
@@ -107,5 +108,5 @@ namespace LoanManagementSystem
     }
 
 }
-    
+
 
