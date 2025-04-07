@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 
@@ -7,7 +8,7 @@ namespace LoanManagementSystem
     public class DatabaseHelper
     {
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=DESKTOP-7GEUIL3\\SQLEXPRESS;Database=DB_LoanManagementSystem;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=LAPTOP-S0N4JMSC\\SQLEXPRESS;Database=DB_LMS;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
@@ -64,5 +65,45 @@ namespace LoanManagementSystem
                 return false;
             }
         }
+
+
+        public List<User> GetUsers()
+        {
+            List<User> users = new List<User>();
+
+            // SQL query to select users
+            string query = "SELECT Userid, Firstname, LastName, Status FROM Users²"; // Adjust the query as needed
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                connection.Open();
+
+                SqlDataReader reader = command.ExecuteReader();
+                while (reader.Read())
+                {
+            
+                    User user = new User
+                    {
+                        UserId = reader.GetInt32(0),
+                        FirstName = reader.GetString(1),
+                        LastName = reader.GetString(2),
+                        Status = reader.GetString(3)
+                    };
+                    users.Add(user);
+                }
+            }
+
+            return users;
+        }
+    }
+
+    // User class to represent the user object
+    public class User
+    {
+        public int UserId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Status { get; set; }
     }
 }

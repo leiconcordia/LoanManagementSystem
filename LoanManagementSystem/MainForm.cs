@@ -8,6 +8,7 @@ namespace LoanManagementSystem
     public partial class MainForm : Form
     {
         Controls.UserEvaluation UserEvaluation = new Controls.UserEvaluation();
+        Controls.Loans Loans = new Controls.Loans();
         public MainForm()
         {
             InitializeComponent();
@@ -16,6 +17,8 @@ namespace LoanManagementSystem
             pnlNav.Top = btnDashboard.Top;
             pnlNav.Left = btnDashboard.Left;
             btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
+
+
         }
 
 
@@ -29,6 +32,13 @@ namespace LoanManagementSystem
         private void exitBtn_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        public void switchUserControl(UserControl userControl)
+        {
+            MainPanel.Controls.Clear();
+            MainPanel.Controls.Add(userControl);
+            userControl.Dock = DockStyle.Fill;
         }
 
         private void btnDashboard_Click(object sender, EventArgs e)
@@ -46,18 +56,23 @@ namespace LoanManagementSystem
            btnUserEvaluation.BackColor = Color.FromArgb(46, 51, 73);
 
             //function
-            MainPanel.Controls.Clear();
-            MainPanel.Controls.Add(UserEvaluation);
-            MainPanel.Controls.Clear();
-            UserEvaluation.Dock = DockStyle.Fill;
+            //MainPanel.Controls.Clear();
+            //MainPanel.Controls.Add(UserEvaluation);
+            //MainPanel.Controls.Clear();
+            //UserEvaluation.Dock = DockStyle.Fill;
+            switchUserControl(UserEvaluation);
 
         }
+
+       
 
         private void btnCalender_Click(object sender, EventArgs e)
         {
             pnlNav.Height = btnCalender.Height;
             pnlNav.Top = btnCalender.Top;
             btnCalender.BackColor = Color.FromArgb(46, 51, 73);
+
+            switchUserControl(Loans);
         }
 
         private void btnContactUs_Click(object sender, EventArgs e)
@@ -104,7 +119,11 @@ namespace LoanManagementSystem
             Process.Start(new ProcessStartInfo("https://www.flaticon.com/") { UseShellExecute = true });
         }
 
-        
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+           //pang full screen
+           // this.WindowState = FormWindowState.Maximized;
+        }
     }
 
 }
