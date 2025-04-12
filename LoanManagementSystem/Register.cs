@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
+using System.Net;
 using System.Windows.Forms;
 
 
@@ -20,7 +21,7 @@ namespace LoanManagementSystem
         }
 
 
-
+        
 
         private DatabaseHelper dbHelper = new DatabaseHelper(); // Create an instance of DatabaseHelper
 
@@ -90,10 +91,20 @@ namespace LoanManagementSystem
                 new SqlParameter("@PasswordHash", password)
             };
 
+
+
             if (dbHelper.ExecuteQuery(insertQuery, insertParams))
             {
-                MessageBox.Show("Registration Successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                this.Close(); // Close the form after registration
+                MessageBox.Show("Registration Successful!", "Success",
+                 MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+                // Close the current registration form
+                this.Close();
+
+                // Create and show the login form
+                Login loginForm = new Login();
+                loginForm.Show();
+
             }
             else
             {

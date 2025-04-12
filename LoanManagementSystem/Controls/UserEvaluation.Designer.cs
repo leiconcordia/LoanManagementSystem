@@ -1,4 +1,6 @@
-﻿namespace LoanManagementSystem.Controls
+﻿using System.Windows.Forms;
+
+namespace LoanManagementSystem.Controls
 {
     partial class UserEvaluation
     {
@@ -38,6 +40,10 @@
             // 
             // dataGridView1
             // 
+            this.dataGridView1.ReadOnly = true;
+            this.dataGridView1.AllowUserToAddRows = false;
+
+            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridView1.AllowUserToOrderColumns = true;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -50,6 +56,9 @@
             this.dataGridView1.RowHeadersWidth = 51;
             this.dataGridView1.Size = new System.Drawing.Size(965, 492);
             this.dataGridView1.TabIndex = 0;
+
+            
+
             // 
             // label1
             // 
@@ -81,7 +90,7 @@
             this.View.HeaderText = "Action";
             this.View.MinimumWidth = 6;
             this.View.Name = "View";
-            this.View.Text = "Edit";
+            this.View.Text = "View";
             this.View.Width = 50;
             // 
             // UserEvaluation
