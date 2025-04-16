@@ -12,19 +12,19 @@ namespace LoanManagementSystem
 
         //Query for table Users
 
-    //CREATE TABLE Users (
-    //    UserID INT PRIMARY KEY IDENTITY(1,1),
-    //FirstName NVARCHAR(50) NOT NULL,
-    //LastName NVARCHAR(50) NOT NULL,
-    //PhoneNumber NVARCHAR(20),
-    //Address NVARCHAR(100),
-    //DateOfBirth DATE,
-    //EmploymentStatus NVARCHAR(50),
-    //MonthlyIncome DECIMAL(10, 2),
-    //Username NVARCHAR(50) NOT NULL UNIQUE,
-    //PasswordHash NVARCHAR(128) NOT NULL,
-    //Status NVARCHAR(20) NOT NULL DEFAULT 'Pending'
-//);
+        //CREATE TABLE Users (
+        //    UserID INT PRIMARY KEY IDENTITY(1,1),
+        //FirstName NVARCHAR(50) NOT NULL,
+        //LastName NVARCHAR(50) NOT NULL,
+        //PhoneNumber NVARCHAR(20),
+        //Address NVARCHAR(100),
+        //DateOfBirth DATE,
+        //EmploymentStatus NVARCHAR(50),
+        //MonthlyIncome DECIMAL(10, 2),
+        //Username NVARCHAR(50) NOT NULL UNIQUE,
+        //PasswordHash NVARCHAR(128) NOT NULL,
+        //Status NVARCHAR(20) NOT NULL DEFAULT 'Pending'
+        //);
 
 
 
@@ -32,7 +32,7 @@ namespace LoanManagementSystem
 
 
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=STATION48;Database=DB_LMS;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
@@ -95,8 +95,8 @@ namespace LoanManagementSystem
         {
             List<User> users = new List<User>();
 
-            // SQL query to select users
-            string query = "SELECT Userid, Firstname, LastName, Status FROM Users"; // Adjust the query as needed
+            string query = @"   SELECT UserId, FirstName, LastName, PhoneNumber, Address, DateOfBirth, EmploymentStatus, MonthlyIncome, Username, Status
+    FROM Users"; // Add all columns
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -106,28 +106,38 @@ namespace LoanManagementSystem
                 SqlDataReader reader = command.ExecuteReader();
                 while (reader.Read())
                 {
-            
-                    User user = new User
+                    users.Add(new User
                     {
                         UserId = reader.GetInt32(0),
                         FirstName = reader.GetString(1),
                         LastName = reader.GetString(2),
-                        Status = reader.GetString(3)
-                    };
-                    users.Add(user);
+                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(3),
+                        Address = reader.IsDBNull(4) ? null : reader.GetString(4),
+                        DateOfBirth = reader.IsDBNull(5) || !(reader[5] is DateTime) ? (DateTime?)null : reader.GetDateTime(5),
+                        EmploymentStatus = reader.IsDBNull(6) ? null : reader.GetString(6),
+                        MonthlyIncome = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7),
+                        Username = reader.GetString(8),
+                        Status = reader.GetString(9)  // Fixed index from 19 to 9
+                    });
                 }
             }
-
             return users;
         }
-    }
 
-    // User class to represent the user object
-    public class User
-    {
-        public int UserId { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Status { get; set; }
+        // User class to represent the user object
+        public class User
+        {
+            public int UserId { get; set; }
+            public string FirstName { get; set; }
+            public string LastName { get; set; }
+            public string PhoneNumber { get; set; }
+            public string Address { get; set; }
+            public DateTime? DateOfBirth { get; set; }
+            public string EmploymentStatus { get; set; }
+            public decimal? MonthlyIncome { get; set; }
+            public string Username { get; set; }
+            public string Status { get; set; }
+
+        }
     }
 }

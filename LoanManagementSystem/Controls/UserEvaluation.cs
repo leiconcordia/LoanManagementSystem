@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using LoanManagementSystem;
 
@@ -13,14 +14,16 @@ namespace LoanManagementSystem.Controls
         public UserEvaluation()
         {
             InitializeComponent();
-            
+            // In your form constructor or Load event:
+            dataGridView1.CellClick += DataGridView1_CellClick;
         }
 
         // Method to load and display users in the DataGridView
         private void LoadUsers()
         {
 
-            List<User> users = dbHelper.GetUsers(); // Fetch users from the database
+            List<DatabaseHelper.User> users = dbHelper.GetUsers(); // Fetch users from the database
+
 
             dataGridView1.Rows.Clear(); // Clear existing rows in the DataGridView
 
@@ -38,29 +41,26 @@ namespace LoanManagementSystem.Controls
 
             }
         }
-
-
-        private void dataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
+        private void DataGridView1_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex < 0) return;  // Ignore header clicks
+            // Skip header clicks and invalid rows
+            if (e.RowIndex < 0) return;
 
-            if (e.ColumnIndex == dataGridView1.Columns["View"].Index)
-            {
-                // Get the UserID (using whichever approach you chose above)
-                int userId;
+            // Get 1-based row number (2 for second row, etc.)
+            int rowNumber = e.RowIndex + 1;
 
-                // Approach 1: If you stored it in a UserID cell
-                userId = Convert.ToInt32(dataGridView1.Rows[e.RowIndex].Cells["UserID"].Value);
+            // Create UserInfo control with the row number
+            UserInfo userInfoControl = new UserInfo(rowNumber.ToString());
 
-                // OR Approach 2: If you stored the User object in the Tag
-                // var user = (User)dataGridView1.Rows[e.RowIndex].Tag;
-                // userId = user.UserID;
+           
 
-                // Create and switch to the UserInfo control
-                UserInfo userInfoControl = new UserInfo(userId);
-                switchUserControl(userInfoControl);
-            }
+       
+            var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            mainForm?.switchUserControl(userInfoControl);
         }
+
+
+
 
 
 
@@ -69,6 +69,7 @@ namespace LoanManagementSystem.Controls
         private void UserEvaluation_Load(object sender, EventArgs e)
         {
             LoadUsers(); // Call LoadUsers method when the control is loaded
+            
           
         }
     }

@@ -22,8 +22,6 @@ namespace LoanManagementSystem
         }
 
 
-
-      
         private void panel5_Click(object sender, EventArgs e)
         {
             this.ActiveControl = null;
@@ -39,7 +37,7 @@ namespace LoanManagementSystem
             MainPanel.Controls.Clear();
             MainPanel.Controls.Add(userControl);
             userControl.Dock = DockStyle.Fill;
-        }
+        }   
 
         private void btnDashboard_Click(object sender, EventArgs e)
         {

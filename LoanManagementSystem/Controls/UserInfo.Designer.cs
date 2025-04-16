@@ -28,23 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.User = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
+            // 
+            // User
+            // 
+            this.User.AutoSize = true;
+            this.User.Location = new System.Drawing.Point(24, 19);
+            this.User.Name = "User";
+            this.User.Size = new System.Drawing.Size(50, 13);
+            this.User.TabIndex = 0;
+            this.User.Text = "User Info";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(24, 19);
+            this.label1.Location = new System.Drawing.Point(24, 59);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(50, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "User Info";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "label1";
             // 
             // UserInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
             this.Controls.Add(this.label1);
+            this.Controls.Add(this.User);
             this.Name = "UserInfo";
             this.Size = new System.Drawing.Size(965, 492);
             this.Load += new System.EventHandler(this.UserInfo_Load);
@@ -55,6 +67,7 @@
 
         #endregion
 
+        private System.Windows.Forms.Label User;
         private System.Windows.Forms.Label label1;
     }
 }
