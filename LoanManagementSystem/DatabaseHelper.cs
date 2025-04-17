@@ -95,8 +95,7 @@ namespace LoanManagementSystem
         {
             List<User> users = new List<User>();
 
-            string query = @"   SELECT UserId, FirstName, LastName, PhoneNumber, Address, DateOfBirth, EmploymentStatus, MonthlyIncome, Username, Status
-    FROM Users"; // Add all columns
+            string query = @"SELECT UserId, FirstName, LastName, Status FROM Users"; // Add all columns
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -111,17 +110,75 @@ namespace LoanManagementSystem
                         UserId = reader.GetInt32(0),
                         FirstName = reader.GetString(1),
                         LastName = reader.GetString(2),
-                        PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(3),
-                        Address = reader.IsDBNull(4) ? null : reader.GetString(4),
-                        DateOfBirth = reader.IsDBNull(5) || !(reader[5] is DateTime) ? (DateTime?)null : reader.GetDateTime(5),
-                        EmploymentStatus = reader.IsDBNull(6) ? null : reader.GetString(6),
-                        MonthlyIncome = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7),
-                        Username = reader.GetString(8),
-                        Status = reader.GetString(9)  // Fixed index from 19 to 9
+                        Status = reader.GetString(3)  // Fixed index from 19 to 9
                     });
                 }
             }
             return users;
+        }
+
+        public User GetUserById(string userId)
+        {
+            string query = @"SELECT UserId, FirstName, LastName, PhoneNumber, Address, 
+                        DateOfBirth, EmploymentStatus, MonthlyIncome, Username, Status
+                        FROM Users WHERE UserId = @UserId";
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@UserId", userId);
+                connection.Open();
+
+                using (SqlDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        return new User
+                        {
+                            UserId = reader.GetInt32(0),
+                            FirstName = reader.GetString(1),
+                            LastName = reader.GetString(2),
+                            PhoneNumber = reader.IsDBNull(3) ? null : reader.GetString(3),
+                            Address = reader.IsDBNull(4) ? null : reader.GetString(4),
+                            DateOfBirth = reader.IsDBNull(5) ? (DateTime?)null : reader.GetDateTime(5),
+                            EmploymentStatus = reader.IsDBNull(6) ? null : reader.GetString(6),
+                            MonthlyIncome = reader.IsDBNull(7) ? (decimal?)null : reader.GetDecimal(7),
+                            Username = reader.GetString(8),
+                            Status = reader.GetString(9)
+                        };
+                    }
+                }
+            }
+            return null;
+        }
+
+        // Add this to your DatabaseHelper class
+        public bool UpdateUserStatus(string userId, string newStatus)
+        {
+            const string query = @"
+        UPDATE Users 
+        SET Status = @Status 
+        WHERE UserId = @UserId";
+
+            try
+            {
+                using (var connection = new SqlConnection(connectionString))
+                using (var command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.AddWithValue("@Status", newStatus);
+                    command.Parameters.AddWithValue("@UserId", userId);
+
+                    connection.Open();
+                    int rowsAffected = command.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log error
+                Console.WriteLine($"Error updating status: {ex}");
+                return false;
+            }
         }
 
         // User class to represent the user object
@@ -139,5 +196,8 @@ namespace LoanManagementSystem
             public string Status { get; set; }
 
         }
+
+
+        
     }
 }
