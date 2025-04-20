@@ -91,6 +91,85 @@ namespace LoanManagementSystem
         }
 
 
+        public bool ValidateLogin(string username, string password)
+        {
+            string query = "SELECT COUNT(1) FROM Users WHERE Username = @username AND PasswordHash = @password";
+
+            try
+            {
+                using (SqlConnection conn = GetConnection())
+                {
+                    conn.Open();
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@username", username);
+                        cmd.Parameters.AddWithValue("@password", password); // In real apps, use hashing!
+
+                        int count = Convert.ToInt32(cmd.ExecuteScalar());
+                        return count == 1;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Login failed: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
+            }
+        }
+        public string GetFullName(string username, string password)
+        {
+            string fullName = "";
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT FirstName, LastName FROM Users WHERE Username = @Username AND PasswordHash = @Password";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Password", password);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            string firstName = reader["FirstName"].ToString();
+                            string lastName = reader["LastName"].ToString();
+                            fullName = $"{firstName} {lastName}";
+                        }
+                    }
+                }
+            }
+            return fullName;
+        }
+        public string GetStatus(string username, string password)
+        {
+            string status = ""; // Renamed variable to avoid conflict
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT Status FROM Users WHERE Username = @Username AND PasswordHash = @Password";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Password", password);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            status = reader["Status"].ToString(); // Use the renamed variable
+                        }
+                    }
+                }
+            }
+            return status;
+        }
+
+
+
+
+
+
         public List<User> GetUsers()
         {
             List<User> users = new List<User>();

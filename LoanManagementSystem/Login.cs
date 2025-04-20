@@ -48,28 +48,34 @@ namespace LoanManagementSystem
         }
         private void logAdmin_click(object sender, EventArgs e)
         {
-            
+            this.Hide();
+            AdminLogin adminLogin = new AdminLogin();
+            adminLogin.Show();
         }
 
+        
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string username = tbUsername.Text;
-            string password = tbPassword.Text;
+            string username = tbUsername.Text.Trim();
+            string password = tbPassword.Text.Trim();
 
-            // Simple validation to check if fields are not empty
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
                 MessageBox.Show("Please enter both username and password.");
-                // Invalid login: Show a message indicating that the username or password is incorrect
-                
+                return;
             }
-            else if (username == "admin" && password == "123")
-            {
-                this.Hide();
-                MainForm mf = new MainForm();
-                mf.Show();
 
+            DatabaseHelper db = new DatabaseHelper();
+            if (db.ValidateLogin(username, password))
+            {
+                string fullName = db.GetFullName(username, password);
+                string status = db.GetStatus(username, password);
+                MessageBox.Show("Login successful!");
+                this.Hide();
+                new UserForm(fullName, status).Show(); // Pass full name
             }
+           
+
             else
             {
                 // Invalid login: Show a message indicating that the username or password is incorrect
