@@ -13,9 +13,11 @@ namespace LoanManagementSystem
 {
     public partial class UserForm : Form
     {
+       
         public UserForm()
         {
             InitializeComponent();
+         
         }
         public UserForm(string fullName, string status)
         {
@@ -50,18 +52,15 @@ namespace LoanManagementSystem
 
         private void btnApplyLoan_Click(object sender, EventArgs e)
         {
-            // Clear any existing controls from the panel
             LoanApplicationPanel.Controls.Clear();
 
-            // Create a new instance of the LoanApplicationForm UserControl
             LoanApplicationForm loanForm = new LoanApplicationForm();
-
-            // Set to fill the panel
             loanForm.Dock = DockStyle.Fill;
-
-            // Add the control to the panel
             LoanApplicationPanel.Controls.Add(loanForm);
         }
+
+
+
 
     }
 }
