@@ -8,20 +8,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static LoanManagementSystem.DatabaseHelper;
 
 namespace LoanManagementSystem
 {
     public partial class UserForm : Form
     {
-       
+
+        private int userID;
+
         public UserForm()
         {
             InitializeComponent();
-         
+            
+
+           
+
         }
-        public UserForm(string fullName, string status)
+        public UserForm(string fullName, string status, int userID)
         {
+           
+
             InitializeComponent();
+            this.userID = userID;
 
             lblUsername.Text = "Welcome! " + fullName;
             lblUserStatus.Text = "Status: " + status;
@@ -54,10 +63,12 @@ namespace LoanManagementSystem
         {
             LoanApplicationPanel.Controls.Clear();
 
-            LoanApplicationForm loanForm = new LoanApplicationForm();
+            LoanApplicationForm loanForm = new LoanApplicationForm(this.userID); 
             loanForm.Dock = DockStyle.Fill;
             LoanApplicationPanel.Controls.Add(loanForm);
+           
         }
+
 
 
 

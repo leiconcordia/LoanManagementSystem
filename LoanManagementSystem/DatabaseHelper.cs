@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Net;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
@@ -230,6 +232,31 @@ namespace LoanManagementSystem
             }
             return null;
         }
+        public int GetUserID(string username, string password)
+        {
+            int userID = -1;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT UserID FROM Users WHERE Username = @Username AND PasswordHash = @Password";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Username", username);
+                    cmd.Parameters.AddWithValue("@Password", password);
+
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            userID = Convert.ToInt32(reader["UserID"]);
+                        }
+                    }
+                }
+            }
+            return userID;
+        }
+
+
 
         // Add this to your DatabaseHelper class
         public bool UpdateUserStatus(string userId, string newStatus)
@@ -259,6 +286,44 @@ namespace LoanManagementSystem
                 return false;
             }
         }
+
+        public bool SaveUserImages(int userID, Image validID, Image proofOfIncome)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+
+                // Convert images to byte arrays
+                byte[] idBytes = ImageToByteArray(validID);
+                byte[] proofBytes = ImageToByteArray(proofOfIncome);
+
+                string query = @"UPDATE Users 
+                         SET ValidID = @ValidID, ProofOfIncome = @Proof 
+                         WHERE UserID = @UserID";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@ValidID", idBytes);
+                    cmd.Parameters.AddWithValue("@Proof", proofBytes);
+                    cmd.Parameters.AddWithValue("@UserID", userID);
+
+                    int rows = cmd.ExecuteNonQuery();
+                    return rows > 0;
+                }
+            }
+        }
+
+        private byte[] ImageToByteArray(Image image)
+        {
+            using (MemoryStream ms = new MemoryStream())
+            {
+                image.Save(ms, image.RawFormat);
+                return ms.ToArray();
+            }
+        }
+
+
+
 
         // User class to represent the user object
         public class User

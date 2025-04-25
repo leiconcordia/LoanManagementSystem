@@ -70,9 +70,10 @@ namespace LoanManagementSystem
             {
                 string fullName = db.GetFullName(username, password);
                 string status = db.GetStatus(username, password);
+                int userID = db.GetUserID(username, password);
                 MessageBox.Show("Login successful!");
                 this.Hide();
-                new UserForm(fullName, status).Show(); // Pass full name
+                new UserForm(fullName, status, userID).Show(); // Pass full name
             }
            
 

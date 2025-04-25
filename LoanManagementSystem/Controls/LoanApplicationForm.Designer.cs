@@ -46,6 +46,8 @@
             this.pbProof = new System.Windows.Forms.PictureBox();
             this.pbID = new System.Windows.Forms.PictureBox();
             this.btnNext = new System.Windows.Forms.Button();
+            this.lblIDStatus = new System.Windows.Forms.Label();
+            this.lblProofStatus = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pbProof)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbID)).BeginInit();
             this.SuspendLayout();
@@ -178,7 +180,7 @@
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(445, 225);
+            this.label8.Location = new System.Drawing.Point(449, 241);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(175, 25);
             this.label8.TabIndex = 15;
@@ -186,21 +188,23 @@
             // 
             // btnUploadProof
             // 
-            this.btnUploadProof.Location = new System.Drawing.Point(683, 372);
+            this.btnUploadProof.Location = new System.Drawing.Point(677, 199);
             this.btnUploadProof.Name = "btnUploadProof";
             this.btnUploadProof.Size = new System.Drawing.Size(78, 26);
             this.btnUploadProof.TabIndex = 16;
             this.btnUploadProof.Text = "Upload";
             this.btnUploadProof.UseVisualStyleBackColor = true;
+            this.btnUploadProof.Click += new System.EventHandler(this.btnUploadProof_Click);
             // 
             // btnUploadID
             // 
-            this.btnUploadID.Location = new System.Drawing.Point(683, 195);
+            this.btnUploadID.Location = new System.Drawing.Point(677, 357);
             this.btnUploadID.Name = "btnUploadID";
             this.btnUploadID.Size = new System.Drawing.Size(78, 26);
             this.btnUploadID.TabIndex = 17;
             this.btnUploadID.Text = "Upload";
             this.btnUploadID.UseVisualStyleBackColor = true;
+            this.btnUploadID.Click += new System.EventHandler(this.btnUploadID_Click);
             // 
             // pbProof
             // 
@@ -230,10 +234,30 @@
             this.btnNext.UseVisualStyleBackColor = false;
             this.btnNext.Click += new System.EventHandler(this.btnNext_Click);
             // 
+            // lblIDStatus
+            // 
+            this.lblIDStatus.AutoSize = true;
+            this.lblIDStatus.Location = new System.Drawing.Point(455, 370);
+            this.lblIDStatus.Name = "lblIDStatus";
+            this.lblIDStatus.Size = new System.Drawing.Size(35, 13);
+            this.lblIDStatus.TabIndex = 21;
+            this.lblIDStatus.Text = "No ID";
+            // 
+            // lblProofStatus
+            // 
+            this.lblProofStatus.AutoSize = true;
+            this.lblProofStatus.Location = new System.Drawing.Point(451, 212);
+            this.lblProofStatus.Name = "lblProofStatus";
+            this.lblProofStatus.Size = new System.Drawing.Size(98, 13);
+            this.lblProofStatus.TabIndex = 22;
+            this.lblProofStatus.Text = "No Proof of income";
+            // 
             // LoanApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.lblProofStatus);
+            this.Controls.Add(this.lblIDStatus);
             this.Controls.Add(this.btnNext);
             this.Controls.Add(this.pbID);
             this.Controls.Add(this.pbProof);
@@ -281,5 +305,7 @@
         private System.Windows.Forms.PictureBox pbProof;
         private System.Windows.Forms.PictureBox pbID;
         private System.Windows.Forms.Button btnNext;
+        private System.Windows.Forms.Label lblIDStatus;
+        private System.Windows.Forms.Label lblProofStatus;
     }
 }

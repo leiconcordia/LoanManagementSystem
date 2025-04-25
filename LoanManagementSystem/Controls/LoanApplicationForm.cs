@@ -12,10 +12,15 @@ namespace LoanManagementSystem.Controls
 {
     public partial class LoanApplicationForm : UserControl
     {
-        
-        public LoanApplicationForm()
+        private int _userID;
+
+        private DatabaseHelper _dbHelper; // Renamed field to avoid ambiguity
+
+        public LoanApplicationForm(int userID)
         {
             InitializeComponent();
+            _dbHelper = new DatabaseHelper(); // Updated to use the renamed field
+            _userID = userID;
         }
 
         public string LoanAmount { get; set; }
@@ -25,6 +30,9 @@ namespace LoanManagementSystem.Controls
         public Image ProofOfIncome { get; set; }
         public Image ValidID { get; set; }
         public object LoanApplicationPanel { get; private set; }
+
+        private Image _selectedValidIdImage;
+        private Image _selectedProofImage;
 
         private void btnNext_Click(object sender, EventArgs e)
         {
@@ -40,7 +48,7 @@ namespace LoanManagementSystem.Controls
 
                 if (result == DialogResult.Yes)
                 {
-                   
+                    SaveImages();
                 }
                 // If No, do nothing (stay on the current form)
             }
@@ -49,9 +57,6 @@ namespace LoanManagementSystem.Controls
                 MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
-
-
-
 
         private int ExtractMonthsFromTerm(string term)
         {
@@ -100,18 +105,93 @@ namespace LoanManagementSystem.Controls
 
             // Format the output message
             string date = dateTimePicker1.Value.ToString("dd"); // e.g., April 15
-            message = $"You will pay ₱{monthlyPayment:F2} every {date}of the month for {months} months.";
+            message = $"You will pay ₱{monthlyPayment:F2} every {date} of the month for {months} months.";
 
             return true;
         }
 
+        private void btnUploadID_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+                openFileDialog.Title = "Select Valid ID";
 
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        _selectedValidIdImage = Image.FromFile(openFileDialog.FileName);
+                        pbID.Image = _selectedValidIdImage;
 
-        //LoanAmount = tbLoanAmount.Text.Trim(),
-        //LoanTerm = cbLoanTerm.SelectedItem?.ToString(),
-        //LoanPurpose = cbLoanPurpose.SelectedItem?.ToString(),
-        //PreferredPaymentDate = dateTimePicker1.Value,
-        //ProofOfIncome = pbProof.Image,
-        //ValidID = pbID.Image
+                        // Optional: Show success message
+                        lblIDStatus.Text = "ID uploaded successfully!";
+                        lblIDStatus.ForeColor = Color.Green;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error loading image: {ex.Message}", "Error",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void btnUploadProof_Click(object sender, EventArgs e)
+        {
+            using (OpenFileDialog openFileDialog = new OpenFileDialog())
+            {
+                openFileDialog.Filter = "Image Files|*.jpg;*.jpeg;*.png;*.bmp";
+                openFileDialog.Title = "Select Proof of Income";
+
+                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        _selectedProofImage = Image.FromFile(openFileDialog.FileName);
+                        pbProof.Image = _selectedProofImage;
+
+                        // Optional: Show success message
+                        lblProofStatus.Text = "Proof uploaded successfully!";
+                        lblProofStatus.ForeColor = Color.Green;
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error loading image: {ex.Message}", "Error",
+                                      MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+            }
+        }
+
+        private void SaveImages()
+        {
+            if (_selectedValidIdImage == null || _selectedProofImage == null)
+            {
+                MessageBox.Show("Please upload both ID and Proof of Income", "Warning",
+                               MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (_userID <= 0)
+            {
+                MessageBox.Show("No user selected", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            bool success = _dbHelper.SaveUserImages(_userID, _selectedValidIdImage, _selectedProofImage);
+
+            if (success)
+            {
+                MessageBox.Show("Images saved successfully!", "Success",
+                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                MessageBox.Show("Failed to save images", "Error",
+                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
     }
 }
