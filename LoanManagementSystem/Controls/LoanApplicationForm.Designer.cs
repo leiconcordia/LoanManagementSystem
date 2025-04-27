@@ -36,7 +36,7 @@
             this.label4 = new System.Windows.Forms.Label();
             this.cbLoanPurpose = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
-            this.dateTimePicker1 = new System.Windows.Forms.DateTimePicker();
+            this.dtPaymentDate = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -139,12 +139,12 @@
             this.label5.TabIndex = 7;
             this.label5.Text = "Preferred Monthly Payment Date";
             // 
-            // dateTimePicker1
+            // dtPaymentDate
             // 
-            this.dateTimePicker1.Location = new System.Drawing.Point(19, 338);
-            this.dateTimePicker1.Name = "dateTimePicker1";
-            this.dateTimePicker1.Size = new System.Drawing.Size(188, 20);
-            this.dateTimePicker1.TabIndex = 8;
+            this.dtPaymentDate.Location = new System.Drawing.Point(19, 338);
+            this.dtPaymentDate.Name = "dtPaymentDate";
+            this.dtPaymentDate.Size = new System.Drawing.Size(188, 20);
+            this.dtPaymentDate.TabIndex = 8;
             // 
             // label9
             // 
@@ -267,7 +267,7 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.dateTimePicker1);
+            this.Controls.Add(this.dtPaymentDate);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.cbLoanPurpose);
             this.Controls.Add(this.label4);
@@ -295,7 +295,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbLoanPurpose;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.DateTimePicker dateTimePicker1;
+        private System.Windows.Forms.DateTimePicker dtPaymentDate;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;

@@ -14,8 +14,9 @@ namespace LoanManagementSystem.Controls
         public UserEvaluation()
         {
             InitializeComponent();
+             // Load users when the control is initialized
             // In your form constructor or Load event:
-            dataGridView1.CellClick += DataGridView1_CellClick;
+            dgvUserList.CellClick += DataGridView1_CellClick;
         }
 
         // Method to load and display users in the DataGridView
@@ -25,19 +26,19 @@ namespace LoanManagementSystem.Controls
             List<DatabaseHelper.User> users = dbHelper.GetUsers(); // Fetch users from the database
 
 
-            dataGridView1.Rows.Clear(); // Clear existing rows in the DataGridView
+            dgvUserList.Rows.Clear(); // Clear existing rows in the DataGridView
 
             // Populate DataGridView with user data
             foreach (var user in users)
             {
-                int rowIndex = dataGridView1.Rows.Add(); // Add a new row to the DataGridView
-                DataGridViewRow row = dataGridView1.Rows[rowIndex];
+                int rowIndex = dgvUserList.Rows.Add(); // Add a new row to the DataGridView
+                DataGridViewRow row = dgvUserList.Rows[rowIndex];
 
                 // Set the values in the row for each column
-                row.Cells["Name"].Value = $"{user.FirstName} {user.LastName}";
-                row.Cells["Status"].Value = $"{user.Status}";
-                row.Cells["View"].Value = "View"; // You can handle "Edit" logic separately
-                dataGridView1.Columns["View"].DefaultCellStyle.BackColor = Color.LightBlue;
+                row.Cells["colName"].Value = $"{user.FirstName} {user.LastName}";
+                row.Cells["colStatus"].Value = $"{user.Status}";
+                row.Cells["colView"].Value = "View"; // You can handle "Edit" logic separately
+                dgvUserList.Columns["colView"].DefaultCellStyle.BackColor = Color.LightBlue;
 
             }
         }
@@ -69,8 +70,9 @@ namespace LoanManagementSystem.Controls
         private void UserEvaluation_Load(object sender, EventArgs e)
         {
             LoadUsers(); // Call LoadUsers method when the control is loaded
-            
-          
+           
+
+
         }
     }
 }

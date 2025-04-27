@@ -1,10 +1,15 @@
-﻿using System;
+﻿using LoanManagementSystem.Controls;
+using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Security.Principal;
 using System.Windows.Forms;
+using static LoanManagementSystem.DatabaseHelper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace LoanManagementSystem
@@ -15,7 +20,7 @@ namespace LoanManagementSystem
         //Query for table Users
 
         //CREATE TABLE Users (
-        //    UserID INT PRIMARY KEY IDENTITY(1,1),
+        //UserID INT PRIMARY KEY IDENTITY(1,1),
         //FirstName NVARCHAR(50) NOT NULL,
         //LastName NVARCHAR(50) NOT NULL,
         //PhoneNumber NVARCHAR(20),
@@ -27,6 +32,29 @@ namespace LoanManagementSystem
         //PasswordHash NVARCHAR(128) NOT NULL,
         //Status NVARCHAR(20) NOT NULL DEFAULT 'Pending'
         //);
+
+
+        //Query for table Loan
+        //        CREATE TABLE Loan
+        //        (
+        //    LoanID INT PRIMARY KEY IDENTITY(1,1), 
+        //    UserID INT NOT NULL,                 
+        //    Amount DECIMAL(18, 2) NOT NULL,       
+        //    Term VARCHAR(50) NOT NULL,            
+        //    Status VARCHAR(50) NOT NULL,           
+        //    CreatedAt DATETIME DEFAULT GETDATE(),  
+        //    ApprovedAt DATETIME NULL,              
+        //    DisbursedAt DATETIME NULL,            
+
+        //    CONSTRAINT FK_Loan_Users FOREIGN KEY(UserID) REFERENCES Users(UserID)
+        //);
+
+//        ALTER TABLE Loan
+//ADD
+//    LoanPurpose VARCHAR(255) NULL,
+//    PaymentDate DATETIME NULL;
+
+
 
 
 
@@ -324,6 +352,43 @@ namespace LoanManagementSystem
 
 
 
+        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, DateTime paymentDate)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, PaymentDate, Status, CreatedAt)
+                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @PaymentDate, @Status, GETDATE())";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@UserID", userID);
+                        cmd.Parameters.AddWithValue("@Amount", amount);
+                        cmd.Parameters.AddWithValue("@Term", term);
+                        cmd.Parameters.AddWithValue("@LoanPurpose", loanPurpose);
+                        cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
+                        cmd.Parameters.AddWithValue("@Status", "Pending");
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0; // True if insert successful
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error inserting loan: " + ex.Message);
+                    return false;
+                }
+            }
+        }
+
+
+
+
+
+
+
 
         // User class to represent the user object
         public class User
@@ -342,6 +407,43 @@ namespace LoanManagementSystem
         }
 
 
-        
+
+
+        public DataTable GetLoansWithUserNames()
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"
+                SELECT 
+                    (U.FirstName + ' ' + U.LastName) AS Lender,
+                    L.Amount AS Loan_Amount,
+                    L.Status
+                FROM 
+                    Loan L
+                INNER JOIN 
+                    Users U ON L.UserID = U.UserID
+            ";
+
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error fetching loan data: " + ex.Message);
+                    return null;
+                }
+            }
+        }
+
+
+
+
     }
 }

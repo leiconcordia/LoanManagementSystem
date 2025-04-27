@@ -58,17 +58,18 @@ namespace LoanManagementSystem
             //MainPanel.Controls.Add(UserEvaluation);
             //MainPanel.Controls.Clear();
             //UserEvaluation.Dock = DockStyle.Fill;
+            
             switchUserControl(UserEvaluation);
 
         }
 
        
 
-        private void btnCalender_Click(object sender, EventArgs e)
+        private void btnLoan_Click(object sender, EventArgs e)
         {
-            pnlNav.Height = btnCalender.Height;
-            pnlNav.Top = btnCalender.Top;
-            btnCalender.BackColor = Color.FromArgb(46, 51, 73);
+            pnlNav.Height = btnLoan.Height;
+            pnlNav.Top = btnLoan.Top;
+            btnLoan.BackColor = Color.FromArgb(46, 51, 73);
 
             switchUserControl(Loans);
         }
@@ -85,6 +86,7 @@ namespace LoanManagementSystem
             pnlNav.Height = btnSettings.Height;
             pnlNav.Top = btnSettings.Top;
             btnSettings.BackColor = Color.FromArgb(46, 51, 73);
+            
         }
 
         private void btnDashboard_Leave(object sender, EventArgs e)
@@ -97,9 +99,9 @@ namespace LoanManagementSystem
             btnUserEvaluation.BackColor = Color.FromArgb(24, 30, 54);
         }
 
-        private void btnCalender_Leave(object sender, EventArgs e)
+        private void btnLoan_Leave(object sender, EventArgs e)
         {
-            btnCalender.BackColor = Color.FromArgb(24, 30, 54);
+            btnLoan.BackColor = Color.FromArgb(24, 30, 54);
         }
 
         private void btnContactUs_Leave(object sender, EventArgs e)

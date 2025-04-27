@@ -49,6 +49,7 @@ namespace LoanManagementSystem.Controls
                 if (result == DialogResult.Yes)
                 {
                     SaveImages();
+                    SubmitLoanApplication();
                 }
                 // If No, do nothing (stay on the current form)
             }
@@ -104,7 +105,7 @@ namespace LoanManagementSystem.Controls
             monthlyPayment = totalAmount / months;
 
             // Format the output message
-            string date = dateTimePicker1.Value.ToString("dd"); // e.g., April 15
+            string date = dtPaymentDate.Value.ToString("dd"); // e.g., April 15
             message = $"You will pay ₱{monthlyPayment:F2} every {date} of the month for {months} months.";
 
             return true;
@@ -193,5 +194,49 @@ namespace LoanManagementSystem.Controls
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+        private void SubmitLoanApplication()
+        {
+            DateTime paymentDate = dtPaymentDate.Value;
+            string loanPurpose = cbLoanPurpose.SelectedItem != null ? cbLoanPurpose.SelectedItem.ToString() : "";
+            string loanTerm = cbLoanTerm.SelectedItem != null ? cbLoanTerm.SelectedItem.ToString() : "";
+            decimal loanAmount = 0;
+
+            if (!decimal.TryParse(tbLoanAmount.Text, out loanAmount))
+            {
+                MessageBox.Show("Invalid loan amount. Please enter a valid number.");
+                return;
+            }
+
+            if (string.IsNullOrEmpty(loanPurpose) || string.IsNullOrEmpty(loanTerm))
+            {
+                MessageBox.Show("Please select both Loan Purpose and Loan Term.");
+                return;
+            }
+
+            // Now call DatabaseHelper to insert the loan
+            DatabaseHelper db = new DatabaseHelper();
+            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, paymentDate);
+
+            if (success)
+            {
+                MessageBox.Show("Loan application submitted successfully!");
+            }
+            else
+            {
+                MessageBox.Show("Failed to submit loan application. Please try again.");
+            }
+        }
+
     }
+
+
+
+
+    //DateTime paymentDate = dtPaymentDate.Value;
+    //string loanPurpose = cbLoanPurpose.SelectedItem.ToString() : "";
+    //string loanTerm =  cbLoanTerm.SelectedItem.ToString() : "";
+    //decimal loanAmount = 0;
+
+
 }
+

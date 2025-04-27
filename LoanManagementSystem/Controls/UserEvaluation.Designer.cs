@@ -30,82 +30,80 @@ namespace LoanManagementSystem.Controls
         /// </summary>
         private void InitializeComponent()
         {
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvUserList = new System.Windows.Forms.DataGridView();
             this.label1 = new System.Windows.Forms.Label();
-            this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.View = new System.Windows.Forms.DataGridViewButtonColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colView = new System.Windows.Forms.DataGridViewButtonColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUserList)).BeginInit();
             this.SuspendLayout();
             // 
-            // dataGridView1
+            // dgvUserList
             // 
-            this.dataGridView1.ReadOnly = true;
-            this.dataGridView1.AllowUserToAddRows = false;
-
-            dataGridView1.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
-            this.dataGridView1.AllowUserToOrderColumns = true;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Name,
-            this.Status,
-            this.View});
-            this.dataGridView1.Location = new System.Drawing.Point(89, 110);
-            this.dataGridView1.Margin = new System.Windows.Forms.Padding(4);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.RowHeadersWidth = 51;
-            this.dataGridView1.Size = new System.Drawing.Size(965, 492);
-            this.dataGridView1.TabIndex = 0;
-            
-
-
-
+            this.dgvUserList.AllowUserToAddRows = false;
+            this.dgvUserList.AllowUserToOrderColumns = true;
+            this.dgvUserList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dgvUserList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUserList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colName,
+            this.colStatus,
+            this.colView});
+            this.dgvUserList.Location = new System.Drawing.Point(67, 89);
+            this.dgvUserList.Name = "dgvUserList";
+            this.dgvUserList.ReadOnly = true;
+            this.dgvUserList.RowHeadersWidth = 51;
+            this.dgvUserList.Size = new System.Drawing.Size(724, 400);
+            this.dgvUserList.TabIndex = 0;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(33, 26);
+            this.label1.Location = new System.Drawing.Point(25, 21);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(138, 37);
+            this.label1.Size = new System.Drawing.Size(109, 30);
             this.label1.TabIndex = 1;
             this.label1.Text = "User List";
             // 
-            // Name
+            // colName
             // 
-            this.Name.HeaderText = "Name ";
-            this.Name.MinimumWidth = 6;
-            this.Name.Name = "Name";
-            this.Name.Width = 420;
+            this.colName.FillWeight = 127.1574F;
+            this.colName.HeaderText = "Name";
+            this.colName.MinimumWidth = 6;
+            this.colName.Name = "colName";
+            this.colName.ReadOnly = true;
             // 
-            // Status
+            // colStatus
             // 
-            this.Status.HeaderText = "Status";
-            this.Status.MinimumWidth = 6;
-            this.Status.Name = "Status";
-            this.Status.Width = 125;
+            this.colStatus.FillWeight = 127.1574F;
+            this.colStatus.HeaderText = "Status";
+            this.colStatus.MinimumWidth = 6;
+            this.colStatus.Name = "colStatus";
+            this.colStatus.ReadOnly = true;
             // 
-            // View
+            // colView
             // 
-            this.View.HeaderText = "Action";
-            this.View.MinimumWidth = 6;
-            this.View.Name = "View";
-            this.View.Text = "View";
-            this.View.Width = 50;
+            this.colView.FillWeight = 45.68528F;
+            this.colView.HeaderText = "Action";
+            this.colView.MinimumWidth = 6;
+            this.colView.Name = "colView";
+            this.colView.ReadOnly = true;
+            this.colView.Text = "View";
+            this.colView.UseColumnTextForButtonValue = true;
             // 
             // UserEvaluation
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.Controls.Add(this.label1);
-            this.Controls.Add(this.dataGridView1);
-            this.Margin = new System.Windows.Forms.Padding(4);
-            //this.Name = "UserEvaluation";
-            this.Size = new System.Drawing.Size(1150, 775);
+            this.Controls.Add(this.dgvUserList);
+            this.Name = "UserEvaluation";
+            this.Size = new System.Drawing.Size(862, 630);
             this.Load += new System.EventHandler(this.UserEvaluation_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUserList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -113,10 +111,10 @@ namespace LoanManagementSystem.Controls
 
         #endregion
 
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvUserList;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Name;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
-        private System.Windows.Forms.DataGridViewButtonColumn View;
+        private DataGridViewTextBoxColumn colName;
+        private DataGridViewTextBoxColumn colStatus;
+        private DataGridViewButtonColumn colView;
     }
 }
