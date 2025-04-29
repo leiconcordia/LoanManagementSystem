@@ -32,10 +32,12 @@ namespace LoanManagementSystem.Controls
         {
             this.label1 = new System.Windows.Forms.Label();
             this.dgvLoanList = new System.Windows.Forms.DataGridView();
-            this.Lender = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Loanee = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Loan_Amount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Status = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.actionButton = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.LoanID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLoanList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -53,25 +55,28 @@ namespace LoanManagementSystem.Controls
             // 
             // dgvLoanList
             // 
+            this.dgvLoanList.AllowUserToAddRows = false;
             this.dgvLoanList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dgvLoanList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvLoanList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Lender,
+            this.Loanee,
             this.Loan_Amount,
             this.Status,
-            this.actionButton});
+            this.actionButton,
+            this.LoanID,
+            this.Column1});
             this.dgvLoanList.Location = new System.Drawing.Point(46, 97);
             this.dgvLoanList.Name = "dgvLoanList";
             this.dgvLoanList.Size = new System.Drawing.Size(724, 364);
             this.dgvLoanList.TabIndex = 1;
-            this.dgvLoanList.AllowUserToAddRows = false;
+            this.dgvLoanList.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvLoanList_CellContentClick);
             // 
-            // Lender
+            // Loanee
             // 
-            this.Lender.FillWeight = 144.9716F;
-            this.Lender.HeaderText = "Lender";
-            this.Lender.Name = "Lender";
-            this.Lender.ReadOnly = true;
+            this.Loanee.FillWeight = 144.9716F;
+            this.Loanee.HeaderText = "Loanee";
+            this.Loanee.Name = "Loanee";
+            this.Loanee.ReadOnly = true;
             // 
             // Loan_Amount
             // 
@@ -94,6 +99,18 @@ namespace LoanManagementSystem.Controls
             this.actionButton.Text = "View Details";
             this.actionButton.UseColumnTextForButtonValue = true;
             // 
+            // LoanID
+            // 
+            this.LoanID.HeaderText = "Column1";
+            this.LoanID.Name = "LoanID";
+            this.LoanID.Visible = false;
+            // 
+            // Column1
+            // 
+            this.Column1.HeaderText = "Column1";
+            this.Column1.Name = "Column1";
+            this.Column1.Visible = false;
+            // 
             // Loans
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -109,7 +126,6 @@ namespace LoanManagementSystem.Controls
             ((System.ComponentModel.ISupportInitialize)(this.dgvLoanList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
-            
 
         }
 
@@ -117,9 +133,11 @@ namespace LoanManagementSystem.Controls
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.DataGridView dgvLoanList;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Lender;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Loan_Amount;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Status;
+        private DataGridViewTextBoxColumn Loanee;
+        private DataGridViewTextBoxColumn Loan_Amount;
+        private DataGridViewTextBoxColumn Status;
         private DataGridViewButtonColumn actionButton;
+        private DataGridViewTextBoxColumn LoanID;
+        private DataGridViewTextBoxColumn Column1;
     }
 }

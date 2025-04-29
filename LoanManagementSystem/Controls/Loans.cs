@@ -1,53 +1,159 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace LoanManagementSystem.Controls
 {
     public partial class Loans : UserControl
     {
+        private const string ColumnLoanee = "Loanee";
+        private const string ColumnLoanAmount = "Loan_Amount";
+        private const string ColumnStatus = "Status";
+        private const string ColumnActionButton = "actionButton";
+        private const string ColumnUserID = "LoanID";
+
         public Loans()
         {
             InitializeComponent();
-        }
+            if (!dgvLoanList.Columns.Contains("LoanID"))
+            {
+                var loanIdColumn = new DataGridViewTextBoxColumn();
+                loanIdColumn.Name = "LoanID";
+                loanIdColumn.HeaderText = "LoanID";
+                loanIdColumn.Visible = false; // hide it
+                dgvLoanList.Columns.Add(loanIdColumn);
+            }
+            
 
+        }
 
         private void LoadLoanData()
         {
-            DatabaseHelper db = new DatabaseHelper();
-            DataTable loanData = db.GetLoansWithUserNames();
-
-            if (loanData != null)
+            try
             {
-                dgvLoanList.Rows.Clear(); // Clear existing rows first
+                var loanData = FetchLoanData();
 
-                foreach (DataRow row in loanData.Rows)
+                if (loanData != null)
                 {
-                    int rowIndex = dgvLoanList.Rows.Add();
-                    dgvLoanList.Rows[rowIndex].Cells["Lender"].Value = row["Lender"].ToString();
-                    dgvLoanList.Rows[rowIndex].Cells["Loan_Amount"].Value = row["Loan_Amount"].ToString();
-                    dgvLoanList.Rows[rowIndex].Cells["Status"].Value = row["Status"].ToString();
-                    // If you have an Action button, no need to fill here
+                    BindLoanDataToGrid(loanData);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while loading loan data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+            
+
+        }
+       
 
 
-                    // 🎨 Set text color (ForeColor)
-                    dgvLoanList.Rows[rowIndex].Cells["Lender"].Style.ForeColor = Color.Black;
-                    dgvLoanList.Rows[rowIndex].Cells["Loan_Amount"].Style.ForeColor = Color.Black;
-                    dgvLoanList.Rows[rowIndex].Cells["Status"].Style.ForeColor = Color.Black;
+
+
+        private DataTable FetchLoanData()
+        {
+            // Encapsulate database logic
+            var db = new DatabaseHelper();
+            return db.GetLoansWithUserNames();
+        }
+        private void BindLoanDataToGrid(DataTable loanData)
+        {
+            dgvLoanList.Rows.Clear();
+
+            foreach (DataRow row in loanData.Rows)
+            {
+                int rowIndex = dgvLoanList.Rows.Add();
+                dgvLoanList.Rows[rowIndex].Cells[ColumnLoanee].Value = row[ColumnLoanee]?.ToString();
+                dgvLoanList.Rows[rowIndex].Cells[ColumnLoanAmount].Value = row[ColumnLoanAmount]?.ToString();
+                dgvLoanList.Rows[rowIndex].Cells[ColumnStatus].Value = row[ColumnStatus]?.ToString();
+                dgvLoanList.Rows[rowIndex].Cells["LoanID"].Value = row["LoanID"];
+
+
+                // Create a "View Details" button in the row
+                var viewButton = new DataGridViewButtonCell();
+                viewButton.Value = "View Details";  // Set button text
+
+                // Store the UserID in the Tag property
+                viewButton.Tag = row["LoanID"];  // Assuming your query includes the UserID column
+
+                // Add the button to the row
+                dgvLoanList.Rows[rowIndex].Cells[ColumnActionButton] = viewButton;
+                dgvLoanList.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
+
+
+                // Set text color for the cells
+                dgvLoanList.Rows[rowIndex].Cells[ColumnLoanee].Style.ForeColor = Color.Black;
+                dgvLoanList.Rows[rowIndex].Cells[ColumnLoanAmount].Style.ForeColor = Color.Black;
+                dgvLoanList.Rows[rowIndex].Cells[ColumnStatus].Style.ForeColor = Color.Black;
+
+
+                // Optional styling
+                var status = row["Status"].ToString();
+                var statusCell = dgvLoanList.Rows[rowIndex].Cells["Status"];
+
+                if (status == "Approved")
+                {
+                    statusCell.Style.ForeColor = Color.White;
+                    statusCell.Style.BackColor = Color.Green;
+                }
+                else if (status == "Rejected")
+                {
+                    statusCell.Style.ForeColor = Color.White;
+                    statusCell.Style.BackColor = Color.Red;
+                }
+                else if (status == "Pending")
+                {
+                    statusCell.Style.ForeColor = Color.Black;
+                    statusCell.Style.BackColor = Color.Yellow;
                 }
             }
         }
+
+        
+        
+
+
 
 
         private void Loans_Load(object sender, EventArgs e)
         {
             LoadLoanData();
+            this.Load += new EventHandler(Loans_Load);
+            FetchLoanData();
+
         }
+
+        private void dgvLoanList_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvLoanList.Columns[e.ColumnIndex].Name == ColumnActionButton && e.RowIndex >= 0)
+            {
+                try
+                {
+                    int loanId = Convert.ToInt32(dgvLoanList.Rows[e.RowIndex].Cells["LoanID"].Value);
+                    OpenLoanDetails(loanId);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"An error occurred while processing the action: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+
+
+
+
+        private void OpenLoanDetails(int LoanID)
+        {
+
+            
+            var loanDetails = new LoanDetails(LoanID);
+            var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            mainForm?.switchUserControl(loanDetails);
+        }
+
     }
 }

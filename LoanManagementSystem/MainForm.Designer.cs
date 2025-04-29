@@ -31,7 +31,7 @@ namespace LoanManagementSystem
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.pnlNav = new System.Windows.Forms.Panel();
-            this.btnSettings = new System.Windows.Forms.Button();
+            this.btnDisbursements = new System.Windows.Forms.Button();
             this.btnContactUs = new System.Windows.Forms.Button();
             this.btnLoan = new System.Windows.Forms.Button();
             this.btnUserEvaluation = new System.Windows.Forms.Button();
@@ -66,7 +66,7 @@ namespace LoanManagementSystem
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.panel1.Controls.Add(this.pnlNav);
-            this.panel1.Controls.Add(this.btnSettings);
+            this.panel1.Controls.Add(this.btnDisbursements);
             this.panel1.Controls.Add(this.btnContactUs);
             this.panel1.Controls.Add(this.btnLoan);
             this.panel1.Controls.Add(this.btnUserEvaluation);
@@ -74,7 +74,7 @@ namespace LoanManagementSystem
             this.panel1.Controls.Add(this.panel2);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
             this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(156, 609);
             this.panel1.TabIndex = 0;
@@ -84,28 +84,27 @@ namespace LoanManagementSystem
             // 
             this.pnlNav.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.pnlNav.Location = new System.Drawing.Point(0, 101);
-            this.pnlNav.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pnlNav.Margin = new System.Windows.Forms.Padding(2);
             this.pnlNav.Name = "pnlNav";
             this.pnlNav.Size = new System.Drawing.Size(2, 52);
             this.pnlNav.TabIndex = 3;
             // 
-            // btnSettings
+            // btnDisbursements
             // 
-            this.btnSettings.FlatAppearance.BorderSize = 0;
-            this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
-            this.btnSettings.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
-            this.btnSettings.Location = new System.Drawing.Point(2, 286);
-            this.btnSettings.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(154, 53);
-            this.btnSettings.TabIndex = 5;
-            this.btnSettings.Text = "  Settings";
-            this.btnSettings.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.btnSettings.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
-            this.btnSettings.UseVisualStyleBackColor = true;
-            this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
-            this.btnSettings.Leave += new System.EventHandler(this.btnSettings_Leave);
+            this.btnDisbursements.FlatAppearance.BorderSize = 0;
+            this.btnDisbursements.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnDisbursements.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnDisbursements.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.btnDisbursements.Location = new System.Drawing.Point(2, 286);
+            this.btnDisbursements.Margin = new System.Windows.Forms.Padding(2);
+            this.btnDisbursements.Name = "btnDisbursements";
+            this.btnDisbursements.Size = new System.Drawing.Size(154, 53);
+            this.btnDisbursements.TabIndex = 5;
+            this.btnDisbursements.Text = "  Disubursements";
+            this.btnDisbursements.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnDisbursements.UseVisualStyleBackColor = true;
+            this.btnDisbursements.Click += new System.EventHandler(this.btnDisbursements_Click);
+            this.btnDisbursements.Leave += new System.EventHandler(this.btnDisbursements_Leave);
             // 
             // btnContactUs
             // 
@@ -115,7 +114,7 @@ namespace LoanManagementSystem
             this.btnContactUs.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnContactUs.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnContactUs.Location = new System.Drawing.Point(0, 286);
-            this.btnContactUs.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnContactUs.Margin = new System.Windows.Forms.Padding(2);
             this.btnContactUs.Name = "btnContactUs";
             this.btnContactUs.Size = new System.Drawing.Size(156, 38);
             this.btnContactUs.TabIndex = 4;
@@ -132,7 +131,7 @@ namespace LoanManagementSystem
             this.btnLoan.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnLoan.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnLoan.Location = new System.Drawing.Point(0, 227);
-            this.btnLoan.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnLoan.Margin = new System.Windows.Forms.Padding(2);
             this.btnLoan.Name = "btnLoan";
             this.btnLoan.Size = new System.Drawing.Size(156, 59);
             this.btnLoan.TabIndex = 3;
@@ -150,7 +149,7 @@ namespace LoanManagementSystem
             this.btnUserEvaluation.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnUserEvaluation.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnUserEvaluation.Location = new System.Drawing.Point(0, 162);
-            this.btnUserEvaluation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnUserEvaluation.Margin = new System.Windows.Forms.Padding(2);
             this.btnUserEvaluation.Name = "btnUserEvaluation";
             this.btnUserEvaluation.Size = new System.Drawing.Size(156, 65);
             this.btnUserEvaluation.TabIndex = 1;
@@ -168,7 +167,7 @@ namespace LoanManagementSystem
             this.btnDashboard.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
             this.btnDashboard.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
             this.btnDashboard.Location = new System.Drawing.Point(0, 100);
-            this.btnDashboard.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.btnDashboard.Margin = new System.Windows.Forms.Padding(2);
             this.btnDashboard.Name = "btnDashboard";
             this.btnDashboard.Size = new System.Drawing.Size(156, 62);
             this.btnDashboard.TabIndex = 0;
@@ -185,7 +184,7 @@ namespace LoanManagementSystem
             this.panel2.Controls.Add(this.pictureBox1);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(156, 100);
             this.panel2.TabIndex = 0;
@@ -221,7 +220,7 @@ namespace LoanManagementSystem
             // 
             this.pictureBox1.Image = global::LoanManagementSystem.Properties.Resources.account;
             this.pictureBox1.Location = new System.Drawing.Point(59, 11);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(38, 33);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -250,7 +249,7 @@ namespace LoanManagementSystem
             this.panel3.Controls.Add(this.label6);
             this.panel3.Controls.Add(this.label5);
             this.panel3.Location = new System.Drawing.Point(24, 44);
-            this.panel3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel3.Margin = new System.Windows.Forms.Padding(2);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(188, 84);
             this.panel3.TabIndex = 4;
@@ -259,7 +258,7 @@ namespace LoanManagementSystem
             // pictureBox2
             // 
             this.pictureBox2.Location = new System.Drawing.Point(95, 5);
-            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox2.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox2.Name = "pictureBox2";
             this.pictureBox2.Size = new System.Drawing.Size(90, 45);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -313,7 +312,7 @@ namespace LoanManagementSystem
             this.panel4.Controls.Add(this.label8);
             this.panel4.Controls.Add(this.label9);
             this.panel4.Location = new System.Drawing.Point(216, 44);
-            this.panel4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.panel4.Margin = new System.Windows.Forms.Padding(2);
             this.panel4.Name = "panel4";
             this.panel4.Size = new System.Drawing.Size(209, 84);
             this.panel4.TabIndex = 4;
@@ -322,7 +321,7 @@ namespace LoanManagementSystem
             // pictureBox3
             // 
             this.pictureBox3.Location = new System.Drawing.Point(106, 5);
-            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.pictureBox3.Margin = new System.Windows.Forms.Padding(2);
             this.pictureBox3.Name = "pictureBox3";
             this.pictureBox3.Size = new System.Drawing.Size(90, 45);
             this.pictureBox3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -387,7 +386,7 @@ namespace LoanManagementSystem
             this.ClientSize = new System.Drawing.Size(1018, 609);
             this.Controls.Add(this.MainPanel);
             this.Controls.Add(this.panel1);
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DASHBOARD";
@@ -413,7 +412,7 @@ namespace LoanManagementSystem
 
         private Panel panel1;
         private Panel pnlNav;
-        private Button btnSettings;
+        private Button btnDisbursements;
         private Button btnContactUs;
         private Button btnLoan;
         private Button btnUserEvaluation;

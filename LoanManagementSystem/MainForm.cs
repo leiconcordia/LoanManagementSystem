@@ -9,6 +9,8 @@ namespace LoanManagementSystem
     {
         Controls.UserEvaluation UserEvaluation = new Controls.UserEvaluation();
         Controls.Loans Loans = new Controls.Loans();
+        Controls.Disbursements Disbursements = new Controls.Disbursements();
+
         public MainForm()
         {
             InitializeComponent();
@@ -71,7 +73,11 @@ namespace LoanManagementSystem
             pnlNav.Top = btnLoan.Top;
             btnLoan.BackColor = Color.FromArgb(46, 51, 73);
 
-            switchUserControl(Loans);
+
+            Loans.Dock = DockStyle.Fill;
+            MainPanel.Controls.Clear();
+            MainPanel.Controls.Add(Loans);
+
         }
 
         private void btnContactUs_Click(object sender, EventArgs e)
@@ -81,12 +87,14 @@ namespace LoanManagementSystem
             btnContactUs.BackColor = Color.FromArgb(46, 51, 73);
         }
 
-        private void btnSettings_Click(object sender, EventArgs e)
+        private void btnDisbursements_Click(object sender, EventArgs e)
         {
-            pnlNav.Height = btnSettings.Height;
-            pnlNav.Top = btnSettings.Top;
-            btnSettings.BackColor = Color.FromArgb(46, 51, 73);
-            
+            pnlNav.Height = btnDisbursements.Height;
+            pnlNav.Top = btnDisbursements.Top;
+            btnDisbursements.BackColor = Color.FromArgb(46, 51, 73);
+
+            switchUserControl(Disbursements);
+
         }
 
         private void btnDashboard_Leave(object sender, EventArgs e)
@@ -109,9 +117,9 @@ namespace LoanManagementSystem
             btnContactUs.BackColor = Color.FromArgb(24, 30, 54);
         }
 
-        private void btnSettings_Leave(object sender, EventArgs e)
+        private void btnDisbursements_Leave(object sender, EventArgs e)
         {
-            btnSettings.BackColor = Color.FromArgb(24, 30, 54);
+            btnDisbursements.BackColor = Color.FromArgb(24, 30, 54);
         }
 
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

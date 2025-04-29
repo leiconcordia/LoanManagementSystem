@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace LoanManagementSystem.Controls
 {
-    public partial class LoanApplicationForm2 : UserControl
+    public partial class Disbursements : UserControl
     {
-        public LoanApplicationForm2()
+        public Disbursements()
         {
             InitializeComponent();
         }

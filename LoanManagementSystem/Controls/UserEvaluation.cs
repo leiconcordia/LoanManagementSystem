@@ -39,6 +39,7 @@ namespace LoanManagementSystem.Controls
                 row.Cells["colStatus"].Value = $"{user.Status}";
                 row.Cells["colView"].Value = "View"; // You can handle "Edit" logic separately
                 dgvUserList.Columns["colView"].DefaultCellStyle.BackColor = Color.LightBlue;
+                dgvUserList.AlternatingRowsDefaultCellStyle.BackColor = Color.LightGray;
 
             }
         }

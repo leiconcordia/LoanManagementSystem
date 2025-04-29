@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Net;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Security.Principal;
 using System.Windows.Forms;
 using static LoanManagementSystem.DatabaseHelper;
@@ -33,6 +34,11 @@ namespace LoanManagementSystem
         //Status NVARCHAR(20) NOT NULL DEFAULT 'Pending'
         //);
 
+        //ALTER TABLE Users
+        //ADD ValidID VARBINARY(MAX),
+        //ProofOfIncome VARBINARY(MAX);
+
+
 
         //Query for table Loan
         //        CREATE TABLE Loan
@@ -49,15 +55,30 @@ namespace LoanManagementSystem
         //    CONSTRAINT FK_Loan_Users FOREIGN KEY(UserID) REFERENCES Users(UserID)
         //);
 
-//        ALTER TABLE Loan
-//ADD
-//    LoanPurpose VARCHAR(255) NULL,
-//    PaymentDate DATETIME NULL;
+        //        ALTER TABLE Loan
+        //ADD
+        //    LoanPurpose VARCHAR(255) NULL,
+        //    PaymentDate DATETIME NULL;
 
 
+        //        CREATE TABLE Disbursement(
+        //        DisbursementID INT PRIMARY KEY IDENTITY(1,1),
+        //        LoanID INT NOT NULL,
+        //        Amount DECIMAL(18,2) NOT NULL,
+        //        DisbursedAt DATETIME DEFAULT GETDATE(),
+        //        FOREIGN KEY(LoanID) REFERENCES Loan(LoanID)
+        //);
 
 
+//        CREATE TABLE Payments(
+//        PaymentID INT PRIMARY KEY IDENTITY(1,1),
+//        LoanID INT NOT NULL,                 -- FK to Loans table
+//        AmountPaid DECIMAL(18,2) NOT NULL,   -- How much the user paid
+//        PaymentDate DATETIME DEFAULT GETDATE(), -- When they paid
+    
 
+//        FOREIGN KEY(LoanID) REFERENCES Loan(LoanID)
+//);
 
 
 
@@ -413,32 +434,107 @@ namespace LoanManagementSystem
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                try
-                {
-                    conn.Open();
-                    string query = @"
-                SELECT 
-                    (U.FirstName + ' ' + U.LastName) AS Lender,
-                    L.Amount AS Loan_Amount,
-                    L.Status
-                FROM 
-                    Loan L
-                INNER JOIN 
-                    Users U ON L.UserID = U.UserID
-            ";
+                conn.Open();
+                string query = @"
+            SELECT 
+                L.LoanID AS LoanID,  -- ✅ Include LoanID
+                (U.FirstName + ' ' + U.LastName) AS Loanee,
+                L.Amount AS Loan_Amount,
+                L.Status
+            FROM Loan L
+            INNER JOIN Users U ON L.UserID = U.UserID";
 
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(query, conn))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
                     {
                         DataTable dt = new DataTable();
                         adapter.Fill(dt);
                         return dt;
                     }
                 }
+            }
+        }
+
+
+
+
+        public DataTable GetLoanDetailsByLoanId(int loanId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = @"
+            SELECT 
+                (U.FirstName + ' ' + U.LastName) AS Loanee,
+                L.Amount AS Loan_Amount,
+                L.Term,
+                L.LoanPurpose,
+                L.Status
+            FROM Loan L
+            INNER JOIN Users U ON L.UserID = U.UserID
+            WHERE L.LoanID = @LoanID";  // ✅ Make sure this is by LoanID
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LoanID", loanId);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
+
+
+        public bool UpdateLoanStatus(int loanID, string newStatus)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                try
+                {
+                    conn.Open();
+                    string query = @"
+                UPDATE Loan
+                SET Status = @Status,
+                    ApprovedAt = CASE WHEN @Status = 'Approved' THEN GETDATE() ELSE NULL END
+                WHERE LoanID = @LoanID";
+
+                    using (SqlCommand cmd = new SqlCommand(query, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@Status", newStatus);
+                        cmd.Parameters.AddWithValue("@LoanID", loanID);
+
+                        int rowsAffected = cmd.ExecuteNonQuery();
+                        return rowsAffected > 0; // Returns true if the update was successful
+                    }
+                }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error fetching loan data: " + ex.Message);
-                    return null;
+                    MessageBox.Show("Error updating loan status: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return false;
                 }
+            }
+        }
+
+
+
+
+
+        public bool InsertDisbursement(int loanId, decimal amount)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "INSERT INTO Disbursement (LoanID, Amount) VALUES (@LoanID, @Amount)";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@LoanID", loanId);
+                cmd.Parameters.AddWithValue("@Amount", amount);
+
+                conn.Open();
+                int result = cmd.ExecuteNonQuery();
+                return result > 0;
             }
         }
 
@@ -447,3 +543,4 @@ namespace LoanManagementSystem
 
     }
 }
+
