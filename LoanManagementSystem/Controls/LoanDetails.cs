@@ -15,7 +15,7 @@ namespace LoanManagementSystem.Controls
     {
         private int LoanID;
 
-        
+
 
         public LoanDetails(int LoanID)
         {
@@ -27,7 +27,7 @@ namespace LoanManagementSystem.Controls
 
 
         }
-        
+
 
         private void DisplayLoanDetails(int loanId)
         {
@@ -45,7 +45,7 @@ namespace LoanManagementSystem.Controls
                 string status = loan["Status"].ToString();
                 // ✅ Call the visibility handler
                 UpdateButtonVisibility(status);
-             
+
 
             }
             else
@@ -59,13 +59,13 @@ namespace LoanManagementSystem.Controls
         // Make sure the userId is passed to the constructor properly
         private void LoanDetails_Load(object sender, EventArgs e)
         {
-                
+
             // Display loan details for the current user
             DisplayLoanDetails(LoanID);  // Make sure userId is available and passed correctly to this method
         }
 
 
-        
+
 
 
 
@@ -75,8 +75,8 @@ namespace LoanManagementSystem.Controls
             if (db.UpdateLoanStatus(LoanID, "Approved"))
             {
                 MessageBox.Show("Loan approved successfully!");
-                 // Refresh DataGridView if needed
-                 
+                // Refresh DataGridView if needed
+
             }
             else
             {
@@ -90,8 +90,8 @@ namespace LoanManagementSystem.Controls
             if (db.UpdateLoanStatus(LoanID, "Rejected"))
             {
                 MessageBox.Show("Loan rejected.");
-                 
-                
+
+
             }
             else
             {
@@ -172,14 +172,21 @@ namespace LoanManagementSystem.Controls
             }
         }
 
-
-
-
-
-
+        private void btnBacktoLoan_Click(object sender, EventArgs e)
+        {
+            MainForm mainForm = (MainForm)this.ParentForm;
+            if (mainForm != null)
+            {
+                mainForm.switchUserControl(new Loans());
+                
+            }
+            else
+            {
+                MessageBox.Show("Parent form not found.");
+            }
+        }
 
     }
-
 }
 
 

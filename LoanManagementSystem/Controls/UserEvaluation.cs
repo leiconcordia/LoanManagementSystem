@@ -20,7 +20,7 @@ namespace LoanManagementSystem.Controls
         }
 
         // Method to load and display users in the DataGridView
-        private void LoadUsers()
+        public void LoadUsers()
         {
 
             List<DatabaseHelper.User> users = dbHelper.GetUsers(); // Fetch users from the database
@@ -68,12 +68,12 @@ namespace LoanManagementSystem.Controls
 
 
         // Event handler for the UserControl load event
-        private void UserEvaluation_Load(object sender, EventArgs e)
+        public void UserEvaluation_Load(object sender, EventArgs e)
         {
             LoadUsers(); // Call LoadUsers method when the control is loaded
            
 
-
+            
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LoanManagementSystem.Controls;
+using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms;
@@ -39,6 +40,16 @@ namespace LoanManagementSystem
             MainPanel.Controls.Clear();
             MainPanel.Controls.Add(userControl);
             userControl.Dock = DockStyle.Fill;
+            if (userControl is Loans L)
+            {
+                L.LoadLoanData();
+            }
+
+            if (userControl is UserEvaluation ue)
+            {
+                ue.LoadUsers();
+            }
+            
         }   
 
         private void btnDashboard_Click(object sender, EventArgs e)
@@ -74,9 +85,12 @@ namespace LoanManagementSystem
             btnLoan.BackColor = Color.FromArgb(46, 51, 73);
 
 
-            Loans.Dock = DockStyle.Fill;
-            MainPanel.Controls.Clear();
-            MainPanel.Controls.Add(Loans);
+           
+
+            switchUserControl(Loans);
+
+
+
 
         }
 
@@ -95,6 +109,17 @@ namespace LoanManagementSystem
 
             switchUserControl(Disbursements);
 
+        }
+
+        private void btnLogout_Click(object sender, EventArgs e)
+        {
+
+            pnlNav.Height = btnLogout.Height;
+            pnlNav.Top = btnLogout.Top;
+            btnLogout.BackColor = Color.FromArgb(46, 51, 73);
+            Login l = new Login();
+            this.Hide();
+            l.Show();
         }
 
         private void btnDashboard_Leave(object sender, EventArgs e)
@@ -132,6 +157,8 @@ namespace LoanManagementSystem
            //pang full screen
            // this.WindowState = FormWindowState.Maximized;
         }
+
+        
     }
 
 }

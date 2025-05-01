@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Data.SqlTypes;
 using System.Drawing;
 using System.IO;
 using System.Net;
@@ -537,6 +538,32 @@ namespace LoanManagementSystem
                 return result > 0;
             }
         }
+
+        public DataTable GetAllDisbursements()
+        {
+            DataTable dt = new DataTable();
+            string query = @"
+            SELECT 
+                (U.FirstName + ' ' + U.LastName) AS Loanee,
+                L.Amount AS Loan_Amount,
+                D.DisbursedAt AS Disbursed_Date
+            FROM Disbursement D
+            INNER JOIN Loan L ON D.LoanID = L.LoanID
+            INNER JOIN Users U ON L.UserID = U.UserID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
 
 
 

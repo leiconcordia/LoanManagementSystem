@@ -25,12 +25,15 @@ namespace LoanManagementSystem.Controls
                 loanIdColumn.HeaderText = "LoanID";
                 loanIdColumn.Visible = false; // hide it
                 dgvLoanList.Columns.Add(loanIdColumn);
+                LoadLoanData();
+                
             }
             
 
+
         }
 
-        private void LoadLoanData()
+        public void LoadLoanData()
         {
             try
             {

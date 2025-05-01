@@ -15,6 +15,23 @@ namespace LoanManagementSystem.Controls
         public Disbursements()
         {
             InitializeComponent();
+            LoadDisbursementData();
         }
+       
+        private void LoadDisbursementData()
+        {
+            DatabaseHelper db = new DatabaseHelper();
+
+            // Clear manually added columns
+            dgvDisbursements.Columns.Clear();
+
+            // Bind fresh data
+            dgvDisbursements.DataSource = db.GetAllDisbursements();
+
+            // Optional formatting
+            dgvDisbursements.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+        }
+
+
     }
 }

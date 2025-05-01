@@ -43,6 +43,7 @@
             this.lblLoanPurpose = new System.Windows.Forms.Label();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnDisburse = new System.Windows.Forms.Button();
+            this.btnBacktoLoan = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -210,11 +211,22 @@
             this.btnDisburse.UseVisualStyleBackColor = false;
             this.btnDisburse.Click += new System.EventHandler(this.btnDisburse_Click);
             // 
+            // btnBacktoLoan
+            // 
+            this.btnBacktoLoan.Location = new System.Drawing.Point(692, 27);
+            this.btnBacktoLoan.Name = "btnBacktoLoan";
+            this.btnBacktoLoan.Size = new System.Drawing.Size(84, 31);
+            this.btnBacktoLoan.TabIndex = 15;
+            this.btnBacktoLoan.Text = "Back";
+            this.btnBacktoLoan.UseVisualStyleBackColor = true;
+            this.btnBacktoLoan.Click += new System.EventHandler(this.btnBacktoLoan_Click);
+            // 
             // LoanDetails
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.Controls.Add(this.btnBacktoLoan);
             this.Controls.Add(this.btnDisburse);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.lblLoanPurpose);
@@ -254,5 +266,6 @@
         private System.Windows.Forms.Label lblLoanPurpose;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnDisburse;
+        private System.Windows.Forms.Button btnBacktoLoan;
     }
 }

@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
             this.label1 = new System.Windows.Forms.Label();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.dgvDisbursements = new System.Windows.Forms.DataGridView();
             this.LoaneeName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.LoanAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            this.DisbursedDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDisbursements)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -46,37 +48,50 @@
             this.label1.TabIndex = 1;
             this.label1.Text = "DISBURSEMENTS";
             // 
-            // dataGridView1
+            // dgvDisbursements
             // 
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.dgvDisbursements.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
+            this.dgvDisbursements.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvDisbursements.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.LoaneeName,
-            this.LoanAmount});
-            this.dataGridView1.Location = new System.Drawing.Point(53, 104);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(698, 318);
-            this.dataGridView1.TabIndex = 2;
+            this.LoanAmount,
+            this.DisbursedDate});
+            this.dgvDisbursements.Location = new System.Drawing.Point(53, 104);
+            this.dgvDisbursements.Name = "dgvDisbursements";
+            this.dgvDisbursements.Size = new System.Drawing.Size(698, 318);
+            this.dgvDisbursements.TabIndex = 2;
             // 
             // LoaneeName
             // 
-            this.LoaneeName.HeaderText = "Loanee Name";
+            this.LoaneeName.HeaderText = "Loanee";
             this.LoaneeName.Name = "LoaneeName";
+            this.LoaneeName.Width = 218;
             // 
             // LoanAmount
             // 
             this.LoanAmount.HeaderText = "LoanAmount";
             this.LoanAmount.Name = "LoanAmount";
+            this.LoanAmount.Width = 219;
+            // 
+            // DisbursedDate
+            // 
+            this.DisbursedDate.HeaderText = "Disbursed Date";
+            this.DisbursedDate.Name = "DisbursedDate";
+            this.DisbursedDate.Width = 218;
             // 
             // Disbursements
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.dgvDisbursements);
             this.Controls.Add(this.label1);
             this.Name = "Disbursements";
             this.Size = new System.Drawing.Size(862, 630);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvDisbursements)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -85,8 +100,9 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.DataGridView dgvDisbursements;
         private System.Windows.Forms.DataGridViewTextBoxColumn LoaneeName;
         private System.Windows.Forms.DataGridViewTextBoxColumn LoanAmount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn DisbursedDate;
     }
 }

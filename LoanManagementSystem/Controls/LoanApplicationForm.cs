@@ -8,19 +8,24 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+
+
 namespace LoanManagementSystem.Controls
 {
     public partial class LoanApplicationForm : UserControl
     {
         private int _userID;
+        private UserForm _parentForm;
 
         private DatabaseHelper _dbHelper; // Renamed field to avoid ambiguity
 
-        public LoanApplicationForm(int userID)
+        public LoanApplicationForm(int userID, UserForm parentForm)
         {
             InitializeComponent();
-            _dbHelper = new DatabaseHelper(); // Updated to use the renamed field
             _userID = userID;
+            _parentForm = parentForm;
+            _dbHelper = new DatabaseHelper();
         }
 
         public string LoanAmount { get; set; }
@@ -227,7 +232,15 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+        private void btnBacktoDashboard_Click(object sender, EventArgs e)
+        {
+            _parentForm.ClearLoanPanel();
+        }
+
+
+
     }
+
 
 
 

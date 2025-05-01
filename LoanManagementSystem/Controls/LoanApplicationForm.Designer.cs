@@ -48,6 +48,7 @@
             this.btnNext = new System.Windows.Forms.Button();
             this.lblIDStatus = new System.Windows.Forms.Label();
             this.lblProofStatus = new System.Windows.Forms.Label();
+            this.btnBacktoDashboard = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pbProof)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbID)).BeginInit();
             this.SuspendLayout();
@@ -252,10 +253,21 @@
             this.lblProofStatus.TabIndex = 22;
             this.lblProofStatus.Text = "No Proof of income";
             // 
+            // btnBacktoDashboard
+            // 
+            this.btnBacktoDashboard.Location = new System.Drawing.Point(740, 13);
+            this.btnBacktoDashboard.Name = "btnBacktoDashboard";
+            this.btnBacktoDashboard.Size = new System.Drawing.Size(46, 26);
+            this.btnBacktoDashboard.TabIndex = 23;
+            this.btnBacktoDashboard.Text = "Back";
+            this.btnBacktoDashboard.UseVisualStyleBackColor = true;
+            this.btnBacktoDashboard.Click += new System.EventHandler(this.btnBacktoDashboard_Click);
+            // 
             // LoanApplicationForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnBacktoDashboard);
             this.Controls.Add(this.lblProofStatus);
             this.Controls.Add(this.lblIDStatus);
             this.Controls.Add(this.btnNext);
@@ -307,5 +319,6 @@
         private System.Windows.Forms.Button btnNext;
         private System.Windows.Forms.Label lblIDStatus;
         private System.Windows.Forms.Label lblProofStatus;
+        private System.Windows.Forms.Button btnBacktoDashboard;
     }
 }

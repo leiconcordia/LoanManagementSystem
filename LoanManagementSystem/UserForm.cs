@@ -14,7 +14,7 @@ namespace LoanManagementSystem
 {
     public partial class UserForm : Form
     {
-
+        
         private int userID;
 
         public UserForm()
@@ -58,16 +58,24 @@ namespace LoanManagementSystem
                 lblStatusDesc.Text = "Loan status not recognized. Please contact support.";
             }
         }
+        public void ClearLoanPanel()
+        {
+            LoanApplicationPanel.Controls.Clear();
+           LoanApplicationPanel.Visible = false;
+        }
+
+
 
         private void btnApplyLoan_Click(object sender, EventArgs e)
         {
+            LoanApplicationPanel.Visible = true;
             LoanApplicationPanel.Controls.Clear();
 
-            LoanApplicationForm loanForm = new LoanApplicationForm(this.userID); 
+            LoanApplicationForm loanForm = new LoanApplicationForm(this.userID, this); // Pass current UserForm
             loanForm.Dock = DockStyle.Fill;
             LoanApplicationPanel.Controls.Add(loanForm);
-           
         }
+
 
 
 

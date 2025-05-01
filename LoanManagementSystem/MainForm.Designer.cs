@@ -30,6 +30,7 @@ namespace LoanManagementSystem
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnLogout = new System.Windows.Forms.Button();
             this.pnlNav = new System.Windows.Forms.Panel();
             this.btnDisbursements = new System.Windows.Forms.Button();
             this.btnContactUs = new System.Windows.Forms.Button();
@@ -65,6 +66,7 @@ namespace LoanManagementSystem
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Controls.Add(this.pnlNav);
             this.panel1.Controls.Add(this.btnDisbursements);
             this.panel1.Controls.Add(this.btnContactUs);
@@ -79,6 +81,22 @@ namespace LoanManagementSystem
             this.panel1.Size = new System.Drawing.Size(156, 609);
             this.panel1.TabIndex = 0;
             this.panel1.Click += new System.EventHandler(this.panel5_Click);
+            // 
+            // btnLogout
+            // 
+            this.btnLogout.FlatAppearance.BorderSize = 0;
+            this.btnLogout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnLogout.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnLogout.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(126)))), ((int)(((byte)(249)))));
+            this.btnLogout.Location = new System.Drawing.Point(2, 343);
+            this.btnLogout.Margin = new System.Windows.Forms.Padding(2);
+            this.btnLogout.Name = "btnLogout";
+            this.btnLogout.Size = new System.Drawing.Size(154, 53);
+            this.btnLogout.TabIndex = 6;
+            this.btnLogout.Text = "Logout";
+            this.btnLogout.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnLogout.UseVisualStyleBackColor = true;
+            this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
             // pnlNav
             // 
@@ -441,5 +459,6 @@ namespace LoanManagementSystem
         private Label label8;
         private Label label9;
         private Panel MainPanel;
+        private Button btnLogout;
     }
 }

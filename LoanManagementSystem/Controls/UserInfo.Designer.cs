@@ -53,6 +53,7 @@ namespace LoanManagementSystem.Controls
             this.btnApproveStatus = new System.Windows.Forms.Button();
             this.label11 = new System.Windows.Forms.Label();
             this.btnRejectStatus = new System.Windows.Forms.Button();
+            this.btnBacktoUserEval = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // User
@@ -273,11 +274,22 @@ namespace LoanManagementSystem.Controls
             this.btnRejectStatus.UseVisualStyleBackColor = false;
             this.btnRejectStatus.Click += new System.EventHandler(this.btnRejectStatus_Click);
             // 
+            // btnBacktoUserEval
+            // 
+            this.btnBacktoUserEval.Location = new System.Drawing.Point(685, 21);
+            this.btnBacktoUserEval.Name = "btnBacktoUserEval";
+            this.btnBacktoUserEval.Size = new System.Drawing.Size(76, 28);
+            this.btnBacktoUserEval.TabIndex = 23;
+            this.btnBacktoUserEval.Text = "Back";
+            this.btnBacktoUserEval.UseVisualStyleBackColor = true;
+            this.btnBacktoUserEval.Click += new System.EventHandler(this.btnBacktoUserEval_Click);
+            // 
             // UserInfo
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(46)))), ((int)(((byte)(51)))), ((int)(((byte)(73)))));
+            this.Controls.Add(this.btnBacktoUserEval);
             this.Controls.Add(this.btnRejectStatus);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.btnApproveStatus);
@@ -333,5 +345,6 @@ namespace LoanManagementSystem.Controls
         private System.Windows.Forms.Button btnApproveStatus;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button btnRejectStatus;
+        private System.Windows.Forms.Button btnBacktoUserEval;
     }
 }

@@ -180,7 +180,18 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+        private void btnBacktoUserEval_Click(object sender, EventArgs e)
+        {
+            MainForm mainForm = (MainForm)this.ParentForm;
+            if (mainForm != null)
+            {
+                mainForm.switchUserControl(new UserEvaluation());
 
-     
+            }
+            else
+            {
+                MessageBox.Show("Parent form not found.");
+            }
+        }
     }
 }
