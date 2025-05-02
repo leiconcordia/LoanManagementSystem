@@ -84,6 +84,12 @@
     <Compile Include="Controls\LoanDetails.Designer.cs">
       <DependentUpon>LoanDetails.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\LoanRepayments.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\LoanRepayments.Designer.cs">
+      <DependentUpon>LoanRepayments.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Loans.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -146,6 +152,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\LoanDetails.resx">
       <DependentUpon>LoanDetails.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\LoanRepayments.resx">
+      <DependentUpon>LoanRepayments.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Loans.resx">
       <DependentUpon>Loans.cs</DependentUpon>

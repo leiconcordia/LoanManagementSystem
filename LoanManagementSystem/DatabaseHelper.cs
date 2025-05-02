@@ -564,6 +564,29 @@ namespace LoanManagementSystem
             return dt;
         }
 
+        public string GetLoanStatusById(int loanId)
+        {
+            string status = "";
+            string query = "SELECT Status FROM Loan WHERE LoanID = @LoanID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LoanID", loanId);
+                    conn.Open();
+                    var result = cmd.ExecuteScalar();
+                    if (result != null)
+                    {
+                        status = result.ToString();
+                    }
+                }
+            }
+
+            return status;
+        }
+
+
 
 
 

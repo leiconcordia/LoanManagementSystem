@@ -151,11 +151,23 @@ namespace LoanManagementSystem.Controls
 
         private void OpenLoanDetails(int LoanID)
         {
+            DatabaseHelper db = new DatabaseHelper();
+            // Query the status of the loan using LoanID
+            string status = db.GetLoanStatusById(LoanID); 
 
-            
-            var loanDetails = new LoanDetails(LoanID);
+            UserControl controlToShow;
+
+            if (status.ToLower() == "disbursed")
+            {
+                controlToShow = new LoanRepayments(LoanID); // Open LoanRepayments user control
+            }
+            else
+            {
+                controlToShow = new LoanDetails(LoanID); // Open regular LoanDetails user control
+            }
+
             var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
-            mainForm?.switchUserControl(loanDetails);
+            mainForm?.switchUserControl(controlToShow);
         }
 
     }
