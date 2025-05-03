@@ -72,14 +72,16 @@ namespace LoanManagementSystem
 
 
 //        CREATE TABLE Payments(
-//        PaymentID INT PRIMARY KEY IDENTITY(1,1),
-//        LoanID INT NOT NULL,                 -- FK to Loans table
-//        AmountPaid DECIMAL(18,2) NOT NULL,   -- How much the user paid
-//        PaymentDate DATETIME DEFAULT GETDATE(), -- When they paid
-    
+//            PaymentID INT PRIMARY KEY IDENTITY(1,1),
+//    LoanID INT NOT NULL,
+//    RemainingPrincipal DECIMAL(10,2) NOT NULL,
+//    AmountPaid DECIMAL(10,2) NOT NULL,
+//    PaymentDate DATE NOT NULL,
+//    Remarks NVARCHAR(255),
 
-//        FOREIGN KEY(LoanID) REFERENCES Loan(LoanID)
+//    FOREIGN KEY(LoanID) REFERENCES Loans(LoanID)
 //);
+
 
 
 
@@ -543,13 +545,14 @@ namespace LoanManagementSystem
         {
             DataTable dt = new DataTable();
             string query = @"
-            SELECT 
-                (U.FirstName + ' ' + U.LastName) AS Loanee,
-                L.Amount AS Loan_Amount,
-                D.DisbursedAt AS Disbursed_Date
-            FROM Disbursement D
-            INNER JOIN Loan L ON D.LoanID = L.LoanID
-            INNER JOIN Users U ON L.UserID = U.UserID";
+    SELECT 
+        (U.FirstName + ' ' + U.LastName) AS Loanee,
+        L.Amount AS Loan_Amount,
+        D.DisbursedAt AS Disbursed_Date
+    FROM Loan L
+    INNER JOIN Users U ON L.UserID = U.UserID
+    LEFT JOIN Disbursement D ON D.LoanID = L.LoanID
+    WHERE L.Status = 'Disbursed'";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -585,6 +588,59 @@ namespace LoanManagementSystem
 
             return status;
         }
+
+        public bool AddPayment(int loanId, decimal remainingPrincipal, decimal amountPaid, DateTime paymentDate, string remarks)
+        {
+            string query = @"
+        INSERT INTO Payments (LoanID, RemainingPrincipal, AmountPaid, PaymentDate, Remarks)
+        VALUES (@LoanID, @RemainingPrincipal, @AmountPaid, @PaymentDate, @Remarks)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@LoanID", loanId);
+                cmd.Parameters.AddWithValue("@RemainingPrincipal", remainingPrincipal);
+                cmd.Parameters.AddWithValue("@AmountPaid", amountPaid);
+                cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
+                cmd.Parameters.AddWithValue("@Remarks", remarks ?? (object)DBNull.Value);
+
+                conn.Open();
+                int result = cmd.ExecuteNonQuery();
+                return result > 0;
+            }
+        }
+
+
+        public DataTable GetPaymentHistoryByLoanId(int loanId)
+        {
+            DataTable dt = new DataTable();
+            string query = @"
+        SELECT 
+            PaymentDate,
+            AmountPaid,
+            RemainingPrincipal,
+            Remarks
+        FROM Payments
+        WHERE LoanID = @LoanID
+        ORDER BY PaymentDate ASC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LoanID", loanId);
+                    conn.Open();
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+            }
+
+            return dt;
+        }
+
+
+
 
 
 

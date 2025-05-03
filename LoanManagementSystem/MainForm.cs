@@ -49,7 +49,11 @@ namespace LoanManagementSystem
             {
                 ue.LoadUsers();
             }
-            
+            if (userControl is Disbursements d)
+            {
+                d.LoadDisbursementData();
+            }
+
         }   
 
         private void btnDashboard_Click(object sender, EventArgs e)
@@ -108,6 +112,8 @@ namespace LoanManagementSystem
             btnDisbursements.BackColor = Color.FromArgb(46, 51, 73);
 
             switchUserControl(Disbursements);
+
+
 
         }
 

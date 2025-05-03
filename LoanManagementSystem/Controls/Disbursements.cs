@@ -18,7 +18,7 @@ namespace LoanManagementSystem.Controls
             LoadDisbursementData();
         }
        
-        private void LoadDisbursementData()
+        public void LoadDisbursementData()
         {
             DatabaseHelper db = new DatabaseHelper();
 

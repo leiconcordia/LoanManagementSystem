@@ -12,11 +12,25 @@ namespace LoanManagementSystem.Controls
 {
     public partial class LoanRepayments : UserControl
     {
-        int LoanID;
-        public LoanRepayments(int LoanIDuserID)
+  
+
+        private int loanID; // store the current loan ID
+
+        public LoanRepayments(int loanID)
         {
             InitializeComponent();
-            this.LoanID = LoanID;
+            this.loanID = loanID;
+            LoadPaymentHistory(); // load data on form load
         }
+
+        private void LoadPaymentHistory()
+        {
+            DatabaseHelper dbHelper = new DatabaseHelper();
+            DataTable dt = dbHelper.GetPaymentHistoryByLoanId(loanID);
+            dgvPaymentHistory.DataSource = dt;
+            dgvPaymentHistory.AutoGenerateColumns = false;
+
+        }
+
     }
 }

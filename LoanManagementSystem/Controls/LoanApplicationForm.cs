@@ -39,7 +39,7 @@ namespace LoanManagementSystem.Controls
         private Image _selectedValidIdImage;
         private Image _selectedProofImage;
 
-        private void btnNext_Click(object sender, EventArgs e)
+        private void BtnNext_Click(object sender, EventArgs e)
         {
             if (TryCalculateMonthlyPayment(out decimal monthly, out string displayMessage))
             {
@@ -64,6 +64,7 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+        // Removed duplicate method definition
         private int ExtractMonthsFromTerm(string term)
         {
             if (term.Contains("3 months")) return 3;
@@ -74,6 +75,31 @@ namespace LoanManagementSystem.Controls
             if (term.Contains("3 years")) return 36;
 
             return 0;
+        }
+
+        private void btnNext_Click(object sender, EventArgs e)
+        {
+            if (TryCalculateMonthlyPayment(out decimal monthly, out string displayMessage))
+            {
+                // Show confirmation message box
+                DialogResult result = MessageBox.Show(
+                    displayMessage + "\n\nDo you want to proceed?",
+                    "Confirm Loan Application",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    SaveImages();
+                    SubmitLoanApplication();
+                }
+                // If No, do nothing (stay on the current form)
+            }
+            else
+            {
+                MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private bool TryCalculateMonthlyPayment(out decimal monthlyPayment, out string message)
@@ -115,6 +141,8 @@ namespace LoanManagementSystem.Controls
 
             return true;
         }
+
+
 
         private void btnUploadID_Click(object sender, EventArgs e)
         {
