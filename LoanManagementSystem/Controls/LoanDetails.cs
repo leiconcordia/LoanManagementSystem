@@ -97,6 +97,7 @@ namespace LoanManagementSystem.Controls
             {
                 MessageBox.Show("Failed to reject loan.");
             }
+            
         }
 
         private void UpdateButtonVisibility(string status)

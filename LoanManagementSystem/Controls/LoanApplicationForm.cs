@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static LoanManagementSystem.DatabaseHelper;
 
 
 
@@ -16,15 +17,16 @@ namespace LoanManagementSystem.Controls
     public partial class LoanApplicationForm : UserControl
     {
         private int _userID;
-        private UserForm _parentForm;
 
+        private UserForm _parentForm;
         private DatabaseHelper _dbHelper; // Renamed field to avoid ambiguity
 
         public LoanApplicationForm(int userID, UserForm parentForm)
         {
             InitializeComponent();
-            _userID = userID;
+            this._userID = userID;
             _parentForm = parentForm;
+
             _dbHelper = new DatabaseHelper();
         }
 
@@ -107,14 +109,12 @@ namespace LoanManagementSystem.Controls
             monthlyPayment = 0;
             message = "";
 
-            // Validate Loan Amount
             if (!decimal.TryParse(tbLoanAmount.Text.Trim(), out decimal loanAmount) || loanAmount < 1000)
             {
                 message = "Loan amount must be at least ₱1000 and a valid number.";
                 return false;
             }
 
-            // Validate Loan Term
             if (cbLoanTerm.SelectedItem == null)
             {
                 message = "Please select a loan term.";
@@ -129,14 +129,24 @@ namespace LoanManagementSystem.Controls
                 return false;
             }
 
-            // Interest calculation: 10% of loan amount
-            decimal interest = loanAmount * 0.10m;
-            decimal totalAmount = loanAmount + interest;
+            // Amortization logic
+            decimal annualInterestRate = 0.10m; // 10%
+            decimal monthlyInterestRate = annualInterestRate / 12;
 
-            monthlyPayment = totalAmount / months;
+            if (monthlyInterestRate == 0)
+            {
+                monthlyPayment = loanAmount / months;
+            }
+            else
+            {
+                double P = (double)loanAmount;
+                double r = (double)monthlyInterestRate;
+                int n = months;
 
-            // Format the output message
-            string date = dtPaymentDate.Value.ToString("dd"); // e.g., April 15
+                monthlyPayment = (decimal)(P * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1));
+            }
+
+            string date = dtPaymentDate.Value.ToString("dd");
             message = $"You will pay ₱{monthlyPayment:F2} every {date} of the month for {months} months.";
 
             return true;
@@ -214,6 +224,8 @@ namespace LoanManagementSystem.Controls
                 return;
             }
 
+
+
             bool success = _dbHelper.SaveUserImages(_userID, _selectedValidIdImage, _selectedProofImage);
 
             if (success)
@@ -227,6 +239,9 @@ namespace LoanManagementSystem.Controls
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+
+
         private void SubmitLoanApplication()
         {
             DateTime paymentDate = dtPaymentDate.Value;
@@ -246,9 +261,20 @@ namespace LoanManagementSystem.Controls
                 return;
             }
 
-            // Now call DatabaseHelper to insert the loan
+            int months = ExtractMonthsFromTerm(loanTerm);
+            if (months <= 0)
+            {
+                MessageBox.Show("Invalid loan term selected.");
+                return;
+            }
+
+            TryCalculateMonthlyPayment(out decimal monthlyPayment, out string message);
+
+
+
+            // Now call DatabaseHelper to insert the loan with monthly payment
             DatabaseHelper db = new DatabaseHelper();
-            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, paymentDate);
+            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, paymentDate, monthlyPayment);
 
             if (success)
             {
@@ -260,10 +286,17 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+
         private void btnBacktoDashboard_Click(object sender, EventArgs e)
         {
-            _parentForm.ClearLoanPanel();
+            // Updated constructor call to include the required 'parent' parameter
+            var dashboard = new UserDashboard(_parentForm.FullName, _parentForm.Status, _parentForm.UserID, _parentForm);
+            dashboard.Dock = DockStyle.Fill;
+
+            _parentForm.UserPanel.Controls.Clear();
+            _parentForm.UserPanel.Controls.Add(dashboard);
         }
+
 
 
 

@@ -9,71 +9,45 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static LoanManagementSystem.DatabaseHelper;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LoanManagementSystem
 {
     public partial class UserForm : Form
     {
-        
-        private int userID;
 
-        public UserForm()
-        {
-            InitializeComponent();
-            
 
-           
 
-        }
+        public Panel UserPanelControl => UserPanel;
+        public string FullName { get; private set; }
+        public string Status { get; private set; }
+        public int UserID { get; private set; }
+
         public UserForm(string fullName, string status, int userID)
         {
-           
-
             InitializeComponent();
-            this.userID = userID;
+            FullName = fullName;
+            Status = status;
+            UserID = userID;
 
-            lblUsername.Text = "Welcome! " + fullName;
-            lblUserStatus.Text = "Status: " + status;
-
-            // Show description based on status
-            if (status.ToLower() == "pending")
-            {
-                lblStatusDesc.Text = "Your loan application is under review. Please wait for admin approval.";
-                btnApplyLoan.Visible = false;
-            }
-            else if (status.ToLower() == "rejected")
-            {
-                lblStatusDesc.Text = "Unfortunately, you are not eligible for a loan at this time.";
-                btnApplyLoan.Visible = false;
-            }
-            else if (status.ToLower() == "approved")
-            {
-                
-                lblStatusDesc.Text = "You are eligible to apply for a loan. Please proceed with your application.";
-                btnApplyLoan.Visible = true;
-            }
-
-            else
-            {
-                lblStatusDesc.Text = "Loan status not recognized. Please contact support.";
-            }
+            // Load default control (like UserDashboard)
+            var dashboard = new UserDashboard(FullName, Status, UserID, this);
+            dashboard.Dock = DockStyle.Fill;
+            UserPanel.Controls.Add(dashboard);
         }
+
         public void ClearLoanPanel()
         {
-            LoanApplicationPanel.Controls.Clear();
-           LoanApplicationPanel.Visible = false;
+            UserPanel.Controls.Clear();
+           UserPanel.Visible = false;
         }
 
-
-
-        private void btnApplyLoan_Click(object sender, EventArgs e)
+        public void switchUserControl(UserControl userControl)
         {
-            LoanApplicationPanel.Visible = true;
-            LoanApplicationPanel.Controls.Clear();
+            UserPanel.Controls.Clear();
+            UserPanel.Controls.Add(userControl);
+            userControl.Dock = DockStyle.Fill;
 
-            LoanApplicationForm loanForm = new LoanApplicationForm(this.userID, this); // Pass current UserForm
-            loanForm.Dock = DockStyle.Fill;
-            LoanApplicationPanel.Controls.Add(loanForm);
         }
 
 
@@ -81,5 +55,7 @@ namespace LoanManagementSystem
 
 
 
-    }
+
+
+        }
 }

@@ -38,6 +38,9 @@ namespace LoanManagementSystem
         //ALTER TABLE Users
         //ADD ValidID VARBINARY(MAX),
         //ProofOfIncome VARBINARY(MAX);
+//        ALTER TABLE Users
+//ADD CreditBalance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
+
 
 
 
@@ -55,6 +58,9 @@ namespace LoanManagementSystem
 
         //    CONSTRAINT FK_Loan_Users FOREIGN KEY(UserID) REFERENCES Users(UserID)
         //);
+
+//        ALTER TABLE Loan
+//ADD MonthlyPayment DECIMAL(10, 2) NOT NULL DEFAULT 0;
 
         //        ALTER TABLE Loan
         //ADD
@@ -376,15 +382,15 @@ namespace LoanManagementSystem
 
 
 
-        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, DateTime paymentDate)
+        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, DateTime paymentDate, decimal monthlyPayment)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, PaymentDate, Status, CreatedAt)
-                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @PaymentDate, @Status, GETDATE())";
+                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, PaymentDate, MonthlyPayment, Status, CreatedAt)
+                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @PaymentDate,  @MonthlyPayment, @Status, GETDATE())";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -393,6 +399,7 @@ namespace LoanManagementSystem
                         cmd.Parameters.AddWithValue("@Term", term);
                         cmd.Parameters.AddWithValue("@LoanPurpose", loanPurpose);
                         cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
+                        cmd.Parameters.AddWithValue("@MonthlyPayment", monthlyPayment);
                         cmd.Parameters.AddWithValue("@Status", "Pending");
 
                         int rowsAffected = cmd.ExecuteNonQuery();
@@ -530,16 +537,56 @@ namespace LoanManagementSystem
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
-                string query = "INSERT INTO Disbursement (LoanID, Amount) VALUES (@LoanID, @Amount)";
-                SqlCommand cmd = new SqlCommand(query, conn);
-                cmd.Parameters.AddWithValue("@LoanID", loanId);
-                cmd.Parameters.AddWithValue("@Amount", amount);
-
                 conn.Open();
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
+
+                SqlTransaction transaction = conn.BeginTransaction();
+
+                try
+                {
+                    // 1. Insert into Disbursement table
+                    string insertQuery = "INSERT INTO Disbursement (LoanID, Amount) VALUES (@LoanID, @Amount)";
+                    using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, transaction))
+                    {
+                        insertCmd.Parameters.AddWithValue("@LoanID", loanId);
+                        insertCmd.Parameters.AddWithValue("@Amount", amount);
+                        insertCmd.ExecuteNonQuery();
+                    }
+
+                    // 2. Get the UserID from Loan table
+                    int userId;
+                    string getUserQuery = "SELECT UserID FROM Loan WHERE LoanID = @LoanID";
+                    using (SqlCommand getUserCmd = new SqlCommand(getUserQuery, conn, transaction))
+                    {
+                        getUserCmd.Parameters.AddWithValue("@LoanID", loanId);
+                        object result = getUserCmd.ExecuteScalar();
+                        if (result == null)
+                        {
+                            transaction.Rollback();
+                            return false;
+                        }
+                        userId = Convert.ToInt32(result);
+                    }
+
+                    // 3. Update CreditBalance for the user
+                    string updateCreditQuery = "UPDATE Users SET CreditBalance = CreditBalance + @Amount WHERE UserID = @UserID";
+                    using (SqlCommand updateCmd = new SqlCommand(updateCreditQuery, conn, transaction))
+                    {
+                        updateCmd.Parameters.AddWithValue("@Amount", amount);
+                        updateCmd.Parameters.AddWithValue("@UserID", userId);
+                        updateCmd.ExecuteNonQuery();
+                    }
+
+                    transaction.Commit();
+                    return true;
+                }
+                catch
+                {
+                    transaction.Rollback();
+                    return false;
+                }
             }
         }
+
 
         public DataTable GetAllDisbursements()
         {
@@ -566,6 +613,8 @@ namespace LoanManagementSystem
 
             return dt;
         }
+
+
 
         public string GetLoanStatusById(int loanId)
         {
@@ -638,6 +687,26 @@ namespace LoanManagementSystem
 
             return dt;
         }
+
+
+
+
+        public decimal GetUserCreditBalance(int userId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT CreditBalance FROM Users WHERE UserID = @UserID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    conn.Open();
+
+                    object result = cmd.ExecuteScalar();
+                    return result != null ? Convert.ToDecimal(result) : 0m;
+                }
+            }
+        }
+
 
 
 
