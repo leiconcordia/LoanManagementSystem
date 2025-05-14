@@ -439,7 +439,7 @@ namespace LoanManagementSystem
         private Label label2;
         private Label label1;
         private PictureBox pictureBox1;
-        private CircularProgressBar.CircularProgressBar circularProgressBar1;
+
 
         #region Windows Form Designer generated code
 

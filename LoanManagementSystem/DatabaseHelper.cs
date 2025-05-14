@@ -21,7 +21,7 @@ namespace LoanManagementSystem
 
         //Query for table Users
 
-        //CREATE TABLE Users (
+        //CREATE TABLE Users(
         //UserID INT PRIMARY KEY IDENTITY(1,1),
         //FirstName NVARCHAR(50) NOT NULL,
         //LastName NVARCHAR(50) NOT NULL,
@@ -38,8 +38,8 @@ namespace LoanManagementSystem
         //ALTER TABLE Users
         //ADD ValidID VARBINARY(MAX),
         //ProofOfIncome VARBINARY(MAX);
-//        ALTER TABLE Users
-//ADD CreditBalance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
+        //        ALTER TABLE Users
+        //ADD CreditBalance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
 
 
 
@@ -59,17 +59,21 @@ namespace LoanManagementSystem
         //    CONSTRAINT FK_Loan_Users FOREIGN KEY(UserID) REFERENCES Users(UserID)
         //);
 
-//        ALTER TABLE Loan
-//ADD MonthlyPayment DECIMAL(10, 2) NOT NULL DEFAULT 0;
+        //        ALTER TABLE Loan
+        //ADD MonthlyPayment DECIMAL(10, 2) NOT NULL DEFAULT 0;
 
         //        ALTER TABLE Loan
         //ADD
         //    LoanPurpose VARCHAR(255) NULL,
         //    PaymentDate DATETIME NULL;
 
+//        ALTER TABLE Loan
+//ADD Interest DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+//    NewBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00;
 
-        //        CREATE TABLE Disbursement(
-        //        DisbursementID INT PRIMARY KEY IDENTITY(1,1),
+
+        //CREATE TABLE Disbursement(
+        //DisbursementID INT PRIMARY KEY IDENTITY(1,1),
         //        LoanID INT NOT NULL,
         //        Amount DECIMAL(18,2) NOT NULL,
         //        DisbursedAt DATETIME DEFAULT GETDATE(),
@@ -85,14 +89,15 @@ namespace LoanManagementSystem
 //    PaymentDate DATE NOT NULL,
 //    Remarks NVARCHAR(255),
 
-//    FOREIGN KEY(LoanID) REFERENCES Loans(LoanID)
+//    FOREIGN KEY(LoanID) REFERENCES Loan(LoanID)
 //);
 
 
 
 
+
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=STATION48;Database=DB_LMS;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
@@ -382,15 +387,15 @@ namespace LoanManagementSystem
 
 
 
-        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, DateTime paymentDate, decimal monthlyPayment)
+        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose , decimal monthlyPayment, decimal NewBalance, decimal Interest)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, PaymentDate, MonthlyPayment, Status, CreatedAt)
-                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @PaymentDate,  @MonthlyPayment, @Status, GETDATE())";
+                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, MonthlyPayment, Status, NewBalance, Interest)
+                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @MonthlyPayment, @Status, @NewBalance, @Interest )";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -398,9 +403,11 @@ namespace LoanManagementSystem
                         cmd.Parameters.AddWithValue("@Amount", amount);
                         cmd.Parameters.AddWithValue("@Term", term);
                         cmd.Parameters.AddWithValue("@LoanPurpose", loanPurpose);
-                        cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
                         cmd.Parameters.AddWithValue("@MonthlyPayment", monthlyPayment);
                         cmd.Parameters.AddWithValue("@Status", "Pending");
+
+                        cmd.Parameters.AddWithValue("@NewBalance", NewBalance);
+                        cmd.Parameters.AddWithValue("@Interest", Interest);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
                         return rowsAffected > 0; // True if insert successful
@@ -706,6 +713,53 @@ namespace LoanManagementSystem
                 }
             }
         }
+
+
+
+
+        public DataTable GetActiveLoansByUser(int userId)
+        {
+            DataTable dt = new DataTable();
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+
+                string query = @"  
+    SELECT  
+        l.LoanID,  
+        l.Amount AS Principal,  
+        l.LoanPurpose,  
+        l.monthlyPayment,  
+        l.Interest,  
+         
+        l.Term,  
+        l.Status,  
+        ISNULL(SUM(p.AmountPaid), 0) AS TotalPaid,  
+        (l.NewBalance - ISNULL(SUM(p.AmountPaid), 0)) AS Balance  
+    FROM  
+        Loan l  
+    LEFT JOIN  
+        Payments p ON l.LoanID = p.LoanID  
+    WHERE  
+        l.Status IN ('Approved', 'Disbursed') AND l.UserID = @UserID  
+    
+        GROUP BY
+    l.LoanID, l.Amount, l.LoanPurpose, l.monthlyPayment,  
+    l.Interest, l.Term, l.Status, l.NewBalance";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    conn.Open();
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    adapter.Fill(dt);
+                }
+            }
+            return dt;
+        }
+
+
+
+
 
 
 

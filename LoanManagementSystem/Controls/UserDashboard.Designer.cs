@@ -1,4 +1,7 @@
-﻿namespace LoanManagementSystem.Controls
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace LoanManagementSystem.Controls
 {
     partial class UserDashboard
     {
@@ -34,6 +37,9 @@
             this.lblUserStatus = new System.Windows.Forms.Label();
             this.lblUsername = new System.Windows.Forms.Label();
             this.btnLogout = new System.Windows.Forms.Button();
+            this.dgvUserLoans = new System.Windows.Forms.DataGridView();
+            this.btnBacktoUserLoanTable = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUserLoans)).BeginInit();
             this.SuspendLayout();
             // 
             // lblUserCredit
@@ -92,10 +98,31 @@
             this.btnLogout.UseVisualStyleBackColor = true;
             this.btnLogout.Click += new System.EventHandler(this.btnLogout_Click);
             // 
+            // dgvUserLoans
+            // 
+            this.dgvUserLoans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dgvUserLoans.Location = new System.Drawing.Point(85, 153);
+            this.dgvUserLoans.Name = "dgvUserLoans";
+            this.dgvUserLoans.Size = new System.Drawing.Size(639, 197);
+            this.dgvUserLoans.TabIndex = 11;
+            this.dgvUserLoans.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserLoans_CellContentClick);
+            // 
+            // btnBacktoUserLoanTable
+            // 
+            this.btnBacktoUserLoanTable.Location = new System.Drawing.Point(681, 126);
+            this.btnBacktoUserLoanTable.Name = "btnBacktoUserLoanTable";
+            this.btnBacktoUserLoanTable.Size = new System.Drawing.Size(42, 27);
+            this.btnBacktoUserLoanTable.TabIndex = 12;
+            this.btnBacktoUserLoanTable.Text = "Back";
+            this.btnBacktoUserLoanTable.UseVisualStyleBackColor = true;
+            this.btnBacktoUserLoanTable.Click += new System.EventHandler(this.btnBacktoUserLoanTable_Click);
+            // 
             // UserDashboard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.btnBacktoUserLoanTable);
+            this.Controls.Add(this.dgvUserLoans);
             this.Controls.Add(this.btnLogout);
             this.Controls.Add(this.lblUserCredit);
             this.Controls.Add(this.btnApplyLoan);
@@ -104,6 +131,8 @@
             this.Controls.Add(this.lblUsername);
             this.Name = "UserDashboard";
             this.Size = new System.Drawing.Size(801, 453);
+            this.Load += new System.EventHandler(this.UserDashboard_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.dgvUserLoans)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -117,5 +146,7 @@
         private System.Windows.Forms.Label lblUserStatus;
         private System.Windows.Forms.Label lblUsername;
         private System.Windows.Forms.Button btnLogout;
+        private System.Windows.Forms.DataGridView dgvUserLoans;
+        private Button btnBacktoUserLoanTable;
     }
 }

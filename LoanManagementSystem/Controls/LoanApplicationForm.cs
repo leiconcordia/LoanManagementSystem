@@ -43,7 +43,7 @@ namespace LoanManagementSystem.Controls
 
         private void BtnNext_Click(object sender, EventArgs e)
         {
-            if (TryCalculateMonthlyPayment(out decimal monthly, out string displayMessage))
+            if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance,  out string displayMessage))
             {
                 // Show confirmation message box
                 DialogResult result = MessageBox.Show(
@@ -81,7 +81,7 @@ namespace LoanManagementSystem.Controls
 
         private void btnNext_Click(object sender, EventArgs e)
         {
-            if (TryCalculateMonthlyPayment(out decimal monthly, out string displayMessage))
+            if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance, out string displayMessage))
             {
                 // Show confirmation message box
                 DialogResult result = MessageBox.Show(
@@ -104,9 +104,11 @@ namespace LoanManagementSystem.Controls
             }
         }
 
-        private bool TryCalculateMonthlyPayment(out decimal monthlyPayment, out string message)
+        private bool TryCalculateMonthlyPayment(out decimal monthlyPayment, out decimal Interest, out decimal newBalance, out string message)
         {
             monthlyPayment = 0;
+            Interest = 0;
+            newBalance = 0;
             message = "";
 
             if (!decimal.TryParse(tbLoanAmount.Text.Trim(), out decimal loanAmount) || loanAmount < 1000)
@@ -144,10 +146,13 @@ namespace LoanManagementSystem.Controls
                 int n = months;
 
                 monthlyPayment = (decimal)(P * r * Math.Pow(1 + r, n) / (Math.Pow(1 + r, n) - 1));
+                Interest = (monthlyPayment * months) - loanAmount;
             }
 
-            string date = dtPaymentDate.Value.ToString("dd");
-            message = $"You will pay ₱{monthlyPayment:F2} every {date} of the month for {months} months.";
+            newBalance = loanAmount + Interest;
+
+          
+            message = $"You will pay ₱{monthlyPayment:F2} for {months} months.";
 
             return true;
         }
@@ -244,7 +249,7 @@ namespace LoanManagementSystem.Controls
 
         private void SubmitLoanApplication()
         {
-            DateTime paymentDate = dtPaymentDate.Value;
+           
             string loanPurpose = cbLoanPurpose.SelectedItem != null ? cbLoanPurpose.SelectedItem.ToString() : "";
             string loanTerm = cbLoanTerm.SelectedItem != null ? cbLoanTerm.SelectedItem.ToString() : "";
             decimal loanAmount = 0;
@@ -268,13 +273,13 @@ namespace LoanManagementSystem.Controls
                 return;
             }
 
-            TryCalculateMonthlyPayment(out decimal monthlyPayment, out string message);
+            TryCalculateMonthlyPayment(out decimal monthlyPayment, out decimal Interest, out decimal NewBalance, out string message);
 
 
 
             // Now call DatabaseHelper to insert the loan with monthly payment
             DatabaseHelper db = new DatabaseHelper();
-            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, paymentDate, monthlyPayment);
+            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, monthlyPayment, NewBalance, Interest);
 
             if (success)
             {
