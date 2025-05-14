@@ -21,13 +21,13 @@ namespace LoanManagementSystem.Controls
         public UserDashboard(string fullName, string status, int userID, UserForm parent)
         {
             InitializeComponent();
-           
+
             this.userID = userID;
             this.parentForm = parent;
 
             DatabaseHelper db = new DatabaseHelper();
 
-            
+
 
             lblUsername.Text = "Welcome! " + fullName;
             lblUserStatus.Text = "Status: " + status;
@@ -117,20 +117,20 @@ namespace LoanManagementSystem.Controls
             viewButton.UseColumnTextForButtonValue = true;
             dgvUserLoans.Columns.Add(viewButton);
 
-          
+
 
 
 
         }
 
-       
-        
+
+
         private void UserDashboard_Load(object sender, EventArgs e)
         {
             LoadUserLoans();
             SetupUserLoanGrid();
 
-            
+
         }
 
 
@@ -140,8 +140,8 @@ namespace LoanManagementSystem.Controls
 
             if (e.RowIndex >= 0)
             {
-                
-                 if (dgvUserLoans.Columns[e.ColumnIndex].Name == "ViewDetails")
+
+                if (dgvUserLoans.Columns[e.ColumnIndex].Name == "ViewDetails")
                 {
                     int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
                     DatabaseHelper dbHelper = new DatabaseHelper();

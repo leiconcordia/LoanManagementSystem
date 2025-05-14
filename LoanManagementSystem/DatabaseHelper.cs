@@ -67,9 +67,9 @@ namespace LoanManagementSystem
         //    LoanPurpose VARCHAR(255) NULL,
         //    PaymentDate DATETIME NULL;
 
-//        ALTER TABLE Loan
-//ADD Interest DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-//    NewBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+        //        ALTER TABLE Loan
+        //ADD Interest DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+        //    NewBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00;
 
 
         //CREATE TABLE Disbursement(
@@ -82,14 +82,16 @@ namespace LoanManagementSystem
 
 
 //        CREATE TABLE Payments(
-//            PaymentID INT PRIMARY KEY IDENTITY(1,1),
-//    LoanID INT NOT NULL,
-//    RemainingPrincipal DECIMAL(10,2) NOT NULL,
-//    AmountPaid DECIMAL(10,2) NOT NULL,
-//    PaymentDate DATE NOT NULL,
-//    Remarks NVARCHAR(255),
-
-//    FOREIGN KEY(LoanID) REFERENCES Loan(LoanID)
+//            PaymentID INT PRIMARY KEY IDENTITY(1,1),  -- Auto-incrementing primary key
+//            LoanID INT NOT NULL,
+//    Balance DECIMAL(18,2) NOT NULL,
+//    Status VARCHAR(50) NOT NULL,
+//    Remarks VARCHAR(255) NULL,
+//    CreatedDate DATETIME DEFAULT GETDATE(),
+    
+//    -- Add foreign key constraint to link with Loan table
+//    CONSTRAINT FK_Payments_Loan FOREIGN KEY(LoanID)
+//    REFERENCES Loan(LoanID)
 //);
 
 
@@ -387,15 +389,16 @@ namespace LoanManagementSystem
 
 
 
-        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose , decimal monthlyPayment, decimal NewBalance, decimal Interest)
+        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, decimal monthlyPayment, decimal newBalance, decimal interest)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 try
                 {
                     conn.Open();
-                    string query = @"INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, MonthlyPayment, Status, NewBalance, Interest)
-                             VALUES (@UserID, @Amount, @Term, @LoanPurpose, @MonthlyPayment, @Status, @NewBalance, @Interest )";
+                    string query = @"
+                INSERT INTO Loan (UserID, Amount, Term, LoanPurpose, MonthlyPayment, Status, NewBalance, Interest)
+                VALUES (@UserID, @Amount, @Term, @LoanPurpose, @MonthlyPayment, @Status, @NewBalance, @Interest)";
 
                     using (SqlCommand cmd = new SqlCommand(query, conn))
                     {
@@ -405,17 +408,16 @@ namespace LoanManagementSystem
                         cmd.Parameters.AddWithValue("@LoanPurpose", loanPurpose);
                         cmd.Parameters.AddWithValue("@MonthlyPayment", monthlyPayment);
                         cmd.Parameters.AddWithValue("@Status", "Pending");
-
-                        cmd.Parameters.AddWithValue("@NewBalance", NewBalance);
-                        cmd.Parameters.AddWithValue("@Interest", Interest);
+                        cmd.Parameters.AddWithValue("@NewBalance", newBalance);
+                        cmd.Parameters.AddWithValue("@Interest", interest);
 
                         int rowsAffected = cmd.ExecuteNonQuery();
-                        return rowsAffected > 0; // True if insert successful
+                        return rowsAffected > 0; // True if successful
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show("Error inserting loan: " + ex.Message);
+                    MessageBox.Show("Error inserting loan: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return false;
                 }
             }
@@ -667,31 +669,56 @@ namespace LoanManagementSystem
         }
 
 
+
+
+
+
         public DataTable GetPaymentHistoryByLoanId(int loanId)
         {
             DataTable dt = new DataTable();
             string query = @"
-        SELECT 
-            PaymentDate,
-            AmountPaid,
-            RemainingPrincipal,
-            Remarks
-        FROM Payments
-        WHERE LoanID = @LoanID
-        ORDER BY PaymentDate ASC";
+        -- If no payments exist, return Loan.NewBalance as the initial balance
+        IF NOT EXISTS (SELECT 1 FROM Payments WHERE LoanID = @LoanID)
+        BEGIN
+            SELECT 
+                GETDATE() AS [Payment Date],
+                l.MonthlyPayment AS [Monthly Payment],  -- Changed from PaymentAmount
+                l.NewBalance AS [Balance],
+                'Initial Balance' AS [Status],
+                'Loan created' AS [Remarks]
+            FROM Loan l
+            WHERE l.LoanID = @LoanID
+        END
+        ELSE
+        BEGIN
+            -- Return actual payments
+            SELECT 
+                p.PaymentDate AS [Payment Date],
+                l.MonthlyPayment AS [Monthly Payment],  -- Changed from PaymentAmount
+                p.Balance AS [Balance],
+                p.Status,
+                p.Remarks
+            FROM Payments p
+            INNER JOIN Loan l ON p.LoanID = l.LoanID
+            WHERE p.LoanID = @LoanID
+            ORDER BY p.PaymentDate
+        END";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
+            try
             {
+                using (SqlConnection conn = new SqlConnection(connectionString))
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
                     cmd.Parameters.AddWithValue("@LoanID", loanId);
                     conn.Open();
-
                     SqlDataAdapter adapter = new SqlDataAdapter(cmd);
                     adapter.Fill(dt);
                 }
             }
-
+            catch (Exception ex)
+            {
+                throw new Exception("Error retrieving payment history: " + ex.Message);
+            }
             return dt;
         }
 
@@ -720,39 +747,27 @@ namespace LoanManagementSystem
         public DataTable GetActiveLoansByUser(int userId)
         {
             DataTable dt = new DataTable();
+
+            string query = @"  
+SELECT  
+    l.LoanID, -- Include but won't display  
+    l.Amount AS [Principal],  
+    l.LoanPurpose AS [Loan Purpose],  
+    l.monthlyPayment AS [Monthly Payment],  
+    l.Term,  
+    l.Status  
+FROM  
+    Loan l  
+WHERE  
+    l.Status IN ('Approved', 'Disbursed') AND l.UserID = @UserID";
+
+
             using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-
-                string query = @"  
-    SELECT  
-        l.LoanID,  
-        l.Amount AS Principal,  
-        l.LoanPurpose,  
-        l.monthlyPayment,  
-        l.Interest,  
-         
-        l.Term,  
-        l.Status,  
-        ISNULL(SUM(p.AmountPaid), 0) AS TotalPaid,  
-        (l.NewBalance - ISNULL(SUM(p.AmountPaid), 0)) AS Balance  
-    FROM  
-        Loan l  
-    LEFT JOIN  
-        Payments p ON l.LoanID = p.LoanID  
-    WHERE  
-        l.Status IN ('Approved', 'Disbursed') AND l.UserID = @UserID  
-    
-        GROUP BY
-    l.LoanID, l.Amount, l.LoanPurpose, l.monthlyPayment,  
-    l.Interest, l.Term, l.Status, l.NewBalance";
-
-                using (SqlCommand cmd = new SqlCommand(query, conn))
-                {
-                    cmd.Parameters.AddWithValue("@UserID", userId);
-                    conn.Open();
-                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
-                    adapter.Fill(dt);
-                }
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                conn.Open();
+                new SqlDataAdapter(cmd).Fill(dt);
             }
             return dt;
         }
