@@ -101,15 +101,15 @@ namespace LoanManagementSystem.Controls
             // dgvUserLoans
             // 
             this.dgvUserLoans.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvUserLoans.Location = new System.Drawing.Point(85, 153);
+            this.dgvUserLoans.Location = new System.Drawing.Point(28, 153);
             this.dgvUserLoans.Name = "dgvUserLoans";
-            this.dgvUserLoans.Size = new System.Drawing.Size(639, 197);
+            this.dgvUserLoans.Size = new System.Drawing.Size(757, 197);
             this.dgvUserLoans.TabIndex = 11;
             this.dgvUserLoans.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvUserLoans_CellContentClick);
             // 
             // btnBacktoUserLoanTable
             // 
-            this.btnBacktoUserLoanTable.Location = new System.Drawing.Point(681, 126);
+            this.btnBacktoUserLoanTable.Location = new System.Drawing.Point(743, 120);
             this.btnBacktoUserLoanTable.Name = "btnBacktoUserLoanTable";
             this.btnBacktoUserLoanTable.Size = new System.Drawing.Size(42, 27);
             this.btnBacktoUserLoanTable.TabIndex = 12;

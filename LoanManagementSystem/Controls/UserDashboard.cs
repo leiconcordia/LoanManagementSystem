@@ -95,21 +95,16 @@ namespace LoanManagementSystem.Controls
 
         private void SetupUserLoanGrid()
         {
-            // Clear existing columns if any
             dgvUserLoans.Columns.Clear();
 
             DatabaseHelper DB = new DatabaseHelper();
-
-            // Set your data source (after fetching from DB)
             dgvUserLoans.DataSource = DB.GetActiveLoansByUser(userID);
 
-            // Then hide the LoanID column
+            // Hide LoanID for privacy
             if (dgvUserLoans.Columns.Contains("LoanID"))
-            {
                 dgvUserLoans.Columns["LoanID"].Visible = false;
-            }
 
-            // Add a View Details button column
+            // 🔘 1st Action button: View (with "Action" header)
             DataGridViewButtonColumn viewButton = new DataGridViewButtonColumn();
             viewButton.Name = "ViewDetails";
             viewButton.HeaderText = "Action";
@@ -117,10 +112,13 @@ namespace LoanManagementSystem.Controls
             viewButton.UseColumnTextForButtonValue = true;
             dgvUserLoans.Columns.Add(viewButton);
 
-
-
-
-
+            // 💸 2nd button: Pay (no header)
+            DataGridViewButtonColumn payButton = new DataGridViewButtonColumn();
+            payButton.Name = "Pay";
+            payButton.HeaderText = ""; // No header
+            payButton.Text = "Pay";
+            payButton.UseColumnTextForButtonValue = true;
+            dgvUserLoans.Columns.Add(payButton);
         }
 
 
@@ -137,27 +135,37 @@ namespace LoanManagementSystem.Controls
 
         private void dgvUserLoans_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-
             if (e.RowIndex >= 0)
             {
+                string columnName = dgvUserLoans.Columns[e.ColumnIndex].Name;
 
-                if (dgvUserLoans.Columns[e.ColumnIndex].Name == "ViewDetails")
+                if (columnName == "ViewDetails")
                 {
                     int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
-                    DatabaseHelper dbHelper = new DatabaseHelper();
-                    DataTable dt = dbHelper.GetPaymentHistoryByLoanId(loanId);
-                    dgvUserLoans.DataSource = dt;
-                    dgvUserLoans.AutoGenerateColumns = true;
+                    PaymentHistory historyForm = new PaymentHistory(loanId);
+                    historyForm.ShowDialog();
+
+                    
 
                 }
-            }
+                else if (columnName == "Pay")
+                {
+                    int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
+                    MessageBox.Show($"Processing payment for Loan ID: {loanId}", "Pay", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                   
+                }
+            }
         }
+
+
+
+
 
         private void btnBacktoUserLoanTable_Click(object sender, EventArgs e)
         {
             LoadUserLoans();
-            SetupUserLoanGrid();
+            
         }
     }
 }

@@ -99,7 +99,7 @@ namespace LoanManagementSystem
 
 
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=STATION48;Database=DB_LMS;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
@@ -389,7 +389,8 @@ namespace LoanManagementSystem
 
 
 
-        public bool InsertLoan(int userID, decimal amount, string term, string loanPurpose, decimal monthlyPayment, decimal newBalance, decimal interest)
+        public bool InsertLoan(int userID, decimal amount, int term, string loanPurpose, decimal monthlyPayment, decimal newBalance, decimal interest)
+
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -647,26 +648,37 @@ namespace LoanManagementSystem
             return status;
         }
 
-        public bool AddPayment(int loanId, decimal remainingPrincipal, decimal amountPaid, DateTime paymentDate, string remarks)
+        public bool AddPayment(int loanId, DateTime paymentDate, decimal paymentAmount, decimal balance, string status, string remarks)
         {
             string query = @"
-        INSERT INTO Payments (LoanID, RemainingPrincipal, AmountPaid, PaymentDate, Remarks)
-        VALUES (@LoanID, @RemainingPrincipal, @AmountPaid, @PaymentDate, @Remarks)";
+        INSERT INTO Payments (LoanID, PaymentDate, PaymentAmount, Balance, Status, Remarks)
+        VALUES (@LoanID, @PaymentDate, @PaymentAmount, @Balance, @Status, @Remarks)";
 
-            using (SqlConnection conn = new SqlConnection(connectionString))
-            using (SqlCommand cmd = new SqlCommand(query, conn))
+            try
             {
-                cmd.Parameters.AddWithValue("@LoanID", loanId);
-                cmd.Parameters.AddWithValue("@RemainingPrincipal", remainingPrincipal);
-                cmd.Parameters.AddWithValue("@AmountPaid", amountPaid);
-                cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
-                cmd.Parameters.AddWithValue("@Remarks", remarks ?? (object)DBNull.Value);
+                using (SqlConnection conn = new SqlConnection(connectionString))
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@LoanID", loanId);
+                    cmd.Parameters.AddWithValue("@PaymentDate", paymentDate);
+                    cmd.Parameters.AddWithValue("@PaymentAmount", paymentAmount);
+                    cmd.Parameters.AddWithValue("@Balance", balance);
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    cmd.Parameters.AddWithValue("@Remarks", remarks);
 
-                conn.Open();
-                int result = cmd.ExecuteNonQuery();
-                return result > 0;
+                    conn.Open();
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error inserting payment: " + ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return false;
             }
         }
+
+
 
 
 
@@ -676,33 +688,50 @@ namespace LoanManagementSystem
         public DataTable GetPaymentHistoryByLoanId(int loanId)
         {
             DataTable dt = new DataTable();
+
             string query = @"
-        -- If no payments exist, return Loan.NewBalance as the initial balance
-        IF NOT EXISTS (SELECT 1 FROM Payments WHERE LoanID = @LoanID)
-        BEGIN
-            SELECT 
-                GETDATE() AS [Payment Date],
-                l.MonthlyPayment AS [Monthly Payment],  -- Changed from PaymentAmount
-                l.NewBalance AS [Balance],
-                'Initial Balance' AS [Status],
-                'Loan created' AS [Remarks]
-            FROM Loan l
-            WHERE l.LoanID = @LoanID
-        END
-        ELSE
-        BEGIN
-            -- Return actual payments
-            SELECT 
-                p.PaymentDate AS [Payment Date],
-                l.MonthlyPayment AS [Monthly Payment],  -- Changed from PaymentAmount
-                p.Balance AS [Balance],
-                p.Status,
-                p.Remarks
-            FROM Payments p
-            INNER JOIN Loan l ON p.LoanID = l.LoanID
-            WHERE p.LoanID = @LoanID
-            ORDER BY p.PaymentDate
-        END";
+    DECLARE @Term INT, @MonthlyPayment DECIMAL(18,2), @StartDate DATE, @NewBalance DECIMAL(18,2);
+
+    -- Get loan details
+    SELECT 
+        @Term = Term,
+        @MonthlyPayment = MonthlyPayment,
+        @StartDate = DisbursedAt,
+        @NewBalance = NewBalance
+    FROM Loan
+    WHERE LoanID = @LoanID;
+
+    -- Generate sequence of months
+    WITH PaymentSchedule AS (
+        SELECT 0 AS [Month Index], @StartDate AS [ExpectedDate]
+        UNION ALL
+        SELECT [MonthIndex] + 1, DATEADD(MONTH, 1, [ExpectedDate])
+        FROM PaymentSchedule
+        WHERE [MonthIndex] < @Term
+    )
+
+    -- Combine schedule with actual payments
+    SELECT 
+        ps.MonthIndex,
+        ISNULL(p.PaymentDate, NULL) AS [Payment Date],
+        @MonthlyPayment AS [Monthly Payment],
+        ISNULL(p.Balance, @NewBalance) AS [Balance],
+        ISNULL(p.Status, CASE WHEN ps.MonthIndex = 0 THEN 'Initial Balance' ELSE 'Not yet paid' END) AS [Status],
+        ISNULL(p.Remarks, CASE WHEN ps.MonthIndex = 0 THEN 'Loan Created' ELSE '' END) AS [Remarks]
+    FROM PaymentSchedule ps
+    LEFT JOIN (
+        SELECT 
+            ROW_NUMBER() OVER (ORDER BY PaymentDate) - 1 AS PaymentIndex,
+            PaymentDate,
+            Balance,
+            Status,
+            Remarks
+        FROM Payments
+        WHERE LoanID = @LoanID
+    ) p ON ps.MonthIndex = p.PaymentIndex
+    ORDER BY ps.MonthIndex
+    OPTION (MAXRECURSION 100);
+    ";
 
             try
             {
@@ -717,10 +746,12 @@ namespace LoanManagementSystem
             }
             catch (Exception ex)
             {
-                throw new Exception("Error retrieving payment history: " + ex.Message);
+                throw new Exception("Error retrieving generated payment schedule: " + ex.Message);
             }
+
             return dt;
         }
+
 
 
 

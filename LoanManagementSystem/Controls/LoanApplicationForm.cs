@@ -277,11 +277,15 @@ namespace LoanManagementSystem.Controls
 
 
 
-            // Now call DatabaseHelper to insert the loan with monthly payment
             DatabaseHelper db = new DatabaseHelper();
-            bool success = db.InsertLoan(_userID, loanAmount, loanTerm, loanPurpose, monthlyPayment, NewBalance, Interest);
+            
+
+            bool success = db.InsertLoan(_userID, loanAmount, months, loanPurpose, monthlyPayment, NewBalance, Interest);
+
+
 
             if (success)
+
             {
                 MessageBox.Show("Loan application submitted successfully!");
             }
