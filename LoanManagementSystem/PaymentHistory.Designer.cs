@@ -38,14 +38,14 @@
             this.dgvPaymentHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgvPaymentHistory.Location = new System.Drawing.Point(0, 0);
             this.dgvPaymentHistory.Name = "dgvPaymentHistory";
-            this.dgvPaymentHistory.Size = new System.Drawing.Size(544, 465);
+            this.dgvPaymentHistory.Size = new System.Drawing.Size(705, 464);
             this.dgvPaymentHistory.TabIndex = 0;
             // 
             // PaymentHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(544, 465);
+            this.ClientSize = new System.Drawing.Size(705, 464);
             this.Controls.Add(this.dgvPaymentHistory);
             this.Name = "PaymentHistory";
             this.Text = "PaymentHistory";

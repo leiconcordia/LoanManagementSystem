@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.Remoting.Metadata.W3cXsd2001;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -25,10 +26,16 @@ namespace LoanManagementSystem.Controls
 
         private void LoadPaymentHistory()
         {
-            DatabaseHelper dbHelper = new DatabaseHelper();
-            DataTable dt = dbHelper.GetPaymentHistoryByLoanId(loanID);
+            DatabaseHelper db = new DatabaseHelper();
+            DataTable dt = db.GetPaymentHistoryByLoanId(loanID);
             dgvPaymentHistory.DataSource = dt;
-            dgvPaymentHistory.AutoGenerateColumns = false;
+
+            // Optional: hide internal IDs
+            if (dgvPaymentHistory.Columns.Contains("PaymentID"))
+                dgvPaymentHistory.Columns["PaymentID"].Visible = false;
+
+
+
 
         }
 
