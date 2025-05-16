@@ -53,7 +53,7 @@ namespace LoanManagementSystem.Controls
             // 
             // btnApplyLoan
             // 
-            this.btnApplyLoan.Location = new System.Drawing.Point(293, 401);
+            this.btnApplyLoan.Location = new System.Drawing.Point(320, 397);
             this.btnApplyLoan.Name = "btnApplyLoan";
             this.btnApplyLoan.Size = new System.Drawing.Size(227, 34);
             this.btnApplyLoan.TabIndex = 8;

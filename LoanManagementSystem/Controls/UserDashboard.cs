@@ -151,10 +151,49 @@ namespace LoanManagementSystem.Controls
                 else if (columnName == "Pay")
                 {
                     int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
-                    MessageBox.Show($"Processing payment for Loan ID: {loanId}", "Pay", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    decimal monthlyPayment = Convert.ToDecimal(dgvUserLoans.Rows[e.RowIndex].Cells["Monthly Payment"].Value);
+                    //decimal balance = Convert.ToDecimal(dgvUserLoans.Rows[e.RowIndex].Cells["Balance"].Value);
+                    DatabaseHelper db = new DatabaseHelper();
+                    decimal creditBalance = db.GetUserCreditBalance(userID);
 
-                   
+                    string message = 
+                                     $"Monthly Payment: ₱{monthlyPayment:N2}\n" +
+                                     $"\n" +
+                                     $"\n" +
+
+                                     "Do you want to proceed with this payment?";
+
+                    DialogResult result = MessageBox.Show(message, "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+
+                    if (result == DialogResult.Yes)
+                    {
+
+
+                        if (creditBalance < monthlyPayment)
+                        {
+                            MessageBox.Show("Insufficient credit balance to make this payment.", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+
+                        bool paymentSuccess = db.AddPaymentAndUpdateLoan(userID, loanId, monthlyPayment);
+                        if (paymentSuccess)
+                        {
+                            MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                            // Refresh the table or UI here if needed
+                        }
+                        else
+                        {
+                            MessageBox.Show("An error occurred while processing the payment.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        }
+                    }
+
+                    else
+                    {
+                        
+                    }
                 }
+
             }
         }
 
