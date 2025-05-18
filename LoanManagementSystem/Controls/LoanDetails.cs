@@ -62,6 +62,7 @@ namespace LoanManagementSystem.Controls
 
             // Display loan details for the current user
             DisplayLoanDetails(LoanID);  // Make sure userId is available and passed correctly to this method
+
         }
 
 
@@ -75,8 +76,9 @@ namespace LoanManagementSystem.Controls
             if (db.UpdateLoanStatus(LoanID, "Approved"))
             {
                 MessageBox.Show("Loan approved successfully!");
-                // Refresh DataGridView if needed
 
+                DisplayLoanDetails(LoanID);
+                
             }
             else
             {
@@ -90,7 +92,7 @@ namespace LoanManagementSystem.Controls
             if (db.UpdateLoanStatus(LoanID, "Rejected"))
             {
                 MessageBox.Show("Loan rejected.");
-
+                DisplayLoanDetails(LoanID);
 
             }
             else

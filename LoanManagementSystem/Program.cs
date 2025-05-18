@@ -17,7 +17,7 @@ namespace LoanManagementSystem
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new UserForm("lei", "Approved", 1));
+            Application.Run(new MainForm());
         }
     }
 }

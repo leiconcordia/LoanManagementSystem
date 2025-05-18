@@ -38,6 +38,8 @@ namespace LoanManagementSystem.Controls
             this.actionButton = new System.Windows.Forms.DataGridViewButtonColumn();
             this.LoanID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.cbLoanFilter = new System.Windows.Forms.ComboBox();
+            this.btnSubmit = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.dgvLoanList)).BeginInit();
             this.SuspendLayout();
             // 
@@ -111,18 +113,45 @@ namespace LoanManagementSystem.Controls
             this.Column1.Name = "Column1";
             this.Column1.Visible = false;
             // 
+            // cbLoanFilter
+            // 
+            this.cbLoanFilter.FormattingEnabled = true;
+            this.cbLoanFilter.Items.AddRange(new object[] {
+            "All",
+            "Pending",
+            "Approved",
+            "Disbursed",
+            "Rejected"});
+            this.cbLoanFilter.Location = new System.Drawing.Point(631, 70);
+            this.cbLoanFilter.Name = "cbLoanFilter";
+            this.cbLoanFilter.Size = new System.Drawing.Size(76, 21);
+            this.cbLoanFilter.TabIndex = 2;
+            // 
+            // btnSubmit
+            // 
+            this.btnSubmit.ForeColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.btnSubmit.Location = new System.Drawing.Point(713, 68);
+            this.btnSubmit.Name = "btnSubmit";
+            this.btnSubmit.Size = new System.Drawing.Size(57, 23);
+            this.btnSubmit.TabIndex = 3;
+            this.btnSubmit.Text = "Submit";
+            this.btnSubmit.UseVisualStyleBackColor = true;
+            this.btnSubmit.Click += new System.EventHandler(this.btnSubmit_Click);
+            // 
             // Loans
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.Controls.Add(this.btnSubmit);
+            this.Controls.Add(this.cbLoanFilter);
             this.Controls.Add(this.dgvLoanList);
             this.Controls.Add(this.label1);
             this.ForeColor = System.Drawing.SystemColors.ButtonFace;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Loans";
             this.Size = new System.Drawing.Size(862, 630);
-            this.Load += new System.EventHandler(this.Loans_Load);
+           
             ((System.ComponentModel.ISupportInitialize)(this.dgvLoanList)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -139,5 +168,7 @@ namespace LoanManagementSystem.Controls
         private DataGridViewButtonColumn actionButton;
         private DataGridViewTextBoxColumn LoanID;
         private DataGridViewTextBoxColumn Column1;
+        private ComboBox cbLoanFilter;
+        private Button btnSubmit;
     }
 }

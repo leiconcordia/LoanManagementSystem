@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Data;
 using System.Drawing;
 using System.Linq;
@@ -26,9 +27,9 @@ namespace LoanManagementSystem.Controls
                 loanIdColumn.Visible = false; // hide it
                 dgvLoanList.Columns.Add(loanIdColumn);
                 LoadLoanData();
-                
+
             }
-            
+
 
 
         }
@@ -37,7 +38,11 @@ namespace LoanManagementSystem.Controls
         {
             try
             {
-                var loanData = FetchLoanData();
+                // Get selected value from ComboBox or default to "All"
+                string selectedStatus = cbLoanFilter.SelectedItem?.ToString() ?? "All";
+
+                // Pass status to FetchLoanData
+                var loanData = FetchLoanData(selectedStatus);
 
                 if (loanData != null)
                 {
@@ -48,20 +53,27 @@ namespace LoanManagementSystem.Controls
             {
                 MessageBox.Show($"An error occurred while loading loan data: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            
-
         }
-       
 
 
 
 
-        private DataTable FetchLoanData()
+
+
+        private DataTable FetchLoanData(string statusFilter)
         {
-            // Encapsulate database logic
             var db = new DatabaseHelper();
-            return db.GetLoansWithUserNames();
+
+            if (statusFilter == "All")
+            {
+                return db.GetLoansWithUserNames(); // Original method
+            }
+            else
+            {
+                return db.GetLoansWithUserNamesByStatus(statusFilter); // Filtered method
+            }
         }
+
         private void BindLoanDataToGrid(DataTable loanData)
         {
             dgvLoanList.Rows.Clear();
@@ -115,19 +127,14 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+
+
+
+
+
+
         
-        
 
-
-
-
-        private void Loans_Load(object sender, EventArgs e)
-        {
-            LoadLoanData();
-            this.Load += new EventHandler(Loans_Load);
-            FetchLoanData();
-
-        }
 
         private void dgvLoanList_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -153,7 +160,7 @@ namespace LoanManagementSystem.Controls
         {
             DatabaseHelper db = new DatabaseHelper();
             // Query the status of the loan using LoanID
-            string status = db.GetLoanStatusById(LoanID); 
+            string status = db.GetLoanStatusById(LoanID);
 
             UserControl controlToShow;
 
@@ -168,6 +175,17 @@ namespace LoanManagementSystem.Controls
 
             var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
             mainForm?.switchUserControl(controlToShow);
+        }
+
+        private void btnSubmit_Click(object sender, EventArgs e)
+        {
+            string selectedStatus = cbLoanFilter.SelectedItem?.ToString() ?? "All";
+
+            var filteredData = FetchLoanData(selectedStatus);
+            if (filteredData != null)
+            {
+                BindLoanDataToGrid(filteredData);
+            }
         }
 
     }

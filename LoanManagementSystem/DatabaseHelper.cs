@@ -479,6 +479,35 @@ namespace LoanManagementSystem
             }
         }
 
+        public DataTable GetLoansWithUserNamesByStatus(string status)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = @"
+            SELECT 
+                L.LoanID,
+                (U.FirstName + ' ' + U.LastName) AS Loanee,
+                L.Amount AS Loan_Amount,
+                L.Status
+            FROM Loan L
+            INNER JOIN Users U ON L.UserID = U.UserID
+            WHERE L.Status = @Status";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Status", status);
+                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
+                    {
+                        DataTable dt = new DataTable();
+                        adapter.Fill(dt);
+                        return dt;
+                    }
+                }
+            }
+        }
+
+
 
 
 
