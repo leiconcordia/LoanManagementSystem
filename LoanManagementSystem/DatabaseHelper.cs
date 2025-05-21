@@ -84,25 +84,37 @@ namespace LoanManagementSystem
         //);
 
 
-//        CREATE TABLE Payments(
-//            PaymentID INT PRIMARY KEY IDENTITY(1,1),  -- Auto-incrementing primary key
-//            LoanID INT NOT NULL,
-//    Balance DECIMAL(18,2) NOT NULL,
-//    Status VARCHAR(50) NOT NULL,
-//    Remarks VARCHAR(255) NULL,
-//    CreatedDate DATETIME DEFAULT GETDATE(),
-    
-//    -- Add foreign key constraint to link with Loan table
-//    CONSTRAINT FK_Payments_Loan FOREIGN KEY(LoanID)
-//    REFERENCES Loan(LoanID)
+        //        CREATE TABLE Payments(
+        //            PaymentID INT PRIMARY KEY IDENTITY(1,1),  -- Auto-incrementing primary key
+        //            LoanID INT NOT NULL,
+        //    Balance DECIMAL(18,2) NOT NULL,
+        //    Status VARCHAR(50) NOT NULL,
+        //    Remarks VARCHAR(255) NULL,
+        //    CreatedDate DATETIME DEFAULT GETDATE(),
+
+        //    -- Add foreign key constraint to link with Loan table
+        //    CONSTRAINT FK_Payments_Loan FOREIGN KEY(LoanID)
+        //    REFERENCES Loan(LoanID)
+        //);
+
+
+
+//        CREATE TABLE PaymentSchedule(
+//    LoanID INT,
+//    MonthIndex INT,
+//    DueDate DATE,
+//    MonthlyPayment DECIMAL(18,2),
+//    ScheduledBalance DECIMAL(18,2),
+//    PRIMARY KEY(LoanID, MonthIndex)
 //);
 
 
 
 
 
+
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=laptop-s0n4jmsc\\sqlexpress;Database=DB_LMS;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()

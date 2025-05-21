@@ -121,16 +121,7 @@ namespace LoanManagementSystem.Controls
             // AnimateButtonVisibility(isPending);
         }
 
-        public void btnApproveStatus_Click(object sender, EventArgs e)
-        {
-            UpdateUserStatus("Approved");
-        }
-            
-
-        private void btnRejectStatus_Click(object sender, EventArgs e)
-        {
-            UpdateUserStatus("Rejected");
-        }
+        
 
         private void UpdateUserStatus(string newStatus)
         {
@@ -193,5 +184,23 @@ namespace LoanManagementSystem.Controls
                 MessageBox.Show("Parent form not found.");
             }
         }
+
+        private void UserInfo_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnReject_Click(object sender, EventArgs e)
+        {
+            
+            UpdateUserStatus("Rejected");
+        }
+
+        private void btnApprove_Click(object sender, EventArgs e)
+        {
+            UpdateUserStatus("Approved");
+        }
+
+        
     }
 }

@@ -11,6 +11,7 @@ namespace LoanManagementSystem
         Controls.UserEvaluation UserEvaluation = new Controls.UserEvaluation();
         Controls.Loans Loans = new Controls.Loans();
         Controls.Disbursements Disbursements = new Controls.Disbursements();
+        Controls.AdminDashboard ad = new Controls.AdminDashboard();
 
         public MainForm()
         {
@@ -20,6 +21,7 @@ namespace LoanManagementSystem
             pnlNav.Top = btnDashboard.Top;
             pnlNav.Left = btnDashboard.Left;
             btnDashboard.BackColor = Color.FromArgb(46, 51, 73);
+            switchUserControl(ad);
 
 
         }
@@ -48,16 +50,22 @@ namespace LoanManagementSystem
             if (userControl is UserEvaluation ue)
             {
                 ue.LoadUsers();
+
             }
             if (userControl is Disbursements d)
             {
                 d.LoadDisbursementData();
+            }
+            if (userControl is AdminDashboard ad)
+            {
+                
             }
 
         }   
 
         private void btnDashboard_Click(object sender, EventArgs e)
         {
+            switchUserControl(ad);
             pnlNav.Height = btnDashboard.Height;
             pnlNav.Top = btnDashboard.Top;
             pnlNav.Left = btnDashboard.Left;

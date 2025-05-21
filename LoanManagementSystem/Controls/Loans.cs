@@ -30,6 +30,8 @@ namespace LoanManagementSystem.Controls
 
             }
 
+            CustomizeDataGridView(dgvLoanList);
+
 
 
         }
@@ -187,6 +189,40 @@ namespace LoanManagementSystem.Controls
                 BindLoanDataToGrid(filteredData);
             }
         }
+
+        private void CustomizeDataGridView(DataGridView dgvLoanList)
+        {
+            // Set background and grid color
+            dgvLoanList.BackgroundColor = Color.FromArgb(46, 51, 73);
+            dgvLoanList.GridColor = Color.Gray;
+
+            // Remove borders and make it modern
+            dgvLoanList.BorderStyle = BorderStyle.None;
+            dgvLoanList.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvLoanList.EnableHeadersVisualStyles = false;
+
+            // Column header styling
+            dgvLoanList.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 45);
+            dgvLoanList.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvLoanList.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            // Row styling
+            dgvLoanList.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
+            dgvLoanList.DefaultCellStyle.ForeColor = Color.White;
+            dgvLoanList.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
+            dgvLoanList.DefaultCellStyle.SelectionForeColor = Color.White;
+    
+            // Alternate row styling
+            dgvLoanList.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(58, 63, 85);  // slightly lighter
+            dgvLoanList.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
+
+            // Row height (optional)
+            dgvLoanList.RowTemplate.Height = 30;
+
+            // Header height (optional)
+            dgvLoanList.ColumnHeadersHeight = 35;
+        }
+
 
     }
 }

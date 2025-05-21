@@ -22,6 +22,7 @@ namespace LoanManagementSystem.Controls
             InitializeComponent();
             this.loanID = loanID;
             LoadPaymentHistory(); // load data on form load
+            CustomizeDataGridView(dgvPaymentHistory);
         }
 
         private void LoadPaymentHistory()
@@ -38,6 +39,41 @@ namespace LoanManagementSystem.Controls
 
 
         }
+
+        private void CustomizeDataGridView(DataGridView dgvPaymentHistory)
+        {
+            // Set background and grid color
+            dgvPaymentHistory.BackgroundColor = Color.FromArgb(46, 51, 73);
+            dgvPaymentHistory.GridColor = Color.Gray;
+
+            // Remove borders and make it modern
+            dgvPaymentHistory.BorderStyle = BorderStyle.None;
+            dgvPaymentHistory.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvPaymentHistory.EnableHeadersVisualStyles = false;
+
+            // Column header styling
+            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 45);
+            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            // Row styling
+            dgvPaymentHistory.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
+            dgvPaymentHistory.DefaultCellStyle.ForeColor = Color.White;
+            dgvPaymentHistory.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
+            dgvPaymentHistory.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Alternate row styling
+            dgvPaymentHistory.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(58, 63, 85);  // slightly lighter
+            dgvPaymentHistory.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
+
+            // Row height (optional)
+            dgvPaymentHistory.RowTemplate.Height = 30;
+
+            // Header height (optional)
+            dgvPaymentHistory.ColumnHeadersHeight = 35;
+        }
+
+
 
     }
 }

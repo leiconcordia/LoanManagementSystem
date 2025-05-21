@@ -17,6 +17,7 @@ namespace LoanManagementSystem.Controls
              // Load users when the control is initialized
             // In your form constructor or Load event:
             dgvUserList.CellClick += DataGridView1_CellClick;
+            CustomizeDataGridView(dgvUserList);
         }
 
         // Method to load and display users in the DataGridView
@@ -74,6 +75,39 @@ namespace LoanManagementSystem.Controls
            
 
             
+        }
+
+        private void CustomizeDataGridView(DataGridView dgvUserList)
+        {
+            // Set background and grid color
+            dgvUserList.BackgroundColor = Color.FromArgb(46, 51, 73);
+            dgvUserList.GridColor = Color.Gray;
+
+            // Remove borders and make it modern
+            dgvUserList.BorderStyle = BorderStyle.None;
+            dgvUserList.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvUserList.EnableHeadersVisualStyles = false;
+
+            // Column header styling
+            dgvUserList.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 45);
+            dgvUserList.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvUserList.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+
+            // Row styling
+            dgvUserList.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
+            dgvUserList.DefaultCellStyle.ForeColor = Color.White;
+            dgvUserList.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
+            dgvUserList.DefaultCellStyle.SelectionForeColor = Color.White;
+
+            // Alternate row styling
+            dgvUserList.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(58, 63, 85);  // slightly lighter
+            dgvUserList.AlternatingRowsDefaultCellStyle.ForeColor = Color.Black;
+
+            // Row height (optional)
+            dgvUserList.RowTemplate.Height = 30;
+
+            // Header height (optional)
+            dgvUserList.ColumnHeadersHeight = 35;
         }
     }
 }

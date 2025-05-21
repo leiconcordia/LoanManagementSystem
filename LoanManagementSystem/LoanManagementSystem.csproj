@@ -66,6 +66,12 @@
       <DependentUpon>AdminLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="CircularProgressBar\CircularProgressBar.cs" />
+    <Compile Include="Controls\AdminDashboard.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AdminDashboard.Designer.cs">
+      <DependentUpon>AdminDashboard.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Disbursements.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -155,6 +161,9 @@
     </Compile>
     <EmbeddedResource Include="AdminLogin.resx">
       <DependentUpon>AdminLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AdminDashboard.resx">
+      <DependentUpon>AdminDashboard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Disbursements.resx">
       <DependentUpon>Disbursements.cs</DependentUpon>
