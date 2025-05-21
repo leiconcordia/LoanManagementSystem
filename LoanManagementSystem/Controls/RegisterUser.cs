@@ -1,29 +1,27 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
 using System.Data.SqlClient;
-using System.Net;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
-
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
-
-namespace LoanManagementSystem
+namespace LoanManagementSystem.Controls
 {
-    public partial class Register : Form
+    public partial class RegisterUser : UserControl
     {
-        public Register()
+        private Login parentForm;
+        public RegisterUser(Login parent)
         {
             InitializeComponent();
+            this.parentForm = parent;
         }
+   
 
-        private void Register_Load(object sender, EventArgs e)
-        {
-
-        }
-
-
-        
-
-        private DatabaseHelper dbHelper = new DatabaseHelper(); // Create an instance of DatabaseHelper
+     private DatabaseHelper dbHelper = new DatabaseHelper(); // Create an instance of DatabaseHelper
 
         public object BCrypt { get; private set; }
 
@@ -54,7 +52,7 @@ namespace LoanManagementSystem
                 MessageBox.Show("Monthly Income must be a valid number.", "Validation Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            
+
 
             // Step 3: Check if Phone Number or Username already exists
             string checkQuery = "SELECT 1 FROM Users WHERE PhoneNumber = @PhoneNumber OR Username = @Username";
@@ -98,12 +96,14 @@ namespace LoanManagementSystem
                 MessageBox.Show("Registration Successful!", "Success",
                  MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                // Close the current registration form
-                this.Close();
 
-                // Create and show the login form
-                Login loginForm = new Login();
-                loginForm.Show();
+
+                parentForm.LoginPanel.Controls.Clear(); // ✅ use the stored reference
+                UserLogin UserLogin = new UserLogin(parentForm);
+                UserLogin.Dock = DockStyle.Fill;
+                parentForm.LoginPanel.Controls.Add(UserLogin);
+
+
 
             }
             else
@@ -112,9 +112,12 @@ namespace LoanManagementSystem
             }
         }
 
-        private void tbPhoneNumber_TextChanged(object sender, EventArgs e)
+        private void btnBack_Click(object sender, EventArgs e)
         {
-
+            parentForm.LoginPanel.Controls.Clear(); // ✅ use the stored reference
+            UserLogin UserLogin = new UserLogin(parentForm);
+            UserLogin.Dock = DockStyle.Fill;
+            parentForm.LoginPanel.Controls.Add(UserLogin);
         }
     }
 }

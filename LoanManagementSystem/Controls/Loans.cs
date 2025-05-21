@@ -18,7 +18,9 @@ namespace LoanManagementSystem.Controls
 
         public Loans()
         {
+
             InitializeComponent();
+            CustomizeDataGridView(dgvLoanList);
             if (!dgvLoanList.Columns.Contains("LoanID"))
             {
                 var loanIdColumn = new DataGridViewTextBoxColumn();
@@ -30,7 +32,7 @@ namespace LoanManagementSystem.Controls
 
             }
 
-            CustomizeDataGridView(dgvLoanList);
+           
 
 
 
@@ -126,6 +128,11 @@ namespace LoanManagementSystem.Controls
                     statusCell.Style.ForeColor = Color.Black;
                     statusCell.Style.BackColor = Color.Yellow;
                 }
+                else if (status == "Disbursed")
+                {
+                    statusCell.Style.ForeColor = Color.White;
+                    statusCell.Style.BackColor = Color.FromArgb(33, 150, 243);
+                }
             }
         }
 
@@ -207,8 +214,8 @@ namespace LoanManagementSystem.Controls
             dgvLoanList.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // Row styling
-            dgvLoanList.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
-            dgvLoanList.DefaultCellStyle.ForeColor = Color.White;
+            dgvLoanList.DefaultCellStyle.BackColor = Color.White;  // base row color
+            dgvLoanList.DefaultCellStyle.ForeColor = Color.Black;
             dgvLoanList.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
             dgvLoanList.DefaultCellStyle.SelectionForeColor = Color.White;
     

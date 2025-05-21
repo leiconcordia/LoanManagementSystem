@@ -51,14 +51,14 @@ namespace LoanManagementSystem.Controls
             dgvDisbursement.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // Row styling
-            dgvDisbursement.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
-            dgvDisbursement.DefaultCellStyle.ForeColor = Color.White;
+            dgvDisbursement.DefaultCellStyle.BackColor = Color.White;  // base row color
+            dgvDisbursement.DefaultCellStyle.ForeColor = Color.Black;
             dgvDisbursement.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
             dgvDisbursement.DefaultCellStyle.SelectionForeColor = Color.White;
 
             // Alternate row styling
             dgvDisbursement.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(58, 63, 85);  // slightly lighter
-            dgvDisbursement.AlternatingRowsDefaultCellStyle.ForeColor = Color.Black;
+            dgvDisbursement.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
 
             // Row height (optional)
             dgvDisbursement.RowTemplate.Height = 30;

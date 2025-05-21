@@ -57,8 +57,8 @@ namespace LoanManagementSystem.Controls
             dgvPaymentHistory.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // Row styling
-            dgvPaymentHistory.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
-            dgvPaymentHistory.DefaultCellStyle.ForeColor = Color.White;
+            dgvPaymentHistory.DefaultCellStyle.BackColor = Color.White;  // base row color
+            dgvPaymentHistory.DefaultCellStyle.ForeColor = Color.Black;
             dgvPaymentHistory.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
             dgvPaymentHistory.DefaultCellStyle.SelectionForeColor = Color.White;
 

@@ -59,7 +59,7 @@
             this.DisbursedDate});
             this.dgvDisbursements.Location = new System.Drawing.Point(53, 104);
             this.dgvDisbursements.Name = "dgvDisbursements";
-            this.dgvDisbursements.Size = new System.Drawing.Size(698, 318);
+            this.dgvDisbursements.Size = new System.Drawing.Size(701, 410);
             this.dgvDisbursements.TabIndex = 2;
             // 
             // LoaneeName

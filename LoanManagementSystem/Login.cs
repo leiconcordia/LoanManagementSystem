@@ -12,81 +12,23 @@ using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace LoanManagementSystem
 {
-    public partial class Login: Form
+    public partial class Login : Form
     {
         public Login()
         {
             InitializeComponent();
+            switchUserControl(new UserLogin(this));
         }
 
-       
 
-        private void Login_Load(object sender, EventArgs e)
+
+        public void switchUserControl(UserControl userControl)
         {
+            LoginPanel.Controls.Clear();
+            LoginPanel.Controls.Add(userControl);
+            userControl.Dock = DockStyle.Fill;
 
         }
 
-
-        private void tbUsername_TextChanged(object sender, EventArgs e)
-        {
-            label5.Visible = false;
-           
-        }
-
-        private void tbPassword_TextChanged(object sender, EventArgs e)
-        {
-            label6.Visible = false;
-           
-        }
-
-        
-
-        private void register_Click(object sender, EventArgs e)
-        {
-            this.Hide();
-            Register register = new Register();
-            register.Show();
-        }
-        private void logAdmin_click(object sender, EventArgs e)
-        {
-            this.Hide();
-            AdminLogin adminLogin = new AdminLogin();
-            adminLogin.Show();
-        }
-
-        
-        private void btnLogin_Click(object sender, EventArgs e)
-        {
-            string username = tbUsername.Text.Trim();
-            string password = tbPassword.Text.Trim();
-
-            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
-            {
-                MessageBox.Show("Please enter both username and password.");
-                return;
-            }
-
-            DatabaseHelper db = new DatabaseHelper();
-            if (db.ValidateLogin(username, password))
-            {
-                string fullName = db.GetFullName(username, password);
-                string status = db.GetStatus(username, password);
-                int userID = db.GetUserID(username, password);
-                MessageBox.Show("Login successful!");
-                this.Hide();
-                new UserForm(fullName, status, userID).Show(); // Pass full name
-            }
-           
-
-            else
-            {
-                // Invalid login: Show a message indicating that the username or password is incorrect
-                MessageBox.Show("Invalid username or password.");
-                tbPassword.Text = "";
-                tbUsername.Text = "";
-            }
-
-
-        }
     }
 }

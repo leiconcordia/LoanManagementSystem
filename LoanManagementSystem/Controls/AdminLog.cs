@@ -4,31 +4,24 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace LoanManagementSystem
+namespace LoanManagementSystem.Controls
 {
-    public partial class AdminLogin : Form
+    public partial class AdminLog : UserControl
     {
-        public AdminLogin()
+        private Login parentForm;
+        public AdminLog(Login parent)
         {
             InitializeComponent();
-
-        }
-        private void tbUsername_TextChanged(object sender, EventArgs e)
-        {
-            label5.Visible = false;
-
+            this.parentForm = parent;
         }
 
-        private void tbPassword_TextChanged(object sender, EventArgs e)
-        {
-            label6.Visible = false;
 
-        }
+
+       
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -44,7 +37,11 @@ namespace LoanManagementSystem
             }
             else if (username == "admin" && password == "123")
             {
-                this.Hide();
+                Form parentForm = this.FindForm(); // gets the Login form
+                if (parentForm != null)
+                {
+                    parentForm.Hide(); // you can also use parentForm.Close(); if you want to close it entirely
+                }
                 MainForm mf = new MainForm();
                 mf.Show();
 
@@ -58,14 +55,22 @@ namespace LoanManagementSystem
             }
         }
 
-        private void tbUsername_TextChanged_1(object sender, EventArgs e)
+        private void tbUsername_TextChanged(object sender, EventArgs e)
         {
             label5.Visible = false;
         }
 
-        private void tbPassword_TextChanged_1(object sender, EventArgs e)
+        private void tbPassword_TextChanged(object sender, EventArgs e)
         {
             label6.Visible = false;
+        }
+
+        private void btnBack_Click(object sender, EventArgs e)
+        {
+            parentForm.LoginPanel.Controls.Clear(); // ✅ use the stored reference
+            UserLogin UserLogin = new UserLogin(parentForm);
+            UserLogin.Dock = DockStyle.Fill;
+            parentForm.LoginPanel.Controls.Add(UserLogin);
         }
     }
 }

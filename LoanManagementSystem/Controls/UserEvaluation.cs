@@ -94,8 +94,8 @@ namespace LoanManagementSystem.Controls
             dgvUserList.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
 
             // Row styling
-            dgvUserList.DefaultCellStyle.BackColor = Color.FromArgb(46, 51, 73);  // base row color
-            dgvUserList.DefaultCellStyle.ForeColor = Color.White;
+            dgvUserList.DefaultCellStyle.BackColor = Color.White;  // base row color
+            dgvUserList.DefaultCellStyle.ForeColor = Color.Black;
             dgvUserList.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
             dgvUserList.DefaultCellStyle.SelectionForeColor = Color.White;
 

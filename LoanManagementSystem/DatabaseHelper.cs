@@ -114,7 +114,7 @@ namespace LoanManagementSystem
 
 
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=laptop-s0n4jmsc\\sqlexpress;Database=DB_LMS;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
