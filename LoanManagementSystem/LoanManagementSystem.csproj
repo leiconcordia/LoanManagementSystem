@@ -59,18 +59,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AdminLogin.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="AdminLogin.Designer.cs">
-      <DependentUpon>AdminLogin.cs</DependentUpon>
-    </Compile>
     <Compile Include="CircularProgressBar\CircularProgressBar.cs" />
     <Compile Include="Controls\AdminDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Controls\AdminDashboard.Designer.cs">
       <DependentUpon>AdminDashboard.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\AdminLog.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\AdminLog.Designer.cs">
+      <DependentUpon>AdminLog.cs</DependentUpon>
     </Compile>
     <Compile Include="Controls\Disbursements.cs">
       <SubType>UserControl</SubType>
@@ -102,6 +102,12 @@
     <Compile Include="Controls\Loans.Designer.cs">
       <DependentUpon>Loans.cs</DependentUpon>
     </Compile>
+    <Compile Include="Controls\RegisterUser.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\RegisterUser.Designer.cs">
+      <DependentUpon>RegisterUser.cs</DependentUpon>
+    </Compile>
     <Compile Include="Controls\UserDashboard.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -119,6 +125,12 @@
     </Compile>
     <Compile Include="Controls\UserInfo.Designer.cs">
       <DependentUpon>UserInfo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\UserLogin.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\UserLogin.Designer.cs">
+      <DependentUpon>UserLogin.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -147,23 +159,17 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Register.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Register.Designer.cs">
-      <DependentUpon>Register.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="UserForm.Designer.cs">
       <DependentUpon>UserForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="AdminLogin.resx">
-      <DependentUpon>AdminLogin.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Controls\AdminDashboard.resx">
       <DependentUpon>AdminDashboard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\AdminLog.resx">
+      <DependentUpon>AdminLog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\Disbursements.resx">
       <DependentUpon>Disbursements.cs</DependentUpon>
@@ -180,6 +186,9 @@
     <EmbeddedResource Include="Controls\Loans.resx">
       <DependentUpon>Loans.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Controls\RegisterUser.resx">
+      <DependentUpon>RegisterUser.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Controls\UserDashboard.resx">
       <DependentUpon>UserDashboard.cs</DependentUpon>
     </EmbeddedResource>
@@ -188,6 +197,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Controls\UserInfo.resx">
       <DependentUpon>UserInfo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Controls\UserLogin.resx">
+      <DependentUpon>UserLogin.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
@@ -208,9 +220,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="Register.resx">
-      <DependentUpon>Register.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="UserForm.resx">
       <DependentUpon>UserForm.cs</DependentUpon>
     </EmbeddedResource>

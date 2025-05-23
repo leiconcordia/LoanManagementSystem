@@ -19,9 +19,9 @@ namespace LoanManagementSystem.Controls
             InitializeComponent();
             this.parentForm = parent;
         }
-   
 
-     private DatabaseHelper dbHelper = new DatabaseHelper(); // Create an instance of DatabaseHelper
+
+        private DatabaseHelper dbHelper = new DatabaseHelper(); // Create an instance of DatabaseHelper
 
         public object BCrypt { get; private set; }
 

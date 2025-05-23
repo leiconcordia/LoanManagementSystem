@@ -42,29 +42,34 @@ namespace LoanManagementSystem.Controls
         private Image _selectedProofImage;
 
         private void BtnNext_Click(object sender, EventArgs e)
-        {
-            if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance,  out string displayMessage))
-            {
-                // Show confirmation message box
-                DialogResult result = MessageBox.Show(
-                    displayMessage + "\n\nDo you want to proceed?",
-                    "Confirm Loan Application",
-                    MessageBoxButtons.YesNo,
-                    MessageBoxIcon.Question
-                );
+{
+    if (!SaveImages()) // This ensures both images are checked and saved first
+    {
+        return; // Stop here if images are missing or saving failed
+    }
 
-                if (result == DialogResult.Yes)
-                {
-                    SaveImages();
-                    SubmitLoanApplication();
-                }
-                // If No, do nothing (stay on the current form)
-            }
-            else
-            {
-                MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+    if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance, out string displayMessage))
+    {
+        // Show confirmation message box
+        DialogResult result = MessageBox.Show(
+            displayMessage + "\n\nDo you want to proceed?",
+            "Confirm Loan Application",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Question
+        );
+
+        if (result == DialogResult.Yes)
+        {
+            SubmitLoanApplication(); // only reaches here if images are saved
         }
+    }
+    else
+    {
+        MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+    }
+}
+
+
 
         // Removed duplicate method definition
         private int ExtractMonthsFromTerm(string term)
@@ -81,6 +86,11 @@ namespace LoanManagementSystem.Controls
 
         private void btnNext_Click(object sender, EventArgs e)
         {
+            if (!SaveImages()) // This ensures both images are checked and saved first
+            {
+                return; // Stop here if images are missing or saving failed
+            }
+
             if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance, out string displayMessage))
             {
                 // Show confirmation message box
@@ -93,16 +103,15 @@ namespace LoanManagementSystem.Controls
 
                 if (result == DialogResult.Yes)
                 {
-                    SaveImages();
-                    SubmitLoanApplication();
+                    SubmitLoanApplication(); // only reaches here if images are saved
                 }
-                // If No, do nothing (stay on the current form)
             }
             else
             {
                 MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
+
 
         private bool TryCalculateMonthlyPayment(out decimal monthlyPayment, out decimal Interest, out decimal newBalance, out string message)
         {
@@ -213,37 +222,37 @@ namespace LoanManagementSystem.Controls
             }
         }
 
-        private void SaveImages()
+        private bool SaveImages()
         {
             if (_selectedValidIdImage == null || _selectedProofImage == null)
             {
                 MessageBox.Show("Please upload both ID and Proof of Income", "Warning",
                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
+                return false; // <-- must return false here
             }
 
             if (_userID <= 0)
             {
                 MessageBox.Show("No user selected", "Error",
                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                return false; // <-- also must return false here
             }
-
-
 
             bool success = _dbHelper.SaveUserImages(_userID, _selectedValidIdImage, _selectedProofImage);
 
             if (success)
             {
-                MessageBox.Show("Images saved successfully!", "Success",
-                               MessageBoxButtons.OK, MessageBoxIcon.Information);
+                
+                return true;
             }
             else
             {
-                MessageBox.Show("Failed to save images", "Error",
-                               MessageBoxButtons.OK, MessageBoxIcon.Error);
+             
+                return false;
             }
         }
+
+        
 
 
 

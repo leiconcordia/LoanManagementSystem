@@ -35,8 +35,6 @@
             this.cbLoanTerm = new System.Windows.Forms.ComboBox();
             this.label4 = new System.Windows.Forms.Label();
             this.cbLoanPurpose = new System.Windows.Forms.ComboBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.dtPaymentDate = new System.Windows.Forms.DateTimePicker();
             this.label9 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -129,23 +127,6 @@
             this.cbLoanPurpose.Name = "cbLoanPurpose";
             this.cbLoanPurpose.Size = new System.Drawing.Size(95, 21);
             this.cbLoanPurpose.TabIndex = 6;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(15, 291);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(354, 25);
-            this.label5.TabIndex = 7;
-            this.label5.Text = "Preferred Monthly Payment Date";
-            // 
-            // dtPaymentDate
-            // 
-            this.dtPaymentDate.Location = new System.Drawing.Point(19, 338);
-            this.dtPaymentDate.Name = "dtPaymentDate";
-            this.dtPaymentDate.Size = new System.Drawing.Size(188, 20);
-            this.dtPaymentDate.TabIndex = 8;
             // 
             // label9
             // 
@@ -279,8 +260,6 @@
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.label9);
-            this.Controls.Add(this.dtPaymentDate);
-            this.Controls.Add(this.label5);
             this.Controls.Add(this.cbLoanPurpose);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.cbLoanTerm);
@@ -306,8 +285,6 @@
         private System.Windows.Forms.ComboBox cbLoanTerm;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.ComboBox cbLoanPurpose;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.DateTimePicker dtPaymentDate;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Label label7;

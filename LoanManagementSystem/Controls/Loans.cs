@@ -113,26 +113,26 @@ namespace LoanManagementSystem.Controls
                 var status = row["Status"].ToString();
                 var statusCell = dgvLoanList.Rows[rowIndex].Cells["Status"];
 
-                if (status == "Approved")
-                {
-                    statusCell.Style.ForeColor = Color.White;
-                    statusCell.Style.BackColor = Color.Green;
-                }
-                else if (status == "Rejected")
-                {
-                    statusCell.Style.ForeColor = Color.White;
-                    statusCell.Style.BackColor = Color.Red;
-                }
-                else if (status == "Pending")
-                {
-                    statusCell.Style.ForeColor = Color.Black;
-                    statusCell.Style.BackColor = Color.Yellow;
-                }
-                else if (status == "Disbursed")
-                {
-                    statusCell.Style.ForeColor = Color.White;
-                    statusCell.Style.BackColor = Color.FromArgb(33, 150, 243);
-                }
+                //if (status == "Approved")
+                //{
+                //    statusCell.Style.ForeColor = Color.White;
+                //    statusCell.Style.BackColor = Color.Green;
+                //}
+                //else if (status == "Rejected")
+                //{
+                //    statusCell.Style.ForeColor = Color.White;
+                //    statusCell.Style.BackColor = Color.Red;
+                //}
+                //else if (status == "Pending")
+                //{
+                //    statusCell.Style.ForeColor = Color.Black;
+                //    statusCell.Style.BackColor = Color.Yellow;
+                //}
+                //else if (status == "Disbursed")
+                //{
+                //    statusCell.Style.ForeColor = Color.White;
+                //    statusCell.Style.BackColor = Color.FromArgb(33, 150, 243);
+                //}
             }
         }
 
