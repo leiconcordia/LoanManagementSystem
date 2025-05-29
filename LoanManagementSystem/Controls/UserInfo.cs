@@ -235,6 +235,29 @@ namespace LoanManagementSystem.Controls
             }
         }
 
+
+        private string ShowInputDialog(string title, string prompt)
+        {
+            Form inputForm = new Form();
+            inputForm.Width = 400;
+            inputForm.Height = 150;
+            inputForm.Text = title;
+
+            Label textLabel = new Label() { Left = 20, Top = 20, Text = prompt, Width = 340 };
+            TextBox textBox = new TextBox() { Left = 20, Top = 50, Width = 340 };
+
+            Button confirmation = new Button() { Text = "OK", Left = 280, Width = 80, Top = 80, DialogResult = DialogResult.OK };
+            inputForm.AcceptButton = confirmation;
+
+            inputForm.Controls.Add(textLabel);
+            inputForm.Controls.Add(textBox);
+            inputForm.Controls.Add(confirmation);
+            inputForm.StartPosition = FormStartPosition.CenterParent;
+
+            return inputForm.ShowDialog() == DialogResult.OK ? textBox.Text : null;
+        }
+
+
         private void UserInfo_Load(object sender, EventArgs e)
         {
 
@@ -245,11 +268,41 @@ namespace LoanManagementSystem.Controls
             
             UpdateUserStatus("Rejected");
         }
-
         private void btnApprove_Click(object sender, EventArgs e)
         {
-            UpdateUserStatus("Approved");
+            string input = ShowInputDialog("Max Loan Amount", "Enter amount for user's max loan amount:");
+
+            if (!string.IsNullOrWhiteSpace(input))
+            {
+                if (decimal.TryParse(input, out decimal amount))
+                {
+                    try
+                    {
+
+                        int convertedId = int.Parse(_userId);
+                        DatabaseHelper db = new DatabaseHelper();
+                        db.UpdateUserMaxLoanAmount(convertedId, amount);
+
+                        UpdateUserStatus("Approved");
+
+                        MessageBox.Show($"User approved with max loan amount: {amount:C}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show("Error updating database: " + ex.Message, "Database Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Invalid amount entered. Please enter a valid decimal number.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Approval cancelled or no input provided.", "Cancelled", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
+
 
         private void userInfoEstatus_Click(object sender, EventArgs e)
         {

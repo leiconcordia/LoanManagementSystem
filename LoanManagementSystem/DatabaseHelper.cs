@@ -127,8 +127,8 @@ namespace LoanManagementSystem
 
 
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=LAPTOP-GHQG6N7F\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
-
+        //private readonly string connectionString = "Server=LAPTOP-GHQG6N7F\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
         // Method to get SQL Connection
         private SqlConnection GetConnection()
         {
@@ -1540,7 +1540,34 @@ WHERE
         }
 
 
-       
+        public void UpdateUserMaxLoanAmount(int userId, decimal maxLoanAmount)
+        {
+         
+            string query = @"
+        UPDATE Users
+        SET max_loan_amount = @MaxLoanAmount
+        WHERE userID = @UserID";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@MaxLoanAmount", maxLoanAmount);
+                cmd.Parameters.AddWithValue("@UserID", userId);
+
+                conn.Open();
+                int rowsAffected = cmd.ExecuteNonQuery();
+
+                if (rowsAffected == 0)
+                {
+                    throw new Exception("No user found with the specified ID.");
+                }
+            }
+        }
+
+
+
+
+
 
 
 
