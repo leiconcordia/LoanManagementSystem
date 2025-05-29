@@ -35,7 +35,7 @@ namespace LoanManagementSystem
             dashboard.Dock = DockStyle.Fill;
             UserPanel.Controls.Add(dashboard);
         }
-
+            
         public void ClearLoanPanel()
         {
             UserPanel.Controls.Clear();

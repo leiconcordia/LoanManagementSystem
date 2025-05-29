@@ -42,32 +42,32 @@ namespace LoanManagementSystem.Controls
         private Image _selectedProofImage;
 
         private void BtnNext_Click(object sender, EventArgs e)
-{
-    if (!SaveImages()) // This ensures both images are checked and saved first
-    {
-        return; // Stop here if images are missing or saving failed
-    }
-
-    if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance, out string displayMessage))
-    {
-        // Show confirmation message box
-        DialogResult result = MessageBox.Show(
-            displayMessage + "\n\nDo you want to proceed?",
-            "Confirm Loan Application",
-            MessageBoxButtons.YesNo,
-            MessageBoxIcon.Question
-        );
-
-        if (result == DialogResult.Yes)
         {
-            SubmitLoanApplication(); // only reaches here if images are saved
+            if (!SaveImages()) // This ensures both images are checked and saved first
+            {
+                return; // Stop here if images are missing or saving failed
+            }
+
+            if (TryCalculateMonthlyPayment(out decimal monthly, out decimal totalInterest, out decimal newBalance, out string displayMessage))
+            {
+                // Show confirmation message box
+                DialogResult result = MessageBox.Show(
+                    displayMessage + "\n\nDo you want to proceed?",
+                    "Confirm Loan Application",
+                    MessageBoxButtons.YesNo,
+                    MessageBoxIcon.Question
+                );
+
+                if (result == DialogResult.Yes)
+                {
+                    SubmitLoanApplication(); // only reaches here if images are saved
+                }
+            }
+            else
+            {
+                MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
-    }
-    else
-    {
-        MessageBox.Show(displayMessage, "Invalid Input", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-    }
-}
 
 
 
@@ -160,7 +160,7 @@ namespace LoanManagementSystem.Controls
 
             newBalance = loanAmount + Interest;
 
-          
+
             message = $"You will pay ₱{monthlyPayment:F2} for {months} months.";
 
             return true;
@@ -242,23 +242,23 @@ namespace LoanManagementSystem.Controls
 
             if (success)
             {
-                
+
                 return true;
             }
             else
             {
-             
+
                 return false;
             }
         }
 
-        
+
 
 
 
         private void SubmitLoanApplication()
         {
-           
+
             string loanPurpose = cbLoanPurpose.SelectedItem != null ? cbLoanPurpose.SelectedItem.ToString() : "";
             string loanTerm = cbLoanTerm.SelectedItem != null ? cbLoanTerm.SelectedItem.ToString() : "";
             decimal loanAmount = 0;
@@ -287,7 +287,7 @@ namespace LoanManagementSystem.Controls
 
 
             DatabaseHelper db = new DatabaseHelper();
-            
+
 
             bool success = db.InsertLoan(_userID, loanAmount, months, loanPurpose, monthlyPayment, NewBalance, Interest);
 
@@ -331,4 +331,3 @@ namespace LoanManagementSystem.Controls
 
 
 }
-

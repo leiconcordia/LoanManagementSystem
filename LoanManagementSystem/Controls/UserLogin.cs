@@ -22,15 +22,15 @@ namespace LoanManagementSystem.Controls
             this.parentForm = parent; // Now correctly assigns a Login instance
         }
 
-        private void tbUsername_TextChanged(object sender, EventArgs e)
-        {
-            label5.Visible = false;
-        }
+        //private void tbUsername_TextChanged(object sender, EventArgs e)
+        //{
+        //    label5.Visible = false;
+        //}
 
-        private void tbPassword_TextChanged(object sender, EventArgs e)
-        {
-            label6.Visible = false;
-        }
+        //private void tbPassword_TextChanged(object sender, EventArgs e)
+        //{
+        //    label6.Visible = false;
+        //}
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
@@ -81,6 +81,21 @@ namespace LoanManagementSystem.Controls
             AdminLog logAdmin = new AdminLog(parentForm); // Create an instance of AdminLog
             logAdmin.Dock = DockStyle.Fill; // Use the instance to set Dock property
             parentForm.LoginPanel.Controls.Add(logAdmin); // Add the instance to the panel
+        }
+
+        private void UserLogin_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label6_Click_1(object sender, EventArgs e)
+        {
+
         }
     }
 }

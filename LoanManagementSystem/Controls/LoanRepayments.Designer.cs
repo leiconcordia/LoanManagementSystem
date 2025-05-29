@@ -30,7 +30,6 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.dgvPaymentHistory = new System.Windows.Forms.DataGridView();
-           
             ((System.ComponentModel.ISupportInitialize)(this.dgvPaymentHistory)).BeginInit();
             this.SuspendLayout();
             // 
@@ -40,7 +39,7 @@
             this.label1.BackColor = System.Drawing.Color.Transparent;
             this.label1.Font = new System.Drawing.Font("Microsoft YaHei", 16.2F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.ForeColor = System.Drawing.SystemColors.ButtonFace;
-            this.label1.Location = new System.Drawing.Point(38, 27);
+            this.label1.Location = new System.Drawing.Point(65, 69);
             this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(259, 30);
@@ -50,15 +49,10 @@
             // dgvPaymentHistory
             // 
             this.dgvPaymentHistory.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-           
-            
-
-
             this.dgvPaymentHistory.Location = new System.Drawing.Point(70, 123);
             this.dgvPaymentHistory.Name = "dgvPaymentHistory";
             this.dgvPaymentHistory.Size = new System.Drawing.Size(707, 422);
             this.dgvPaymentHistory.TabIndex = 2;
-          
             // 
             // LoanRepayments
             // 
@@ -69,7 +63,6 @@
             this.Controls.Add(this.label1);
             this.Name = "LoanRepayments";
             this.Size = new System.Drawing.Size(862, 630);
-            
             ((System.ComponentModel.ISupportInitialize)(this.dgvPaymentHistory)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

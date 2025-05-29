@@ -17,7 +17,7 @@ namespace LoanManagementSystem
         public Login()
         {
             InitializeComponent();
-            switchUserControl(new UserLogin(this));
+            switchUserControl(new AdminLog(this));
         }
 
 

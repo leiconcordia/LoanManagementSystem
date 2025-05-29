@@ -9,6 +9,7 @@ using System.IO;
 using System.Net;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Remoting.Metadata.W3cXsd2001;
+using System.Security.Cryptography;
 using System.Security.Principal;
 using System.Windows.Forms;
 using static LoanManagementSystem.DatabaseHelper;
@@ -38,9 +39,9 @@ namespace LoanManagementSystem
         //Status NVARCHAR(20) NOT NULL DEFAULT 'Pending'
         //);
 
-        //ALTER TABLE Users
-        //ADD ValidID VARBINARY(MAX),
-        //ProofOfIncome VARBINARY(MAX);
+        //        ALTER TABLE Users
+        //        ADD ValidID VARBINARY(MAX),
+        //        ProofOfIncome VARBINARY(MAX);
         //        ALTER TABLE Users
         //ADD CreditBalance DECIMAL(10, 2) NOT NULL DEFAULT 0.00;
 
@@ -51,10 +52,10 @@ namespace LoanManagementSystem
         //        CREATE TABLE Loan
         //        (
         //    LoanID INT PRIMARY KEY IDENTITY(1,1), 
-        //    UserID INT NOT NULL,                 
-        //    Amount DECIMAL(18, 2) NOT NULL,       
-        //    Term VARCHAR(50) NOT NULL,            
-        //    Status VARCHAR(50) NOT NULL,           
+        //    UserID INT NOT NULL,
+        //    Amount DECIMAL(18, 2) NOT NULL,
+        //    Term VARCHAR(50) NOT NULL,
+        //    Status VARCHAR(50) NOT NULL,
         //    CreatedAt DATETIME DEFAULT GETDATE(),  
         //    ApprovedAt DATETIME NULL,              
         //    DisbursedAt DATETIME NULL,            
@@ -67,12 +68,12 @@ namespace LoanManagementSystem
 
         //        ALTER TABLE Loan
         //ADD
-        //    LoanPurpose VARCHAR(255) NULL,
-        //    PaymentDate DATETIME NULL;
+        //                    LoanPurpose VARCHAR(255) NULL,
+        //                    PaymentDate DATETIME NULL;
 
-        //        ALTER TABLE Loan
-        //ADD Interest DECIMAL(10,2) NOT NULL DEFAULT 0.00,
-        //    NewBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00;
+        //                ALTER TABLE Loan
+        //        ADD Interest DECIMAL(10,2) NOT NULL DEFAULT 0.00,
+        //            NewBalance DECIMAL(10,2) NOT NULL DEFAULT 0.00;
 
 
         //CREATE TABLE Disbursement(
@@ -84,9 +85,9 @@ namespace LoanManagementSystem
         //);
 
 
-        //        CREATE TABLE Payments(
-        //            PaymentID INT PRIMARY KEY IDENTITY(1,1),  -- Auto-incrementing primary key
-        //            LoanID INT NOT NULL,
+        //CREATE TABLE Payments(
+        //    PaymentID INT PRIMARY KEY IDENTITY(1,1),  -- Auto-incrementing primary key
+        //    LoanID INT NOT NULL,
         //    Balance DECIMAL(18,2) NOT NULL,
         //    Status VARCHAR(50) NOT NULL,
         //    Remarks VARCHAR(255) NULL,
@@ -99,14 +100,26 @@ namespace LoanManagementSystem
 
 
 
-//        CREATE TABLE PaymentSchedule(
-//    LoanID INT,
-//    MonthIndex INT,
-//    DueDate DATE,
-//    MonthlyPayment DECIMAL(18,2),
-//    ScheduledBalance DECIMAL(18,2),
-//    PRIMARY KEY(LoanID, MonthIndex)
-//);
+        //        CREATE TABLE PaymentSchedule(
+        //    LoanID INT,
+        //    MonthIndex INT,
+        //    DueDate DATE,
+        //    MonthlyPayment DECIMAL(18,2),
+        //    ScheduledBalance DECIMAL(18,2),
+        //    PRIMARY KEY(LoanID, MonthIndex)
+        //);
+
+
+//        CREATE TABLE ActivityLogs(
+//LogID INT PRIMARY KEY IDENTITY,
+//Action VARCHAR(50),
+//            Message VARCHAR(255),
+//            Timestamp DATETIME DEFAULT GETDATE()
+//        );
+
+//         _dbHelper.LogActivity("User Approved", $"user #{_userId}");
+//          db.DisburseLoan(loanId);  // Your logic
+//        db.LogActivity("Loan Disbursed", $"Disbursed {amount} for Loan #{loanId}");
 
 
 
@@ -114,7 +127,7 @@ namespace LoanManagementSystem
 
 
         // Replace with your actual SQL Server connection string
-        private readonly string connectionString = "Server=DESKTOP-0TPQ7D6\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
+        private readonly string connectionString = "Server=LAPTOP-GHQG6N7F\\SQLEXPRESS01;Database=DB_KASALIGAN_LOAN_SYSTEM;Trusted_Connection=True;";
 
         // Method to get SQL Connection
         private SqlConnection GetConnection()
@@ -252,15 +265,46 @@ namespace LoanManagementSystem
 
 
 
-        public List<User> GetUsers()
+        //public List<User> GetUsers()
+        //{
+        //    List<User> users = new List<User>();
+
+        //    string query = @"SELECT UserId, FirstName, LastName, Status FROM Users"; // Add all columns
+
+        //    using (SqlConnection connection = new SqlConnection(connectionString))
+        //    {
+        //        SqlCommand command = new SqlCommand(query, connection);
+        //        connection.Open();
+
+        //        SqlDataReader reader = command.ExecuteReader();
+        //        while (reader.Read())
+        //        {
+        //            users.Add(new User
+        //            {
+        //                UserId = reader.GetInt32(0),
+        //                FirstName = reader.GetString(1),
+        //                LastName = reader.GetString(2),
+        //                Status = reader.GetString(3)  // Fixed index from 19 to 9
+        //            });
+        //        }
+        //    }
+        //    return users;
+        //}
+
+        public List<User> GetUsers(string searchTerm = "")
         {
             List<User> users = new List<User>();
+            string query = @"
+                SELECT UserId, FirstName, LastName, Status 
+                FROM Users 
+                WHERE FirstName LIKE @Search OR LastName LIKE @Search
+                ORDER BY CreatedAt DESC";
 
-            string query = @"SELECT UserId, FirstName, LastName, Status FROM Users"; // Add all columns
 
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 SqlCommand command = new SqlCommand(query, connection);
+                command.Parameters.AddWithValue("@Search", $"%{searchTerm}%");
                 connection.Open();
 
                 SqlDataReader reader = command.ExecuteReader();
@@ -271,12 +315,14 @@ namespace LoanManagementSystem
                         UserId = reader.GetInt32(0),
                         FirstName = reader.GetString(1),
                         LastName = reader.GetString(2),
-                        Status = reader.GetString(3)  // Fixed index from 19 to 9
+                        Status = reader.GetString(3)
                     });
                 }
             }
+
             return users;
         }
+
 
         public User GetUserById(string userId)
         {
@@ -335,6 +381,22 @@ namespace LoanManagementSystem
             }
             return userID;
         }
+
+        public string GetUserStatus(int userId)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT Status FROM Users WHERE UserID = @UserID";
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@UserID", userId);
+                    object result = cmd.ExecuteScalar();
+                    return result?.ToString();
+                }
+            }
+        }
+
 
 
 
@@ -465,56 +527,222 @@ namespace LoanManagementSystem
 
 
 
-        public DataTable GetLoansWithUserNames()
+        public void LogActivity(string action, string message)
+        {
+            string query = "INSERT INTO ActivityLogs (Action, Message) VALUES (@action, @message)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@action", action);
+                cmd.Parameters.AddWithValue("@message", message);
+                conn.Open();
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+
+        
+
+        public int GetPendingUsers()
+        {
+            int total = 0;
+            string query = "SELECT * FROM Users WHERE Status = 'Pending'";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+
+             
+            }
+
+            return total;
+        }
+
+
+        public DataTable GetUsersWithNearDueDates()
+        {
+            DataTable dt = new DataTable();
+            string query = @"
+                    SELECT 
+                    l.LoanID AS [Loan ID],
+                    l.UserID AS [User ID],
+                    ps.MonthlyPayment AS [Amount],
+                    ps.DueDate AS [Scheduled Date]
+                FROM Loan l
+                JOIN PaymentSchedule ps ON l.LoanID = ps.LoanID
+                WHERE 
+                    l.Status = 'Disbursed' AND 
+                    ps.DueDate BETWEEN CAST(GETDATE() AS DATE) AND DATEADD(MONTH, 2, CAST(GETDATE() AS DATE))
+                ORDER BY ps.DueDate;
+                ";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dt);
+            }
+
+            return dt;
+        }
+
+
+
+
+        public DataTable GetRecentActivities()
+        {
+            DataTable dt = new DataTable();
+            string query = "SELECT TOP 10 Action, Message, Timestamp FROM ActivityLogs ORDER BY Timestamp DESC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dt);
+            }
+
+            return dt;
+        }
+
+
+
+        //public Dictionary<string, int> GetLoanStatusCounts()
+        //{
+        //    Dictionary<string, int> statusCounts = new Dictionary<string, int>();
+
+        //    string query = @"SELECT Status, COUNT(*) AS Count FROM Loan GROUP BY Status";
+
+        //    using (SqlConnection conn = new SqlConnection(connectionString))
+        //    {
+        //        using (SqlCommand cmd = new SqlCommand(query, conn))
+        //        {
+        //            conn.Open();
+        //            SqlDataReader reader = cmd.ExecuteReader();
+
+        //            while (reader.Read())
+        //            {
+        //                string status = reader["Status"].ToString();
+        //                int count = Convert.ToInt32(reader["Count"]);
+        //                statusCounts[status] = count;
+        //            }
+        //        }
+        //    }
+
+        //    return statusCounts;
+        //}
+
+        public decimal GetTotalDisbursedAmount()
+        {
+            decimal total = 0;
+            string query = "SELECT ISNULL(SUM(Amount), 0) FROM Disbursement";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+
+                if (result != DBNull.Value)
+                {
+                    total = Convert.ToDecimal(result);
+                }
+            }
+
+            return total;
+        }
+
+
+
+
+        public int GetPendingLoans()
+        {
+            int count = 0;
+            string query = @"
+  SELECT COUNT(*) FROM Loan WHERE Status = 'Pending'";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                count = (int)cmd.ExecuteScalar();
+            }
+
+            return count;
+        }
+
+        // Method to get the count of active loans (those that have been disbursed)
+        public int GetActiveLoanCount()
+        {
+            int count = 0;
+            string query = @"
+  SELECT COUNT(*) 
+  FROM Loan L
+  INNER JOIN Disbursement D ON L.LoanID = D.LoanID
+  WHERE L.Status = 'Disbursed'";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                conn.Open();
+                count = (int)cmd.ExecuteScalar();
+            }
+
+            return count;
+        }
+
+
+
+
+        public DataTable SearchLoansByName(string keyword)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = @"
-            SELECT 
-                L.LoanID AS LoanID,  -- ✅ Include LoanID
-                (U.FirstName + ' ' + U.LastName) AS Loanee,
-                L.Amount AS Loan_Amount,
-                L.Status
-            FROM Loan L
-            INNER JOIN Users U ON L.UserID = U.UserID";
+    SELECT L.LoanID, (U.FirstName + ' ' + U.LastName) AS Loanee,
+           L.Amount AS Loan_Amount, L.Status
+    FROM Loan L
+    INNER JOIN Users U ON L.UserID = U.UserID
+    WHERE (U.FirstName + ' ' + U.LastName) LIKE @keyword";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        return dt;
-                    }
+                    cmd.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
                 }
             }
         }
-
-        public DataTable GetLoansWithUserNamesByStatus(string status)
+        public DataTable SearchLoansByNameAndStatus(string keyword, string status)
         {
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
                 string query = @"
-            SELECT 
-                L.LoanID,
-                (U.FirstName + ' ' + U.LastName) AS Loanee,
-                L.Amount AS Loan_Amount,
-                L.Status
-            FROM Loan L
-            INNER JOIN Users U ON L.UserID = U.UserID
-            WHERE L.Status = @Status";
+    SELECT L.LoanID, (U.FirstName + ' ' + U.LastName) AS Loanee,
+           L.Amount AS Loan_Amount, L.Status
+    FROM Loan L
+    INNER JOIN Users U ON L.UserID = U.UserID
+    WHERE (U.FirstName + ' ' + U.LastName) LIKE @keyword
+      AND L.Status = @status";
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
-                    cmd.Parameters.AddWithValue("@Status", status);
-                    using (SqlDataAdapter adapter = new SqlDataAdapter(cmd))
-                    {
-                        DataTable dt = new DataTable();
-                        adapter.Fill(dt);
-                        return dt;
-                    }
+                    cmd.Parameters.AddWithValue("@keyword", "%" + keyword + "%");
+                    cmd.Parameters.AddWithValue("@status", status);
+
+                    SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    adapter.Fill(dt);
+                    return dt;
                 }
             }
         }
@@ -522,6 +750,9 @@ namespace LoanManagementSystem
 
 
 
+
+
+        //KANI SIYA DONG NAA NI SIYAY METHOD NA INGANI ILISI LANG TONG DAAN ANI.
 
         public DataTable GetLoanDetailsByLoanId(int loanId)
         {
@@ -529,15 +760,18 @@ namespace LoanManagementSystem
             {
                 conn.Open();
                 string query = @"
-            SELECT 
-                (U.FirstName + ' ' + U.LastName) AS Loanee,
-                L.Amount AS Loan_Amount,
-                L.Term,
-                L.LoanPurpose,
-                L.Status
-            FROM Loan L
-            INNER JOIN Users U ON L.UserID = U.UserID
-            WHERE L.LoanID = @LoanID";  // ✅ Make sure this is by LoanID
+SELECT 
+    (U.FirstName + ' ' + U.LastName) AS Loanee,
+    L.Amount AS Loan_Amount,
+    L.Term,
+    L.LoanPurpose,
+    L.Status,
+    L.ValidID,
+    L.ProofOfIncome
+FROM Loan L
+INNER JOIN Users U ON L.UserID = U.UserID
+WHERE L.LoanID = @LoanID";
+                // ✅ Make sure this is by LoanID
 
                 using (SqlCommand cmd = new SqlCommand(query, conn))
                 {
@@ -551,6 +785,43 @@ namespace LoanManagementSystem
                 }
             }
         }
+
+
+        //KANING DUHA I ADD JUDNI KAY BAGO NI. 
+
+        public int GetUserIdByLoanId(int loanId)
+        {
+            int userId = -1;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT UserID FROM Loan WHERE LoanID = @LoanID";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@LoanID", loanId);
+                conn.Open();
+                object result = cmd.ExecuteScalar();
+                if (result != null)
+                {
+                    userId = Convert.ToInt32(result);
+                }
+            }
+            return userId;
+        }
+
+
+        public int GetDisbursedLoanCountByUserId(int userId)
+        {
+            int count = 0;
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                string query = "SELECT COUNT(*) FROM Loan WHERE UserID = @UserID AND Status = 'Disbursed'";
+                SqlCommand cmd = new SqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@UserID", userId);
+                conn.Open();
+                count = (int)cmd.ExecuteScalar();
+            }
+            return count;
+        }
+
 
 
         public bool UpdateLoanStatus(int loanID, string newStatus)
@@ -641,8 +912,136 @@ namespace LoanManagementSystem
         //    }
         //}
 
+        //public bool InsertDisbursement(int loanId, decimal amount)
+        //{
+        //    if (loanId <= 0 || amount <= 0)
+        //    {
+        //        MessageBox.Show("Invalid loan ID or amount.");
+        //        return false;
+        //    }
+
+        //    using (SqlConnection conn = new SqlConnection(connectionString))
+        //    {
+        //        conn.Open();
+        //        SqlTransaction transaction = conn.BeginTransaction();
+
+        //        try
+        //        {
+        //            // 1. Insert into Disbursement table
+        //            string insertQuery = "INSERT INTO Disbursement (LoanID, Amount, DisbursedAt) VALUES (@LoanID, @Amount, GETDATE())";
+        //            using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, transaction))
+        //            {
+        //                insertCmd.Parameters.AddWithValue("@LoanID", loanId);
+        //                insertCmd.Parameters.AddWithValue("@Amount", amount);
+        //                insertCmd.ExecuteNonQuery();
+        //            }
+
+        //            // 2. Get UserID from Loan table
+        //            int userId;
+        //            string getUserQuery = "SELECT UserID FROM Loan WHERE LoanID = @LoanID";
+        //            using (SqlCommand getUserCmd = new SqlCommand(getUserQuery, conn, transaction))
+        //            {
+        //                getUserCmd.Parameters.AddWithValue("@LoanID", loanId);
+        //                object result = getUserCmd.ExecuteScalar();
+        //                if (result == null || result == DBNull.Value)
+        //                {
+        //                    transaction.Rollback();
+        //                    return false;
+        //                }
+        //                userId = Convert.ToInt32(result);
+        //            }
+
+        //            // 3. Update User CreditBalance
+        //            string updateCreditQuery = "UPDATE Users SET CreditBalance = CreditBalance + @Amount WHERE UserID = @UserID";
+        //            using (SqlCommand updateCmd = new SqlCommand(updateCreditQuery, conn, transaction))
+        //            {
+        //                updateCmd.Parameters.AddWithValue("@Amount", amount);
+        //                updateCmd.Parameters.AddWithValue("@UserID", userId);
+        //                updateCmd.ExecuteNonQuery();
+        //            }
+
+        //            // 4. Get loan details: Term, MonthlyPayment, NewBalance
+        //            int term = 0;
+        //            decimal monthlyPayment = 0, newBalance = 0;
+        //            string getLoanQuery = "SELECT Term, MonthlyPayment, NewBalance FROM Loan WHERE LoanID = @LoanID";
+        //            using (SqlCommand cmdLoan = new SqlCommand(getLoanQuery, conn, transaction))
+        //            {
+        //                cmdLoan.Parameters.AddWithValue("@LoanID", loanId);
+        //                using (SqlDataReader reader = cmdLoan.ExecuteReader())
+
+        //                {
+        //                    if (reader.Read())
+        //                    {
+        //                        // Then proceed with your logic
+        //                        object termObj = reader.GetValue(0);
+        //                        term = (termObj == null || termObj == DBNull.Value) ? 0 : int.TryParse(termObj.ToString(), out int parsedTerm) ? parsedTerm : 0;
+        //                        monthlyPayment = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
+        //                        newBalance = reader.IsDBNull(2) ? 0 : reader.GetDecimal(2);
+        //                    }
+        //                    else
+        //                    {
+        //                        transaction.Rollback();
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+
+        //            // 5. Get Disbursement date
+        //            DateTime disbursementDate;
+        //            string getDateQuery = "SELECT DisbursedAt FROM Disbursement WHERE LoanID = @LoanID";
+        //            using (SqlCommand cmdDate = new SqlCommand(getDateQuery, conn, transaction))
+        //            {
+        //                cmdDate.Parameters.AddWithValue("@LoanID", loanId);
+        //                object dateResult = cmdDate.ExecuteScalar();
+        //                if (dateResult == null || dateResult == DBNull.Value)
+        //                {
+        //                    transaction.Rollback();
+        //                    return false;
+        //                }
+        //                disbursementDate = Convert.ToDateTime(dateResult);
+        //            }
+
+        //            // 6. Insert full PaymentSchedule
+        //            for (int i = 1; i <= term; i++)
+        //            {
+        //                DateTime dueDate = disbursementDate.AddMonths(i);
+        //                decimal scheduledBalance = newBalance - (monthlyPayment * i);
+        //                if (scheduledBalance < 0) scheduledBalance = 0;
+
+        //                string insertSchedule = @"
+        //            INSERT INTO PaymentSchedule (LoanID, MonthIndex, DueDate, MonthlyPayment, ScheduledBalance)
+        //            VALUES (@LoanID, @MonthIndex, @DueDate, @MonthlyPayment, @ScheduledBalance)";
+        //                using (SqlCommand cmdInsert = new SqlCommand(insertSchedule, conn, transaction))
+        //                {
+        //                    cmdInsert.Parameters.AddWithValue("@LoanID", loanId);
+        //                    cmdInsert.Parameters.AddWithValue("@MonthIndex", i);
+        //                    cmdInsert.Parameters.AddWithValue("@DueDate", dueDate);
+        //                    cmdInsert.Parameters.AddWithValue("@MonthlyPayment", monthlyPayment);
+        //                    cmdInsert.Parameters.AddWithValue("@ScheduledBalance", scheduledBalance);
+        //                    cmdInsert.ExecuteNonQuery();
+        //                }
+        //            }
+
+        //            transaction.Commit();
+        //            return true;
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            transaction?.Rollback();
+        //            MessageBox.Show($"Error: {ex.Message}\nStack Trace: {ex.StackTrace}");
+        //            return false;
+        //        }
+        //    }
+        //}
+
         public bool InsertDisbursement(int loanId, decimal amount)
         {
+            if (loanId <= 0 || amount <= 0)
+            {
+                MessageBox.Show("Invalid loan ID or amount.");
+                return false;
+            }
+
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
                 conn.Open();
@@ -650,8 +1049,46 @@ namespace LoanManagementSystem
 
                 try
                 {
-                    // 1. Insert into Disbursement table
-                    string insertQuery = "INSERT INTO Disbursement (LoanID, Amount) VALUES (@LoanID, @Amount)";
+                    // 1. Get latest AdminWallet balance
+                    decimal adminBalance = 0;
+                    string getAdminBalanceQuery = "SELECT TOP 1 TotalBalance FROM AdminWallet ORDER BY WalletID DESC";
+
+                    using (SqlCommand adminBalanceCmd = new SqlCommand(getAdminBalanceQuery, conn, transaction))
+                    {
+                        object result = adminBalanceCmd.ExecuteScalar();
+                        if (result == null || result == DBNull.Value)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show("Unable to retrieve AdminWallet balance.");
+                            return false;
+                        }
+
+                        adminBalance = Convert.ToDecimal(result);
+                        if (adminBalance < amount)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show("Admin wallet has insufficient balance.");
+                            return false;
+                        }
+                    }
+
+                    // 2. Subtract amount and insert a new wallet record
+                    decimal newAdminBalance = adminBalance - amount;
+                    string insertAdminWalletQuery = @"
+                INSERT INTO AdminWallet (TotalBalance, LastUpdated)
+                VALUES (@TotalBalance, GETDATE())"; // WalletID is assumed to be IDENTITY
+
+                    using (SqlCommand updateAdminCmd = new SqlCommand(insertAdminWalletQuery, conn, transaction))
+                    {
+                        updateAdminCmd.Parameters.AddWithValue("@TotalBalance", newAdminBalance);
+                        updateAdminCmd.ExecuteNonQuery();
+                    }
+
+
+
+                    // --- continue with your original disbursement, user credit update, and payment schedule logic ---
+                    // [Insert into Disbursement]
+                    string insertQuery = "INSERT INTO Disbursement (LoanID, Amount, DisbursedAt) VALUES (@LoanID, @Amount, GETDATE())";
                     using (SqlCommand insertCmd = new SqlCommand(insertQuery, conn, transaction))
                     {
                         insertCmd.Parameters.AddWithValue("@LoanID", loanId);
@@ -659,22 +1096,23 @@ namespace LoanManagementSystem
                         insertCmd.ExecuteNonQuery();
                     }
 
-                    // 2. Get UserID from Loan table
+                    // [Get UserID from Loan]
                     int userId;
                     string getUserQuery = "SELECT UserID FROM Loan WHERE LoanID = @LoanID";
                     using (SqlCommand getUserCmd = new SqlCommand(getUserQuery, conn, transaction))
                     {
                         getUserCmd.Parameters.AddWithValue("@LoanID", loanId);
                         object result = getUserCmd.ExecuteScalar();
-                        if (result == null)
+                        if (result == null || result == DBNull.Value)
                         {
                             transaction.Rollback();
+                            MessageBox.Show("Loan not found.");
                             return false;
                         }
                         userId = Convert.ToInt32(result);
                     }
 
-                    // 3. Update User CreditBalance
+                    // [Update User CreditBalance]
                     string updateCreditQuery = "UPDATE Users SET CreditBalance = CreditBalance + @Amount WHERE UserID = @UserID";
                     using (SqlCommand updateCmd = new SqlCommand(updateCreditQuery, conn, transaction))
                     {
@@ -683,7 +1121,7 @@ namespace LoanManagementSystem
                         updateCmd.ExecuteNonQuery();
                     }
 
-                    // 4. Get loan details: Term, MonthlyPayment, NewBalance
+                    // [Get loan details]
                     int term = 0;
                     decimal monthlyPayment = 0, newBalance = 0;
                     string getLoanQuery = "SELECT Term, MonthlyPayment, NewBalance FROM Loan WHERE LoanID = @LoanID";
@@ -694,31 +1132,40 @@ namespace LoanManagementSystem
                         {
                             if (reader.Read())
                             {
-                                term = reader.GetInt32(0);
-                                monthlyPayment = reader.GetDecimal(1);
-                                newBalance = reader.GetDecimal(2);
+                                object termObj = reader.GetValue(0);
+                                term = (termObj == null || termObj == DBNull.Value) ? 0 : int.TryParse(termObj.ToString(), out int parsedTerm) ? parsedTerm : 0;
+                                monthlyPayment = reader.IsDBNull(1) ? 0 : reader.GetDecimal(1);
+                                newBalance = reader.IsDBNull(2) ? 0 : reader.GetDecimal(2);
                             }
                             else
                             {
                                 transaction.Rollback();
+                                MessageBox.Show("Loan details not found.");
                                 return false;
                             }
                         }
                     }
 
-                    // 5. Get Disbursement date (assumes default GETDATE())
+                    // [Get Disbursement date]
                     DateTime disbursementDate;
-                    string getDateQuery = "SELECT DisbursedAt FROM Disbursement WHERE LoanID = @LoanID";
+                    string getDateQuery = "SELECT TOP 1 DisbursedAt FROM Disbursement WHERE LoanID = @LoanID ORDER BY DisbursedAt DESC";
                     using (SqlCommand cmdDate = new SqlCommand(getDateQuery, conn, transaction))
                     {
                         cmdDate.Parameters.AddWithValue("@LoanID", loanId);
-                        disbursementDate = Convert.ToDateTime(cmdDate.ExecuteScalar());
+                        object dateResult = cmdDate.ExecuteScalar();
+                        if (dateResult == null || dateResult == DBNull.Value)
+                        {
+                            transaction.Rollback();
+                            MessageBox.Show("Disbursement date not found.");
+                            return false;
+                        }
+                        disbursementDate = Convert.ToDateTime(dateResult);
                     }
 
-                    // 6. Insert full PaymentSchedule
+                    // [Insert PaymentSchedule]
                     for (int i = 1; i <= term; i++)
                     {
-                        DateTime dueDate = disbursementDate.AddMonths(i); // Advance by 1 month
+                        DateTime dueDate = disbursementDate.AddMonths(i);
                         decimal scheduledBalance = newBalance - (monthlyPayment * i);
                         if (scheduledBalance < 0) scheduledBalance = 0;
 
@@ -742,7 +1189,7 @@ namespace LoanManagementSystem
                 catch (Exception ex)
                 {
                     transaction?.Rollback();
-                    MessageBox.Show("Error: " + ex.Message);
+                    MessageBox.Show($"Error: {ex.Message}\nStack Trace: {ex.StackTrace}");
                     return false;
                 }
             }
@@ -750,18 +1197,21 @@ namespace LoanManagementSystem
 
 
 
+
+
         public DataTable GetAllDisbursements()
         {
             DataTable dt = new DataTable();
             string query = @"
-    SELECT 
-        (U.FirstName + ' ' + U.LastName) AS Loanee,
-        L.Amount AS Loan_Amount,
-        D.DisbursedAt AS Disbursed_Date
-    FROM Loan L
-    INNER JOIN Users U ON L.UserID = U.UserID
-    LEFT JOIN Disbursement D ON D.LoanID = L.LoanID
-    WHERE L.Status = 'Disbursed'";
+SELECT 
+    L.LoanID,  -- Include LoanID
+    (U.FirstName + ' ' + U.LastName) AS Loanee,
+    L.Amount AS Loan_Amount,
+    D.DisbursedAt AS Disbursed_Date
+FROM Loan L
+INNER JOIN Users U ON L.UserID = U.UserID
+LEFT JOIN Disbursement D ON D.LoanID = L.LoanID
+WHERE L.Status = 'Disbursed'";
 
             using (SqlConnection conn = new SqlConnection(connectionString))
             {
@@ -775,6 +1225,33 @@ namespace LoanManagementSystem
 
             return dt;
         }
+
+        public DataTable SearchDisbursements(string keyword)
+        {
+            DataTable dt = new DataTable();
+            string query = @"
+SELECT 
+    L.LoanID,  -- ✅ Make sure this is included!
+    (U.FirstName + ' ' + U.LastName) AS Loanee,
+    L.Amount AS Loan_Amount,
+    D.DisbursedAt AS Disbursed_Date
+FROM Loan L
+INNER JOIN Users U ON L.UserID = U.UserID
+LEFT JOIN Disbursement D ON D.LoanID = L.LoanID
+WHERE L.Status = 'Disbursed' AND 
+      (U.FirstName LIKE @Keyword OR U.LastName LIKE @Keyword)";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            using (SqlCommand cmd = new SqlCommand(query, conn))
+            {
+                cmd.Parameters.AddWithValue("@Keyword", "%" + keyword + "%");
+                SqlDataAdapter adapter = new SqlDataAdapter(cmd);
+                adapter.Fill(dt);
+            }
+
+            return dt;
+        }
+
 
 
 
@@ -953,6 +1430,27 @@ WHERE
             return dt;
         }
 
+        public decimal GetAdminTotalBalance()
+        {
+            decimal totalBalance = 0m;
+
+            string query = "SELECT TOP 1 TotalBalance FROM AdminWallet ORDER BY WalletID DESC";
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    conn.Open();
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        totalBalance = Convert.ToDecimal(result);
+                    }
+                }
+            }
+
+            return totalBalance;
+        }
 
         public bool AddPaymentAndUpdateLoan(int userId, int loanId, decimal monthlyPayment)
         {

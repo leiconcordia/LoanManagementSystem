@@ -59,6 +59,12 @@ namespace LoanManagementSystem
             if (userControl is AdminDashboard ad)
             {
                 
+                ad.LoadRecentActivity();
+                ad.LoadActiveLoanCount();
+                ad.LoadPendingLoans();
+                ad.LoadDisbursedAmount();
+                ad.LoadAdminBalance();
+
             }
 
         }   

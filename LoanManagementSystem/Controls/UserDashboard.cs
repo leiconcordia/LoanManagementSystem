@@ -1,23 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace LoanManagementSystem.Controls
 {
     public partial class UserDashboard : UserControl
     {
-
         private int userID;
-
         private UserForm parentForm;
+
         public UserDashboard(string fullName, string status, int userID, UserForm parent)
         {
             InitializeComponent();
@@ -27,45 +19,44 @@ namespace LoanManagementSystem.Controls
 
             DatabaseHelper db = new DatabaseHelper();
 
-
-
             lblUsername.Text = "Welcome! " + fullName;
+            lblUsername.Font = new Font("Segoe UI", 12F, FontStyle.Bold);
             lblUserStatus.Text = "Status: " + status;
-            lblUserCredit.Text = "Credit Score: " + db.GetUserCreditBalance(userID).ToString();
+            lblUserStatus.Font = new Font("Segoe UI", 10F);
+            lblUserCredit.Text = "Credit Score: " + db.GetUserCreditBalance(userID).ToString("N0");
+            lblUserCredit.Font = new Font("Segoe UI", 10F);
 
-            // Show description based on status
-            if (status.ToLower() == "pending")
+            switch (status.ToLower())
             {
-                lblStatusDesc.Text = "Your loan application is under review. Please wait for admin approval.";
-                btnApplyLoan.Visible = false;
-            }
-            else if (status.ToLower() == "rejected")
-            {
-                lblStatusDesc.Text = "Unfortunately, you are not eligible for a loan at this time.";
-                btnApplyLoan.Visible = false;
-            }
-            else if (status.ToLower() == "approved")
-            {
-
-                lblStatusDesc.Text = "You are eligible to apply for a loan. Please proceed with your application.";
-                btnApplyLoan.Visible = true;
-            }
-
-            else
-            {
-                lblStatusDesc.Text = "Loan status not recognized. Please contact support.";
+                case "pending":
+                    lblStatusDesc.Text = "Your loan application is under review. Please wait for admin approval.";
+                    lblUserStatus.ForeColor = Color.Goldenrod;
+                    btnApplyLoan.Visible = false;
+                    break;
+                case "rejected":
+                    lblStatusDesc.Text = "Unfortunately, you are not eligible for a loan at this time.";
+                    lblUserStatus.ForeColor = Color.Red;
+                    btnApplyLoan.Visible = false;
+                    break;
+                case "approved":
+                    lblStatusDesc.Text = "You are eligible to apply for a loan. Please proceed with your application.";
+                    lblUserStatus.ForeColor = Color.Green;
+                    btnApplyLoan.Visible = true;
+                    break;
+                default:
+                    lblStatusDesc.Text = "Loan status not recognized. Please contact support.";
+                    lblUserStatus.ForeColor = Color.Gray;
+                    break;
             }
         }
-
-
 
         private void btnApplyLoan_Click(object sender, EventArgs e)
         {
             parentForm.UserPanel.Controls.Clear();
-
-            LoanApplicationForm loanForm = new LoanApplicationForm(parentForm.UserID, parentForm);
-            loanForm.Dock = DockStyle.Fill;
-
+            LoanApplicationForm loanForm = new LoanApplicationForm(parentForm.UserID, parentForm)
+            {
+                Dock = DockStyle.Fill
+            };
             parentForm.UserPanel.Controls.Add(loanForm);
         }
 
@@ -76,21 +67,11 @@ namespace LoanManagementSystem.Controls
             login.Show();
         }
 
-
         private void LoadUserLoans()
         {
             DatabaseHelper db = new DatabaseHelper();
-            DataTable loans = db.GetActiveLoansByUser(userID); // use your logged-in user's ID
+            DataTable loans = db.GetActiveLoansByUser(userID);
             dgvUserLoans.DataSource = loans;
-
-            // Optional: Add buttons to the Action column
-            foreach (DataGridViewRow row in dgvUserLoans.Rows)
-            {
-
-                DataGridViewButtonCell viewButton = new DataGridViewButtonCell();
-                viewButton.Value = "View";
-
-            }
         }
 
         private void SetupUserLoanGrid()
@@ -100,111 +81,90 @@ namespace LoanManagementSystem.Controls
             DatabaseHelper DB = new DatabaseHelper();
             dgvUserLoans.DataSource = DB.GetActiveLoansByUser(userID);
 
-            // Hide LoanID for privacy
+            dgvUserLoans.EnableHeadersVisualStyles = false;
+            dgvUserLoans.ColumnHeadersDefaultCellStyle.BackColor = Color.Navy;
+            dgvUserLoans.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgvUserLoans.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgvUserLoans.RowTemplate.Height = 30;
+            dgvUserLoans.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+
             if (dgvUserLoans.Columns.Contains("LoanID"))
                 dgvUserLoans.Columns["LoanID"].Visible = false;
 
-            // 🔘 1st Action button: View (with "Action" header)
-            DataGridViewButtonColumn viewButton = new DataGridViewButtonColumn();
-            viewButton.Name = "ViewDetails";
-            viewButton.HeaderText = "Action";
-            viewButton.Text = "View";
-            viewButton.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn viewButton = new DataGridViewButtonColumn
+            {
+                Name = "ViewDetails",
+                HeaderText = "Action",
+                Text = "View",
+                UseColumnTextForButtonValue = true
+            };
             dgvUserLoans.Columns.Add(viewButton);
 
-            // 💸 2nd button: Pay (no header)
-            DataGridViewButtonColumn payButton = new DataGridViewButtonColumn();
-            payButton.Name = "Pay";
-            payButton.HeaderText = ""; // No header
-            payButton.Text = "Pay";
-            payButton.UseColumnTextForButtonValue = true;
+            DataGridViewButtonColumn payButton = new DataGridViewButtonColumn
+            {
+                Name = "Pay",
+                HeaderText = "",
+                Text = "Pay",
+                UseColumnTextForButtonValue = true
+            };
             dgvUserLoans.Columns.Add(payButton);
         }
-
-
 
         private void UserDashboard_Load(object sender, EventArgs e)
         {
             LoadUserLoans();
             SetupUserLoanGrid();
-
-
         }
-
-
 
         private void dgvUserLoans_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
-            if (e.RowIndex >= 0)
+            if (e.RowIndex < 0) return;
+
+            string columnName = dgvUserLoans.Columns[e.ColumnIndex].Name;
+
+            int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
+
+            if (columnName == "ViewDetails")
             {
-                string columnName = dgvUserLoans.Columns[e.ColumnIndex].Name;
+                PaymentHistory historyForm = new PaymentHistory(loanId);
+                historyForm.ShowDialog();
+            }
+            else if (columnName == "Pay")
+            {
+                decimal monthlyPayment = Convert.ToDecimal(dgvUserLoans.Rows[e.RowIndex].Cells["Monthly Payment"].Value);
+                DatabaseHelper db = new DatabaseHelper();
+                decimal creditBalance = db.GetUserCreditBalance(userID);
 
-                if (columnName == "ViewDetails")
+                string message =
+                    $"Monthly Payment: ₱{monthlyPayment:N2}\n\nDo you want to proceed with this payment?";
+
+                DialogResult result = MessageBox.Show(message, "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                if (result == DialogResult.Yes)
                 {
-                    int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
-                    PaymentHistory historyForm = new PaymentHistory(loanId);
-                    historyForm.ShowDialog();
-
-                    
-
-                }
-                else if (columnName == "Pay")
-                {
-                    int loanId = Convert.ToInt32(dgvUserLoans.Rows[e.RowIndex].Cells["LoanID"].Value);
-                    decimal monthlyPayment = Convert.ToDecimal(dgvUserLoans.Rows[e.RowIndex].Cells["Monthly Payment"].Value);
-                    //decimal balance = Convert.ToDecimal(dgvUserLoans.Rows[e.RowIndex].Cells["Balance"].Value);
-                    DatabaseHelper db = new DatabaseHelper();
-                    decimal creditBalance = db.GetUserCreditBalance(userID);
-
-                    string message = 
-                                     $"Monthly Payment: ₱{monthlyPayment:N2}\n" +
-                                     $"\n" +
-                                     $"\n" +
-
-                                     "Do you want to proceed with this payment?";
-
-                    DialogResult result = MessageBox.Show(message, "Confirm Payment", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-
-                    if (result == DialogResult.Yes)
+                    if (creditBalance < monthlyPayment)
                     {
-
-
-                        if (creditBalance < monthlyPayment)
-                        {
-                            MessageBox.Show("Insufficient credit balance to make this payment.", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            return;
-                        }
-
-                        bool paymentSuccess = db.AddPaymentAndUpdateLoan(userID, loanId, monthlyPayment);
-                        if (paymentSuccess)
-                        {
-                            MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                            // Refresh the table or UI here if needed
-                        }
-                        else
-                        {
-                            MessageBox.Show("An error occurred while processing the payment.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+                        MessageBox.Show("Insufficient credit balance to make this payment.", "Payment Failed", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        return;
                     }
 
+                    bool paymentSuccess = db.AddPaymentAndUpdateLoan(userID, loanId, monthlyPayment);
+                    if (paymentSuccess)
+                    {
+                        MessageBox.Show("Payment successful!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        SetupUserLoanGrid();
+                    }
                     else
                     {
-                        
+                        MessageBox.Show("An error occurred while processing the payment.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
-
             }
         }
-
-
-
-
 
         private void btnBacktoUserLoanTable_Click(object sender, EventArgs e)
         {
             LoadUserLoans();
-            
         }
     }
 }

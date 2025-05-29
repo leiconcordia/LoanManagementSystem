@@ -55,15 +55,7 @@ namespace LoanManagementSystem.Controls
             }
         }
 
-        private void tbUsername_TextChanged(object sender, EventArgs e)
-        {
-            label5.Visible = false;
-        }
 
-        private void tbPassword_TextChanged(object sender, EventArgs e)
-        {
-            label6.Visible = false;
-        }
 
         private void btnBack_Click(object sender, EventArgs e)
         {
@@ -71,6 +63,11 @@ namespace LoanManagementSystem.Controls
             UserLogin UserLogin = new UserLogin(parentForm);
             UserLogin.Dock = DockStyle.Fill;
             parentForm.LoginPanel.Controls.Add(UserLogin);
+        }
+
+        private void AdminLog_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -1,79 +1,192 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace LoanManagementSystem.Controls
 {
     public partial class LoanRepayments : UserControl
     {
-  
+        private int loanID;
+        private FlowLayoutPanel breadcrumbPanel;
+        private LinkLabel linkDisbursements;
+        private Label lblSeparator;
+        private Label lblCurrentPage;
 
-        private int loanID; // store the current loan ID
-
+        private void LinkDisbursements_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            if (mainForm != null)
+            {
+                Disbursements dis = new Disbursements();
+                mainForm.switchUserControl(dis);
+            }
+        }
         public LoanRepayments(int loanID)
         {
             InitializeComponent();
+            breadcrumbPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                FlowDirection = FlowDirection.LeftToRight,
+                Padding = new Padding(10, 10, 0, 10),
+                BackColor = Color.Transparent
+            };
+
+            linkDisbursements = new LinkLabel
+            {
+                Text = "Disbursements List",
+                AutoSize = true,
+
+                LinkColor = Color.LightBlue,
+                Font = new Font("Segoe UI", 10, FontStyle.Underline),
+                Cursor = Cursors.Hand
+            };
+
+            linkDisbursements.LinkClicked += LinkDisbursements_LinkClicked;
+
+            lblSeparator = new Label
+            {
+                Text = " > ",
+                AutoSize = true,
+                Font = new Font("Segoe UI", 10),
+                ForeColor = Color.White
+            };
+
+            lblCurrentPage = new Label
+            {
+                Text = "Loan Payment History",
+                AutoSize = true,
+                Cursor = Cursors.Hand,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                ForeColor = Color.LightBlue
+            };
+
+
+
+            breadcrumbPanel.Controls.Add(linkDisbursements);
+            breadcrumbPanel.Controls.Add(lblSeparator);
+            breadcrumbPanel.Controls.Add(lblCurrentPage);
+            this.Controls.Add(breadcrumbPanel);
+            breadcrumbPanel.BringToFront();
             this.loanID = loanID;
-            LoadPaymentHistory(); // load data on form load
             CustomizeDataGridView(dgvPaymentHistory);
+            LoadPaymentHistory();
         }
 
         private void LoadPaymentHistory()
         {
             DatabaseHelper db = new DatabaseHelper();
             DataTable dt = db.GetPaymentHistoryByLoanId(loanID);
-            dgvPaymentHistory.DataSource = dt;
 
-            // Optional: hide internal IDs
-            if (dgvPaymentHistory.Columns.Contains("PaymentID"))
-                dgvPaymentHistory.Columns["PaymentID"].Visible = false;
+            dgvPaymentHistory.Rows.Clear();
 
+            foreach (DataRow row in dt.Rows)
+            {
+                int rowIndex = dgvPaymentHistory.Rows.Add();
 
+                dgvPaymentHistory.Rows[rowIndex].Cells["Due Date"].Value = row["Due Date"]?.ToString();
+                dgvPaymentHistory.Rows[rowIndex].Cells["Payment Date"].Value = row["Payment Date"]?.ToString();
+                dgvPaymentHistory.Rows[rowIndex].Cells["Monthly Payment"].Value = row["Monthly Payment"]?.ToString();
+                dgvPaymentHistory.Rows[rowIndex].Cells["Balance"].Value = row["Balance"]?.ToString();
+                dgvPaymentHistory.Rows[rowIndex].Cells["Status"].Value = row["Status"]?.ToString();
+                dgvPaymentHistory.Rows[rowIndex].Cells["Remarks"].Value = row["Remarks"]?.ToString();
 
-
+                // Set text color for all cells
+                foreach (DataGridViewCell cell in dgvPaymentHistory.Rows[rowIndex].Cells)
+                {
+                    cell.Style.ForeColor = Color.White;
+                }
+            }
         }
 
-        private void CustomizeDataGridView(DataGridView dgvPaymentHistory)
+        private void CustomizeDataGridView(DataGridView dgv)
         {
-            // Set background and grid color
-            dgvPaymentHistory.BackgroundColor = Color.FromArgb(46, 51, 73);
-            dgvPaymentHistory.GridColor = Color.Gray;
+            dgv.AllowUserToAddRows = false;
+            dgv.ReadOnly = true;
+            dgv.BackgroundColor = Color.FromArgb(25, 30, 54);
+            dgv.BorderStyle = BorderStyle.None;
+            dgv.GridColor = Color.FromArgb(45, 50, 70);
+            dgv.EnableHeadersVisualStyles = false;
+            dgv.CellBorderStyle = DataGridViewCellBorderStyle.Single;
 
-            // Remove borders and make it modern
-            dgvPaymentHistory.BorderStyle = BorderStyle.None;
-            dgvPaymentHistory.CellBorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
-            dgvPaymentHistory.EnableHeadersVisualStyles = false;
+            dgv.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.EnableResizing;
+            dgv.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(35, 40, 64);
+            dgv.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            dgv.AdvancedColumnHeadersBorderStyle.All = DataGridViewAdvancedCellBorderStyle.Single;
+            dgv.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
+            dgv.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 10, FontStyle.Bold);
+            dgv.ColumnHeadersHeight = 45;
 
-            // Column header styling
-            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(30, 30, 45);
-            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
-            dgvPaymentHistory.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI", 10, FontStyle.Bold);
+            dgv.DefaultCellStyle.BackColor = Color.FromArgb(25, 30, 54);
+            dgv.DefaultCellStyle.ForeColor = Color.White;
+            dgv.DefaultCellStyle.SelectionBackColor = Color.FromArgb(55, 60, 90);
+            dgv.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv.DefaultCellStyle.Font = new Font("Segoe UI", 10);
+            dgv.RowTemplate.Height = 40;
+            dgv.RowHeadersVisible = false;
+            dgv.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
 
-            // Row styling
-            dgvPaymentHistory.DefaultCellStyle.BackColor = Color.White;  // base row color
-            dgvPaymentHistory.DefaultCellStyle.ForeColor = Color.Black;
-            dgvPaymentHistory.DefaultCellStyle.SelectionBackColor = Color.FromArgb(70, 80, 100);
-            dgvPaymentHistory.DefaultCellStyle.SelectionForeColor = Color.White;
+            dgv.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(30, 35, 60);
+            dgv.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
+            dgv.AlternatingRowsDefaultCellStyle = null;
 
-            // Alternate row styling
-            dgvPaymentHistory.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(58, 63, 85);  // slightly lighter
-            dgvPaymentHistory.AlternatingRowsDefaultCellStyle.ForeColor = Color.White;
+            typeof(DataGridView).InvokeMember("DoubleBuffered",
+                System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.SetProperty,
+                null, dgv, new object[] { true });
 
-            // Row height (optional)
-            dgvPaymentHistory.RowTemplate.Height = 30;
+            dgv.Columns.Clear();
 
-            // Header height (optional)
-            dgvPaymentHistory.ColumnHeadersHeight = 35;
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Due Date",
+                HeaderText = "Due Date",
+                ReadOnly = true,
+                FillWeight = 20
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Payment Date",
+                HeaderText = "Payment Date",
+                ReadOnly = true,
+                FillWeight = 20
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Monthly Payment",
+                HeaderText = "Monthly Payment",
+                ReadOnly = true,
+                FillWeight = 20
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Balance",
+                HeaderText = "Balance",
+                ReadOnly = true,
+                FillWeight = 20
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Status",
+                HeaderText = "Status",
+                ReadOnly = true,
+                FillWeight = 15
+            });
+
+            dgv.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Remarks",
+                HeaderText = "Remarks",
+                ReadOnly = true,
+                FillWeight = 25
+            });
         }
-
-
-
     }
 }

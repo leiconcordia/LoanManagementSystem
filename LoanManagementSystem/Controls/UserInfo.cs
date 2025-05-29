@@ -17,18 +17,78 @@ namespace LoanManagementSystem.Controls
     {
         private readonly DatabaseHelper _dbHelper;
         private string _userId;
+        private FlowLayoutPanel breadcrumbPanel;
+        private LinkLabel linkEvaluation;
+        private Label lblSeparator;
+        private Label lblCurrentPage;
+
+        private void LinkEvaluation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            var mainForm = Application.OpenForms.OfType<MainForm>().FirstOrDefault();
+            if (mainForm != null)
+            {
+                UserEvaluation userEvaluationControl = new UserEvaluation();
+                mainForm.switchUserControl(userEvaluationControl);
+            }
+        }
 
         public UserInfo()
         {
             InitializeComponent();
+            
             _dbHelper = new DatabaseHelper(); // Initialize your database helper
-           
+            breadcrumbPanel = new FlowLayoutPanel
+            {
+                Dock = DockStyle.Top,
+                AutoSize = true,
+                FlowDirection = FlowDirection.LeftToRight,
+                Padding = new Padding(10, 10, 0, 10),
+                BackColor = Color.Transparent
+            };
+
+            linkEvaluation = new LinkLabel
+            {
+                Text = "User Evaluation",
+                AutoSize = true,
+
+                LinkColor = Color.LightBlue,
+                Font = new Font("Segoe UI", 10, FontStyle.Underline),
+                Cursor = Cursors.Hand
+            };
+
+            linkEvaluation.LinkClicked += LinkEvaluation_LinkClicked;
+
+            lblSeparator = new Label
+            {
+                Text = " > ",
+                AutoSize = true,
+                Font = new Font("Segoe UI", 10),
+                ForeColor = Color.White
+            };
+
+            lblCurrentPage = new Label
+            {
+                Text = "Client Information",
+                AutoSize = true,
+                Cursor = Cursors.Hand,
+                Font = new Font("Segoe UI", 10, FontStyle.Bold),
+                ForeColor = Color.LightBlue
+            };
+
+
+
+            breadcrumbPanel.Controls.Add(linkEvaluation);
+            breadcrumbPanel.Controls.Add(lblSeparator);
+            breadcrumbPanel.Controls.Add(lblCurrentPage);
+            this.Controls.Add(breadcrumbPanel);
+            breadcrumbPanel.BringToFront();
         }
 
         public UserInfo(string userId) : this()
         {
             _userId = userId;
             LoadUserData();
+            UpdateUserStatusButtons();
         }
 
         private void LoadUserData()
@@ -53,8 +113,7 @@ namespace LoanManagementSystem.Controls
                     // Corrected line: Pass the user's status directly to the method
                     UpdateStatusDisplay(user.Status);
 
-                    // Configure buttons based on current status
-                    UpdateButtonStates(user.Status);
+                    
                 }
                 else
                 {
@@ -95,33 +154,20 @@ namespace LoanManagementSystem.Controls
             }
         }
 
-        private void UpdateButtonStates(string currentStatus)
+        private void UpdateUserStatusButtons()
         {
-            bool isPending = currentStatus?.ToLower() == "pending";
+            int convertedId = int.Parse(_userId);
+            string status = _dbHelper.GetUserStatus(convertedId); // Use the class field
 
-            // Option 1: Simply hide/show
-            btnApproveStatus.Visible = isPending;
-            btnRejectStatus.Visible = isPending;
-
-            // Option 2: Hide and collapse layout
-            if (isPending)
-            {
-                btnApproveStatus.Show();
-                btnRejectStatus.Show();
-               
-            }
-            else
-            {
-                btnApproveStatus.Hide();
-                btnRejectStatus.Hide();
-                
-            }
-
-            // Option 3: Fancy animation (requires additional controls)
-            // AnimateButtonVisibility(isPending);
+            bool isPending = string.Equals(status, "pending", StringComparison.OrdinalIgnoreCase);
+            Console.WriteLine(isPending);
+            btnApprove.Visible = isPending;
+            btnReject.Visible = isPending;
         }
 
-        
+
+
+
 
         private void UpdateUserStatus(string newStatus)
         {
@@ -143,13 +189,17 @@ namespace LoanManagementSystem.Controls
                     {
                         // Update UI
                         UpdateStatusDisplay(newStatus);
-                        UpdateButtonStates(newStatus);
-
+                        
                         MessageBox.Show(
                             $"Client {newStatus.ToLower()} successfully!",
                             "Success",
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Information);
+
+                        // Log activity with user name
+                        var userObj = _dbHelper.GetUserById(_userId);
+                        string logMessage = $"User {newStatus}: ({userObj.FirstName} {userObj.LastName})";
+                        _dbHelper.LogActivity($"User {newStatus}", logMessage);
                     }
                     else
                     {
@@ -201,6 +251,14 @@ namespace LoanManagementSystem.Controls
             UpdateUserStatus("Approved");
         }
 
-        
+        private void userInfoEstatus_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

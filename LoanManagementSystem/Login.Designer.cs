@@ -55,7 +55,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.White;
+            this.pictureBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.pictureBox1.ErrorImage = global::LoanManagementSystem.Properties.Resources.KASALIGANLOANLOGO;
             this.pictureBox1.Image = global::LoanManagementSystem.Properties.Resources.draft_logo;
             this.pictureBox1.InitialImage = global::LoanManagementSystem.Properties.Resources.KASALIGANLOANLOGO;
@@ -68,6 +68,7 @@
             // 
             // LoginPanel
             // 
+            this.LoginPanel.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.LoginPanel.Location = new System.Drawing.Point(408, 3);
             this.LoginPanel.Name = "LoginPanel";
             this.LoginPanel.Size = new System.Drawing.Size(533, 529);
@@ -77,12 +78,11 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(25)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
             this.ClientSize = new System.Drawing.Size(953, 542);
             this.Controls.Add(this.LoginPanel);
             this.Controls.Add(this.panel1);
             this.Name = "Login";
-           
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
