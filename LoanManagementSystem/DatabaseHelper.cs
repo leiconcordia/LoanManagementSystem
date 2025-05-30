@@ -1565,6 +1565,44 @@ WHERE
         }
 
 
+        public decimal GetCurrentInterestRate()
+        {
+            decimal rate = 0.10m; // fallback default if not found
+
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "SELECT TOP 1 Rate FROM Interest ORDER BY ID DESC"; // assumes ID is auto-increment
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    object result = cmd.ExecuteScalar();
+                    if (result != null && result != DBNull.Value)
+                    {
+                        rate = Convert.ToDecimal(result);
+                    }
+                }
+            }
+
+            return rate;
+        }
+
+        public bool UpdateInterestRate(decimal newRate)
+        {
+            using (SqlConnection conn = new SqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "UPDATE Interest SET Rate = @Rate WHERE ID = (SELECT TOP 1 ID FROM Interest ORDER BY ID DESC)";
+
+                using (SqlCommand cmd = new SqlCommand(query, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Rate", newRate);
+                    int rowsAffected = cmd.ExecuteNonQuery();
+                    return rowsAffected > 0;
+                }
+            }
+        }
+
 
 
 

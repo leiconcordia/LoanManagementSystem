@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace LoanManagementSystem
 {
@@ -29,7 +30,11 @@ namespace LoanManagementSystem
         /// </summary>
         private void InitializeComponent()
         {
+
+            
+
             this.panel1 = new System.Windows.Forms.Panel();
+            this.btnChangeInterest = new System.Windows.Forms.Button();
             this.btnLogout = new System.Windows.Forms.Button();
             this.pnlNav = new System.Windows.Forms.Panel();
             this.btnDisbursements = new System.Windows.Forms.Button();
@@ -48,6 +53,7 @@ namespace LoanManagementSystem
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(24)))), ((int)(((byte)(30)))), ((int)(((byte)(54)))));
+            this.panel1.Controls.Add(this.btnChangeInterest);
             this.panel1.Controls.Add(this.btnLogout);
             this.panel1.Controls.Add(this.pnlNav);
             this.panel1.Controls.Add(this.btnDisbursements);
@@ -63,6 +69,23 @@ namespace LoanManagementSystem
             this.panel1.Size = new System.Drawing.Size(156, 609);
             this.panel1.TabIndex = 0;
             this.panel1.Click += new System.EventHandler(this.panel5_Click);
+            // 
+            // btnChangeInterest
+            // 
+            this.btnChangeInterest.FlatAppearance.BorderSize = 0;
+            this.btnChangeInterest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnChangeInterest.Font = new System.Drawing.Font("Nirmala UI", 10F, System.Drawing.FontStyle.Bold);
+            this.btnChangeInterest.ForeColor = System.Drawing.Color.LightBlue;
+            this.btnChangeInterest.Location = new System.Drawing.Point(2, 343);
+            this.btnChangeInterest.Margin = new System.Windows.Forms.Padding(2);
+            this.btnChangeInterest.Name = "btnChangeInterest";
+            this.btnChangeInterest.Size = new System.Drawing.Size(154, 53);
+            this.btnChangeInterest.TabIndex = 7;
+            this.btnChangeInterest.Text = "Change interest rate";
+            this.btnChangeInterest.TextImageRelation = System.Windows.Forms.TextImageRelation.TextBeforeImage;
+            this.btnChangeInterest.UseVisualStyleBackColor = true;
+            this.btnChangeInterest.Click += new System.EventHandler(this.btnChangeInterest_Click);
+           
             // 
             // btnLogout
             // 
@@ -248,5 +271,6 @@ namespace LoanManagementSystem
         #endregion
         private Panel MainPanel;
         private Button btnLogout;
+        private Button btnChangeInterest;
     }
 }
